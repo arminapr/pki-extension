@@ -8,3 +8,17 @@ button {
     cursor: pointer;
     background-color: #E5F2F2;
 }
+
+html, body {
+    width: 200px;
+    font-family: Verdana, sans-serif;
+    text-align: center;
+}
+
+button[id="nonSensitive"] {
+    background-color: red;
+}
+
+button[id="sensitive"] {
+    background-color: green;
+}
