@@ -1,0 +1,18 @@
+{
+    "manifest_Version": 2,
+    "name": "PKI-Extension",
+    "version": "1.0",
+
+    "description": "Helps to keep websites listed as secure/unsecure by asking the user and observing the digital certificate.",
+    "icons": {
+        "48": "icons/nsf-48.png"
+    },
+
+    "permissions": [
+        "tabs"
+    ],
+
+    "background": {
+        "scripts": "background_scripts/background.js"
+    }
+}
