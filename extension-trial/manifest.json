@@ -1,5 +1,5 @@
 {
-    "manifest_Version": 2,
+    "manifest_version": 2,
     "name": "PKI-Extension",
     "version": "1.0",
 
@@ -13,12 +13,12 @@
     ],
 
     "background": {
-        "scripts": "background_scripts/background.js",
+        "scripts": ["background_scripts/background.js"],
         "persistent": false
     },
 
-    "browser-actions": {
+    "browser_action": {
         "default_title": "Extension Trial",
-        "defaul_popup": "popup/change.html"
+        "default_popup": "popup/change.html"
     }
 }
