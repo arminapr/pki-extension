@@ -9,10 +9,16 @@
     },
 
     "permissions": [
-        "tabs"
+        "storage"
     ],
 
     "background": {
-        "scripts": "background_scripts/background.js"
+        "scripts": "background_scripts/background.js",
+        "persistent": false
+    },
+
+    "browser-actions": {
+        "default_title": "Extension Trial",
+        "defaul_popup": "popup/change.html"
     }
 }
