@@ -1,12 +1,21 @@
 document.addEventListener("DOMContentLoaded", () => {
     var nonSens = document.getElementById("nonSensitive");
     var sens = document.getElementById("sensitive");
+    var sensitiveQ = document.getElementById("SensitiveQuestion");
+    var secureQ = document.getElementById("SecurityQuestion");
+    var trustQ = document.getElementById("TrustQuestion");
+    var nonSecure = document.getElementById("notSecure");
+    var secure = document.getElementById("secure");
 
     // call the functions to mark the website as either sensitive or not sensitive
     nonSens.addEventListener("click", () => {
         markWebsiteNonSensitive()});
     sens.addEventListener("click", () => {
         markWebsiteSensitive()});
+    nonSecure.addEventListener("click", () => {
+        markWebsiteNotSecure()}); // have to write this function
+    secure.addEventListener("click", () => {
+        markWebsiteSecure()}); // have to write this function
 
     function markWebsiteNonSensitive() {
         // write this function
@@ -16,12 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
         nonSens.appendChild(image);
     }
 
+    // changes the question and asks whether the website is secure
     function markWebsiteSensitive() {
-        // write this function
-        var sensitiveQ = document.getElementById("SensitiveQuestion");
-        var secureQ = document.getElementById("SecurityQuestion");
-        var trustQ = document.getElementById("TrustQuestion");
-
         sensitiveQ.style.display = "none";
         secureQ.style.display = "block";
     }
