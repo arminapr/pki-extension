@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function markWebsiteNonSensitive() {
         // write this function
-        var imageSrc = '../icons/sample-pic.png'; // Replace with the path to your image
+        var imageSrc = '../icons/sample-pic.png';
         var image = document.createElement('img');
         image.src = imageSrc;
         nonSens.appendChild(image);
@@ -18,6 +18,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function markWebsiteSensitive() {
         // write this function
+        var sensitiveQ = document.getElementById("SensitiveQuestion");
+        var secureQ = document.getElementById("SecurityQuestion");
+        var trustQ = document.getElementById("TrustQuestion");
+
+        sensitiveQ.style.display = "none";
+        secureQ.style.display = "hidden";
     }
 })
 
@@ -26,7 +32,6 @@ var prevCA;
 if (!prevCA) {
     prevCA = "Distrust"; // dummy value
 }
-
 
 function checkChange(url) {
     const currCA = "Entrust"; // dummy value
