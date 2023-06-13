@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
         var trustQ = document.getElementById("TrustQuestion");
 
         sensitiveQ.style.display = "none";
-        secureQ.style.display = "hidden";
+        secureQ.style.display = "block";
     }
 })
 
