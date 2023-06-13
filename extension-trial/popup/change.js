@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
     var trustQ = document.getElementById("TrustQuestion");
     var nonSecure = document.getElementById("notSecure");
     var secure = document.getElementById("secure");
+    var nonSecureText = document.getElementById("nonSecureText");
+    var secureText = document.getElementById("secureText");
 
     // call the functions to mark the website as either sensitive or not sensitive
     nonSens.addEventListener("click", () => {
@@ -13,10 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
     sens.addEventListener("click", () => {
         markWebsiteSensitive()});
     nonSecure.addEventListener("click", () => {
-        markWebsiteNotSecure()}); // have to write this function
+        markWebsiteNonSecure()}); // have to write this function
     secure.addEventListener("click", () => {
         markWebsiteSecure()}); // have to write this function
 
+    // this is a dummy function right now
     function markWebsiteNonSensitive() {
         // write this function
         var imageSrc = '../icons/sample-pic.png';
@@ -29,6 +32,17 @@ document.addEventListener("DOMContentLoaded", () => {
     function markWebsiteSensitive() {
         sensitiveQ.style.display = "none";
         secureQ.style.display = "block";
+    }
+
+    // changes the question to ask why the website is not secure
+    function markWebsiteNonSecure() {
+        secureQ.style.display = "none";
+        trustQ.style.display = "block";
+    }
+
+    function markWebsiteSecure() {
+        secureQ.style.display = "none";
+        secureText.style.display = "block";
     }
 })
 
