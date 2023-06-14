@@ -9,7 +9,7 @@
     },
 
     "permissions": [
-        "storage"
+        "storage", "<all_urls>", "tabs"
     ],
 
     "background": {
