@@ -12,6 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
     //Favicon (Logo)
     var faviconImage = document.getElementById('faviconImage');
 
+    //URL
+    var websiteUrlElement = document.getElementById('websiteUrl');
+
     // Get the current tab information
     browser.tabs.query({ active: true, currentWindow: true }, function(tabs) {
         var currentTab = tabs[0];
@@ -20,7 +23,10 @@ document.addEventListener("DOMContentLoaded", () => {
         // Get the favicon URL
         var faviconUrl = 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(url);
         faviconImage.src = faviconUrl;
-      });
+
+        //Display the website URL
+        websiteUrlElement.textContent = url;
+    });
 
 
     // call the functions to mark the website as either sensitive or not sensitive
