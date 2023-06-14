@@ -5,7 +5,7 @@ if (blocked) {
 }
 
 browser.runtime.onMessage.addListener((msg) => {
-    if (msg === "unblocl") {
+    if (msg === "unblock") {
         blocked = false;
         window.location.reload();
     }

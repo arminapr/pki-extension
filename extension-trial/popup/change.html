@@ -7,18 +7,23 @@
     </head>
     <body>
         <div id="firstVisit" style = "display: none">
-
         </div>
+
+        <!--Favicon (Logo)-->
+        <img id="faviconImage">
+
         <div id = "SensitiveQuestion" style = "display: block">
             <h1>Is this website sensitive?</h1>
             <button id="sensitive">Yes</button>
             <button id="nonSensitive">No</button>
         </div>
+
         <div id = "SecurityQuestion" style = "display: none">
             <h1>Is this website secure?</h1>
             <button id="secure">Yes</button>
             <button id="notSecure">No</button>
         </div>
+
         <!-- ask the user why they do not think that this a secure website-->
         <div id = "TrustQuestion" style = "display: none">
             <h1>Why is this website not secure?</h1>
@@ -27,17 +32,22 @@
             <button id="fraudulent">Fraudulent Certificate</button>
             <button id="other">Other</button>
         </div>
+
         <div id = "nonSensText" style = "display: none">
             <h4>This website has been marked as nonsensitive.</h4>
             <button id="makeSensitive">I misclicked</button>
         </div>
+
         <div id = "secureText" style = "display: none">
             <h4>This website has been marked as secure.</h4>
             <button id="makeNonSecure">I misclicked</button>
         </div>
+
         <div id = "nonSecureText" style = "display: none">
             <h4>This website has been marked as not secure.</h4>
         </div>
+
         <script src="change.js"></script>
+
     </body>
 </html>

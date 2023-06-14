@@ -9,6 +9,20 @@ document.addEventListener("DOMContentLoaded", () => {
     var nonSecureText = document.getElementById("nonSecureText");
     var secureText = document.getElementById("secureText");
 
+    //Favicon (Logo)
+    var faviconImage = document.getElementById('faviconImage');
+
+    // Get the current tab information
+    browser.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+        var currentTab = tabs[0];
+        var url = currentTab.url;
+        
+        // Get the favicon URL
+        var faviconUrl = 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(url);
+        faviconImage.src = faviconUrl;
+      });
+
+
     // call the functions to mark the website as either sensitive or not sensitive
     nonSens.addEventListener("click", () => {
         markWebsiteNonSensitive()});

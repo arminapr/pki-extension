@@ -22,3 +22,9 @@ button[id="nonSensitive"], button[id="notSecure"] {
 button[id="sensitive"], button[id="secure"] {
     background-color: green;
 }
+
+img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+  }
