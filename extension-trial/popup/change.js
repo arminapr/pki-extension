@@ -8,12 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
     var secure = document.getElementById("secure");
     var nonSecureText = document.getElementById("nonSecureText");
     var secureText = document.getElementById("secureText");
-
-    //Favicon (Logo)
-    var faviconImage = document.getElementById('faviconImage');
-
-    //URL
-    var websiteUrlElement = document.getElementById('websiteUrl');
+    var faviconImage = document.getElementById('faviconImage'); //Favicon (Logo)
+    var websiteUrlElement = document.getElementById('websiteUrl'); //URL
 
     // Get the current tab information
     browser.tabs.query({ active: true, currentWindow: true }, function(tabs) {
@@ -27,6 +23,16 @@ document.addEventListener("DOMContentLoaded", () => {
         //Display the website URL
         websiteUrlElement.textContent = url;
     });
+
+    //Receive message from background.js for CA Info and update html
+    browser.runtime.onMessage.addListener(
+        (request, sender, sendResponse) => {
+            if (request.rootCA){
+                const rootCAInfoElement = document.getElementById("rootCAInfo");
+                rootCAInfoElement.textContent = request.rootCA;
+            }
+        }
+    );
 
 
     // call the functions to mark the website as either sensitive or not sensitive
