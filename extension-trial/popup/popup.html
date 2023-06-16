@@ -6,9 +6,6 @@
         <link rel = "stylesheet" type = "text/css" href =" popup.css">
     </head>
     <body>
-        <div id="firstVisit" style = "display: none">
-        </div>
-
         <!--Favicon (Logo)-->
         <img id="faviconImage">
 
@@ -19,11 +16,13 @@
         <h1>Root CA: </h1>
         <p id="rootCAInfo"></p>
 
+        <!--Not Marked & Clicked-->
         <div id = "notMarked" style = "display: block">
             <button id="safe">Add new sensitive site</button>
             <button id="misMarked">This was one of my sensitive websites</button>
             <button id="misclicked">I misclicked</button>
         </div>
+        
         <div id = "markedSameCA" style = "display: none">
             <h1>Is this website secure?</h1>
             <button id="secure">Yes</button>
@@ -39,16 +38,19 @@
             <button id="other">Other</button>
         </div>
 
+        <!--mark website non-sensitive-->
         <div id = "nonSensText" style = "display: none">
             <h4>This website has been marked as nonsensitive.</h4>
             <button id="makeSensitive">I misclicked</button>
         </div>
 
+        <!--mark website secure-->
         <div id = "secureText" style = "display: none">
             <h4>This website has been marked as secure.</h4>
             <button id="makeNonSecure">I misclicked</button>
         </div>
 
+        <!--mark website secure-->
         <div id = "nonSecureText" style = "display: none">
             <h4>This website has been marked as not secure.</h4>
         </div>

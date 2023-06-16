@@ -11,7 +11,9 @@ document.addEventListener("DOMContentLoaded", () => {
     var faviconImage = document.getElementById('faviconImage'); //Favicon (Logo)
     var websiteUrlElement = document.getElementById('websiteUrl'); //URL
 
-    // Get the current tab information
+    /**
+     * Tab Info, Favicon, and URL
+     */
     browser.tabs.query({ active: true, currentWindow: true }, function(tabs) {
         var currentTab = tabs[0];
         var url = currentTab.url;
@@ -24,7 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
         websiteUrlElement.textContent = url;
     });
 
-    //Receive message from background.js for CA Info and update html
+    /**
+     * Receive message from background.js for CA Info and update html
+     */
     browser.runtime.onMessage.addListener(
         (request, sender, sendResponse) => {
             if (request.rootCA){ // checking if root CA exists in the requesr
@@ -35,7 +39,9 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-    // call the functions to mark the website as either sensitive or not sensitive
+    /**
+     * call the functions to mark the website as either sensitive or not sensitive
+     */ 
     nonSens.addEventListener("click", () => {
         markWebsiteNonSensitive()});
     sens.addEventListener("click", () => {
