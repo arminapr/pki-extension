@@ -6,17 +6,13 @@ button {
     text-align: center;
     font-size: 1.5em;
     cursor: pointer;
-    background-color: #E5F2F2;
+    background-color: #B6C9;
 }
 
 html, body {
     width: 200px;
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     text-align: center;
-}
-
-button {
-    background-color: #B3F9;
 }
 
 img {
