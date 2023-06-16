@@ -19,7 +19,7 @@
 
     "browser_action": {
         "default_title": "Extension Trial",
-        "default_popup": "popup/change.html"
+        "default_popup": "popup/popup.html"
     },
     
     "content_scripts": [
