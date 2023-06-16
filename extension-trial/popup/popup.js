@@ -1,29 +1,61 @@
 document.addEventListener("DOMContentLoaded", () => {
     var notMarked = document.getElementById("notMarked");
+    var safe = document.getElementById("safe");
+    var misMarked = document.getElementById("misMarked");
+    var misClicked = document.getElementById("misClicked");
     var markedSame = document.getElementById("markedSameCert");
     var markedDiff = document.getElementById("markedDiffCert");
     var nonSens = document.getElementById("markedNonSensitive");
     var faviconImage = document.getElementById('faviconImage'); //Favicon (Logo)
     var websiteUrlElement = document.getElementById('websiteUrl'); //URL
 
+    var safeWebsites = localStorage.getItem("safeList");
+    if (safeWebsites) {
+        var safeList = JSON.parse(storedList);
+    } else {
+        var safeList = [];
+    }
+    
     /*
      * Tab Info, Favicon, and URL
      */
     browser.tabs.query({ active: true, currentWindow: true }, function(tabs) {
         var currentTab = tabs[0];
         var url = currentTab.url;
-        
-        // Get the favicon URL
-        var faviconUrl = 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(url);
-        faviconImage.src = faviconUrl;
-
+        if (safeList.includes(url)) {
+            notMarked.style.display="none";
+            // TODO: add a conditional comparing the details of the certificates and if they are the same
+            /*
+             * if (prev certificate component != current) {
+             *     markedSame.style.display = "block";
+             * }
+             * else {
+             *     markedDiff.style.display = "block";
+             * }
+             */
+        }
         //Display the website URL
         websiteUrlElement.textContent = url;
+
+        // Get the favicon URL and set the HTML img content
+        var faviconUrl = currentTab.favIconUrl;
+        faviconImage.src = faviconUrl;
+
+        // if they click on the safe button, add the website to a list
+        safe.addEventListener("click", () => {
+            addSafeWebsite();
+        })
+
+        function addSafeWebsite() {
+            safeList.push(url);
+        }
     });
 
-    /*
-     * Receive message from background.js for CA Info and update html
-     */
+    
+    
+    
+
+    // Receive message from background.js for CA Info and update html
     browser.runtime.onMessage.addListener(
         (request, sender, sendResponse) => {
             if (request.rootCA){ // checking if root CA exists in the requesr
@@ -34,9 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-    /*
-     * call the functions to mark the website as either sensitive or not sensitive
-     */ 
+    // Call the functions to mark the website as either sensitive or not sensitive
     nonSens.addEventListener("click", () => {
         markWebsiteNonSensitive()});
     sens.addEventListener("click", () => {
