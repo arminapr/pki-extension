@@ -1,0 +1,22 @@
+button {
+    border: none;
+    width: 100%;
+    margin: 2% auto;
+    padding: 5px;
+    text-align: center;
+    font-size: 1.5em;
+    cursor: pointer;
+    background-color: #B6C9;
+}
+
+html, body {
+    width: 200px;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    text-align: center;
+}
+
+img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
