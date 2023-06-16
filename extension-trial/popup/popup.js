@@ -1,17 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
-    var nonSens = document.getElementById("nonSensitive");
-    var sens = document.getElementById("sensitive");
-    var sensitiveQ = document.getElementById("SensitiveQuestion");
-    var secureQ = document.getElementById("SecurityQuestion");
-    var trustQ = document.getElementById("TrustQuestion");
-    var nonSecure = document.getElementById("notSecure");
-    var secure = document.getElementById("secure");
-    var nonSecureText = document.getElementById("nonSecureText");
-    var secureText = document.getElementById("secureText");
+    var notMarked = document.getElementById("notMarked");
+    var markedSame = document.getElementById("markedSameCert");
+    var markedDiff = document.getElementById("markedDiffCert");
+    var nonSens = document.getElementById("markedNonSensitive");
     var faviconImage = document.getElementById('faviconImage'); //Favicon (Logo)
     var websiteUrlElement = document.getElementById('websiteUrl'); //URL
 
-    /**
+    /*
      * Tab Info, Favicon, and URL
      */
     browser.tabs.query({ active: true, currentWindow: true }, function(tabs) {
@@ -26,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
         websiteUrlElement.textContent = url;
     });
 
-    /**
+    /*
      * Receive message from background.js for CA Info and update html
      */
     browser.runtime.onMessage.addListener(
@@ -39,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-    /**
+    /*
      * call the functions to mark the website as either sensitive or not sensitive
      */ 
     nonSens.addEventListener("click", () => {
