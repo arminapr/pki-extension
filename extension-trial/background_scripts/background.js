@@ -16,7 +16,7 @@ async function sendRootCAName(details){
 
                 let rootCA = root.substring(3,root.indexOf(",")); //substring to only include the root CA name (comma seperated list)
                 
-                browser.runtime.sendMessage({rootCA}); //send to change.js
+                browser.runtime.sendMessage({rootCA}); //send to popup.js
             }
     } catch (error){
         console.error(error);
