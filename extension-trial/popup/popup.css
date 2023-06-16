@@ -15,12 +15,8 @@ html, body {
     text-align: center;
 }
 
-button[id="nonSensitive"], button[id="notSecure"] {
-    background-color: red;
-}
-
-button[id="sensitive"], button[id="secure"] {
-    background-color: green;
+button {
+    background-color: #B3F9;
 }
 
 img {
