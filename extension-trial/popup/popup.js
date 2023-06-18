@@ -28,15 +28,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // add a domain to the safe list
     function addSafeWebsite(url) {
         safeList.push(url);
-        notMarked.style.display="none";
-        trustText.style.display="block";
+        notMarked.style.display = "none";
+        trustText.style.display = "block";
     }
 
     // add a domain to the unsafe list
     function addUnsafeWebsite(url) {
         unsafeList.push(url);
-        notMarked.style.display="none";
-        untrustText.style.display="block";
+        notMarked.style.display = "none";
+        untrustText.style.display = "block";
     }
 
     // update the website information on the extension
@@ -84,9 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
         applyTo(addUnsafeWebsite);
     });
     misClicked.addEventListener("click", () => {
-        setTimeout(() => {
-            window.close(); // I don't think this works
-        }, 100)
+        window.close();
     });
 })
 
