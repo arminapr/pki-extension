@@ -11,13 +11,19 @@ document.addEventListener("DOMContentLoaded", () => {
     var nonSens = document.getElementById("markedNonSensitive");
     var faviconImage = document.getElementById('faviconImage'); //Favicon (Logo)
     var websiteUrlElement = document.getElementById('websiteUrl'); //URL
+    // extracting the list of safe and unsafe websites from local storage
+    const safeWebsites = localStorage.getItem("safeList"); 
+    const unsafeWebsites = localStorage.getItem("unsafeList");
+    // if they exist in local storage, retrieve them; otherwise, make a new list
+    const safeList = safeWebsites ? JSON.parse(safeWebsites) : [];
+    const unsafeList = unsafeWebsites ? JSON.parse(unsafeWebsites) : [];
 
     // get the information on the extension
     browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        //updateInfo(tabs[0]);
         const url = tabs[0].url;
+        const favicon = tabs[0].favIconUrl;
         websiteUrlElement.textContent = url;
-        faviconImage.src = tabs[0].favIconUrl;
+        faviconImage.src = favicon;
         // Receive message from background.js for CA Info and update html
         browser.runtime.onMessage.addListener(
             (request, sender, sendResponse) => {
@@ -33,6 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // if they click on the safe button, add the website to a list
     safe.addEventListener("click", function() {
         addToSensitive(url);
+        notMarked.style.display = "none";
+        markedSame.style.display = "block";
     });
     misMarked.addEventListener("click", function() {
         addToBlock(url);
@@ -85,7 +93,7 @@ function retrieveStoredInfo(url){
 // Update the popup based on the stored information and CA info comparison
 function updatePopup(url, storedCAInfo, isSensitive){
     const notice = document.getElementById("notice");
-
+    
     if (isSensitive){
         notice.textContent = "This website has been marked sensitive. ";
     } else {
