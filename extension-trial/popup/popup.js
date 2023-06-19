@@ -1,3 +1,6 @@
+// Global variable for CA info
+let caInfo;
+
 document.addEventListener("DOMContentLoaded", () => {
     var notMarked = document.getElementById("notMarked");
     var safe = document.getElementById("safe");
@@ -8,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     var nonSens = document.getElementById("markedNonSensitive");
     var faviconImage = document.getElementById('faviconImage'); //Favicon (Logo)
     var websiteUrlElement = document.getElementById('websiteUrl'); //URL
-
+    const rootCAInfoElement = document.getElementById("rootCAInfo");
     var safeWebsites = localStorage.getItem("safeList");
     if (safeWebsites) {
         var safeList = JSON.parse(storedList);
@@ -59,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     browser.runtime.onMessage.addListener(
         (request, sender, sendResponse) => {
             if (request.rootCA){ // checking if root CA exists in the requesr
-                const rootCAInfoElement = document.getElementById("rootCAInfo");
+                caInfo = request.rootCA;
                 rootCAInfoElement.textContent = request.rootCA;
             }
         }
