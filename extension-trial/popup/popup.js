@@ -139,6 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function checkCA(url) {
         retrieveStoredInfo(url).then((storedInfo) => {
             if (storedInfo && storedInfo.storedCAInfo !== caInfo) {
+                markedDiff.style.display = "block"; // telling the user the CA has changed
                 browser.storage.local.set({ [url]: [caInfo, storedInfo.isSensitive] });
             }
         });
