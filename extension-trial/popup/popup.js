@@ -57,6 +57,28 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    function checkCA(url, currentCaInfo) {
+        browser.storage.local.get(["safe", "unsafe"], (result) => {
+            let isSensitiveSite = result.safe && result.safe[url];
+            let isUnsafeSite = result.unsafe && result.unsafe[url];
+            let previousCaInfo = isSensitiveSite ? result.safe[url] : (isUnsafeSite ? result.unsafe[url] : null);
+
+            if (isSensitiveSite || isUnsafeSite) {
+                if (previousCaInfo === currentCaInfo) {
+                    markedSame.style.display = "block";
+                    document.getElementById("notice").textContent = "SAME";
+                } else {
+                    markedDiff.style.display = "block";
+                    document.getElementById("notice").textContent = "DIFF";
+                }
+            } else {
+                notMarked.style.display = "block";
+                document.getElementById("notice").textContent = "NOPE";
+            }
+        });
+    }
+}); //extra
+
     /**
     // update the website information on the extension
     function updateInfo(tab) {
@@ -75,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
     */
-
+/**
     // Retrieve the stored information for the current website
     function retrieveStoredInfo(url) {
         return new Promise((resolve) => {
