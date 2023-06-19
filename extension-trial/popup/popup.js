@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     /**
      * Responsible for adding sites to list
      * Retrieve current list from storage --> add new website --> save list back to storage
+     * Also display message for safe site
      * @param {string} url 
      * @param {string} type 
      */
@@ -61,6 +62,11 @@ document.addEventListener("DOMContentLoaded", () => {
             sitesList[url] = caInfo; //add website and caInfo to list
             browser.storage.local.set({ [type]: sitesList }); //save list to storage
         });
+
+        if (type === "safe") {
+            siteStatusDivs.notMarked.style.display = "none";
+            siteStatusDivs.markedSame.style.display = "block";
+        }
     }
 
     /**
