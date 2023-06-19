@@ -77,6 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     */
 
+// Retrieve the stored information for the current website
 function retrieveStoredInfo(url){
     return new Promise((resolve) => {
         browser.storage.local.get(url).then((result) => {
@@ -90,6 +91,7 @@ function retrieveStoredInfo(url){
     });
 }
 
+// Update the popup based on the stored information and CA info comparison
 function updatePopup(url, storedCAInfo, isSensitive){
     const notice = document.getElementById("notice");
 
@@ -107,6 +109,7 @@ function updatePopup(url, storedCAInfo, isSensitive){
     }
 }
 
+// Get the current tab URL, retrieve stored information, and update the popup
 function tabUpdate(){
     const queryInfo = { active: true, currentWindow: true};
 
@@ -129,15 +132,17 @@ browser.tabs.onActivated.addListener(tabUpdate); //event listener for tab change
 
 tabUpdate(); //initial function call on popup load
 
-
+//save caInfo and mark sensitive
 function addToSensitive(url){
     browser.storage.local.set({ [url]: [caInfo, true] });
 }
 
+//save caInfo and block
 function addToBlock(url){
     browser.storage.local.set({ [url]: [caInfo, false] });
 }
 
+//Check if CA Info has changed 
 function checkCA(url){
     retrieveStoredInfo(url).then((storedInfo) => {
         if (storedInfo && storedInfo.storedCAInfo !== caInfo) {
