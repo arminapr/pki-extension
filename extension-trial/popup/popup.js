@@ -49,29 +49,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
+    /**
+     * Responsible for adding sites to list
+     * Retrieve current list from storage --> add new website --> save list back to storage
+     * @param {string} url 
+     * @param {string} type 
+     */
     function handleSiteAddition(url, type) {
-        browser.storage.local.get(type, (result) => {
-            let sitesList = result[type] ? result[type] : {};
-            sitesList[url] = caInfo;
-            browser.storage.local.set({ [type]: sitesList });
+        browser.storage.local.get(type, (result) => { //get current list of storage
+            let sitesList = result[type] ? result[type] : {}; //If list exists, use it. Otherwise, create new object
+            sitesList[url] = caInfo; //add website and caInfo to list
+            browser.storage.local.set({ [type]: sitesList }); //save list to storage
         });
     }
 
+    /**
+     * Responsible for comparing current caInfo with stored caInfo
+     * @param {string} url 
+     * @param {string} currentCaInfo 
+     */
     function checkCA(url, currentCaInfo) {
-        browser.storage.local.get(["safe", "unsafe"], (result) => {
+        browser.storage.local.get(["safe", "unsafe"], (result) => { //Get current list of storage
+            //Check if the current website exists in either of the lists
             let isSensitiveSite = result.safe && result.safe[url];
             let isUnsafeSite = result.unsafe && result.unsafe[url];
-            let previousCaInfo = isSensitiveSite ? result.safe[url] : (isUnsafeSite ? result.unsafe[url] : null);
+
+            let previousCaInfo = isSensitiveSite ? result.safe[url] : (isUnsafeSite ? result.unsafe[url] : null); // If the website is found, get the stored CA info for that website
 
             if (isSensitiveSite || isUnsafeSite) {
-                if (previousCaInfo === currentCaInfo) {
+                if (previousCaInfo === currentCaInfo) { // If the stored CA info matches the current CA info, display the "same CA" message
                     markedSame.style.display = "block";
                     document.getElementById("notice").textContent = "SAME";
-                } else {
+                } else { // If the stored CA info does not match the current CA info, display the "different CA" message
                     markedDiff.style.display = "block";
                     document.getElementById("notice").textContent = "DIFF";
                 }
-            } else {
+            } else { // If the website does not exist in either of the lists, display the "not marked" message
                 notMarked.style.display = "block";
                 document.getElementById("notice").textContent = "NOPE";
             }
