@@ -12,15 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
     var faviconImage = document.getElementById('faviconImage'); //Favicon (Logo)
     var websiteUrlElement = document.getElementById('websiteUrl'); //URL
 
-    /**
-    var safeWebsites = localStorage.getItem("safeList");
-    if (safeWebsites) {
-        var safeList = JSON.parse(storedList);
-    } else {
-        var safeList = [];
-    }
-    */
-
     // get the information on the extension
     browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         //updateInfo(tabs[0]);
