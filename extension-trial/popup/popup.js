@@ -24,32 +24,38 @@ document.addEventListener("DOMContentLoaded", () => {
         const favicon = tabs[0].favIconUrl;
         websiteUrlElement.textContent = url;
         faviconImage.src = favicon;
+
         // Receive message from background.js for CA Info and update html
-        browser.runtime.onMessage.addListener(
-            (request, sender, sendResponse) => {
-                if (request.rootCA) { // checking if root CA exists in the request
-                    caInfo = request.rootCA;
-                    const rootCAInfoElement = document.getElementById("rootCAInfo");
-                    rootCAInfoElement.textContent = caInfo;
-                    checkCA(url);
-                }
+        browser.runtime.onMessage.addListener((request) => {
+            if (request.rootCA) { // Check if root CA exists in the request
+                caInfo = request.rootCA;
+                document.getElementById("rootCAInfo").textContent = caInfo;
+                checkCA(url, caInfo);
             }
-        );
+        });
 
         // if they click on the safe button, add the website to a list
         safe.addEventListener("click", function () {
-            addToSensitive(url);
+            handleSiteAddition(url, "safe");
             notMarked.style.display = "none";
             markedSame.style.display = "block";
         });
         misMarked.addEventListener("click", function () {
-            addToBlock(url);
+            handleSiteAddition(url, "unsafe");
         });
         misClicked.addEventListener("click", () => {
             window.close();
         });
 
     });
+
+    function handleSiteAddition(url, type) {
+        browser.storage.local.get(type, (result) => {
+            let sitesList = result[type] ? result[type] : {};
+            sitesList[url] = caInfo;
+            browser.storage.local.set({ [type]: sitesList });
+        });
+    }
 
     /**
     // update the website information on the extension
