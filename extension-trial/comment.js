@@ -1,6 +1,8 @@
 //extra
 
+
     /**
+     * 
     // update the website information on the extension
     function updateInfo(tab) {
         /**
@@ -18,6 +20,12 @@
         }
     }
     */
+       // extracting the list of safe and unsafe websites from local storage
+       //const safeWebsites = localStorage.getItem("safeList");
+       //const unsafeWebsites = localStorage.getItem("unsafeList");
+       // if they exist in local storage, retrieve them; otherwise, make a new list
+       //const safeList = safeWebsites ? JSON.parse(safeWebsites) : [];
+       //const unsafeList = unsafeWebsites ? JSON.parse(unsafeWebsites) : [];
 /**
     // Retrieve the stored information for the current website
     function retrieveStoredInfo(url) {

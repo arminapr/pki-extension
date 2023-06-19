@@ -11,12 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
     var nonSens = document.getElementById("markedNonSensitive");
     var faviconImage = document.getElementById('faviconImage'); //Favicon (Logo)
     var websiteUrlElement = document.getElementById('websiteUrl'); //URL
-    // extracting the list of safe and unsafe websites from local storage
-    const safeWebsites = localStorage.getItem("safeList");
-    const unsafeWebsites = localStorage.getItem("unsafeList");
-    // if they exist in local storage, retrieve them; otherwise, make a new list
-    const safeList = safeWebsites ? JSON.parse(safeWebsites) : [];
-    const unsafeList = unsafeWebsites ? JSON.parse(unsafeWebsites) : [];
 
     // get the information on the extension
     browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
