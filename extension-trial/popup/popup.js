@@ -69,13 +69,24 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 })
 
+function addToSensitive(url){
+    browser.storage.local.set({ [url]: [caInfo, true] });
+}
+
+function addToBlock(url){
+    browser.storage.local.set({ [url]: [caInfo, false] });
+}
+
+
+/**
 // we can't set this in checkChange because it would update every time
 var prevCA;
 if (!prevCA) {
     prevCA = "Distrust"; // dummy value
 }
+*/
 
-/* function checkChange(url) {
+/** function checkChange(url) {
     const currCA = "Entrust"; // dummy value
     // check if the current CA is the same as the previous one
     if (currCA != prevCA) {
