@@ -48,9 +48,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Receive message from background.js for CA Info and update html
     browser.runtime.onMessage.addListener(
         (request, sender, sendResponse) => {
-            if (request.rootCA){ // checking if root CA exists in the requesr
+            if (request.rootCA){ // checking if root CA exists in the request
+                caInfo = request.rootCA;
                 const rootCAInfoElement = document.getElementById("rootCAInfo");
-                rootCAInfoElement.textContent = request.rootCA;
+                rootCAInfoElement.textContent = caInfo;
             }
         }
     );
