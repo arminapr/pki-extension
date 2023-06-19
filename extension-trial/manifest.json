@@ -2,30 +2,36 @@
     "manifest_version": 2,
     "name": "PKI-Extension",
     "version": "1.0",
-
     "description": "Helps to keep websites listed as secure/unsecure by asking the user and observing the digital certificate.",
     "icons": {
         "48": "icons/nsf-48.png"
     },
-
     "permissions": [
-        "storage", "<all_urls>", "tabs", "webRequest", "webRequestBlocking"
+        "storage",
+        "<all_urls>",
+        "tabs",
+        "webRequest",
+        "webRequestBlocking",
+        "activeTab"
     ],
-
     "background": {
-        "scripts": ["background_scripts/background.js"],
+        "scripts": [
+            "background_scripts/background.js"
+        ],
         "persistent": false
     },
-
     "browser_action": {
         "default_title": "Extension Trial",
         "default_popup": "popup/popup.html"
     },
-    
     "content_scripts": [
         {
-            "matches": ["<all_urls>"],
-            "js": ["content_scripts/content.js"]
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "content_scripts/content.js"
+            ]
         }
     ]
 }
