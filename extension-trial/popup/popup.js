@@ -2,13 +2,19 @@
 let caInfo;
 
 document.addEventListener("DOMContentLoaded", () => {
-    var notMarked = document.getElementById("notMarked");
-    var safe = document.getElementById("safe");
-    var misMarked = document.getElementById("misMarked");
-    var misClicked = document.getElementById("misClicked");
-    var markedSame = document.getElementById("markedSameCert");
-    var markedDiff = document.getElementById("markedDiffCert");
-    var nonSens = document.getElementById("markedNonSensitive");
+    const buttons = {
+        safe: document.getElementById("safe"),
+        misMarked: document.getElementById("misMarked"),
+        misClicked: document.getElementById("misClicked")
+    };
+
+    const siteStatusDivs = {
+        notMarked: document.getElementById("notMarked"),
+        markedSame: document.getElementById("markedSameCert"),
+        markedDiff: document.getElementById("markedDiffCert"),
+        nonSens: document.getElementById("markedNonSensitive")
+    };
+
     var faviconImage = document.getElementById('faviconImage'); //Favicon (Logo)
     var websiteUrlElement = document.getElementById('websiteUrl'); //URL
 
@@ -29,15 +35,15 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         // if they click on the safe button, add the website to a list
-        safe.addEventListener("click", function () {
+        buttons.safe.addEventListener("click", function () {
             handleSiteAddition(url, "safe");
-            notMarked.style.display = "none";
-            markedSame.style.display = "block";
+            siteStatusDivs.notMarked.style.display = "none";
+            siteStatusDivs.markedSame.style.display = "block";
         });
-        misMarked.addEventListener("click", function () {
+        buttons.misMarked.addEventListener("click", function () {
             handleSiteAddition(url, "unsafe");
         });
-        misClicked.addEventListener("click", () => {
+        buttons.misClicked.addEventListener("click", () => {
             window.close();
         });
 
@@ -72,14 +78,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (isSensitiveSite || isUnsafeSite) {
                 if (previousCaInfo === currentCaInfo) { // If the stored CA info matches the current CA info, display the "same CA" message
-                    markedSame.style.display = "block";
+                    siteStatusDivs.markedSame.style.display = "block";
                     document.getElementById("notice").textContent = "SAME";
                 } else { // If the stored CA info does not match the current CA info, display the "different CA" message
-                    markedDiff.style.display = "block";
+                    siteStatusDivs.markedDiff.style.display = "block";
                     document.getElementById("notice").textContent = "DIFF";
                 }
             } else { // If the website does not exist in either of the lists, display the "not marked" message
-                notMarked.style.display = "block";
+                siteStatusDivs.notMarked.style.display = "block";
                 document.getElementById("notice").textContent = "NOPE";
             }
         });
