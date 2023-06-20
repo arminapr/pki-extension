@@ -84,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let previousCaInfo = isSensitiveSite ? result.safe[url] : (isUnsafeSite ? result.unsafe[url] : null); // If the website is found, get the stored CA info for that website
 
             if (isSensitiveSite || isUnsafeSite) {
+                siteStatusDivs.notMarked.style.display = "none";
                 if (previousCaInfo === currentCaInfo) { // If the stored CA info matches the current CA info, display the "same CA" message
                     siteStatusDivs.markedSame.style.display = "block";
                     document.getElementById("notice").textContent = "same certificate";
