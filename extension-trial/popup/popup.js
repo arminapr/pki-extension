@@ -12,7 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
         notMarked: document.getElementById("notMarked"),
         markedSame: document.getElementById("markedSameCert"),
         markedDiff: document.getElementById("markedDiffCert"),
-        nonSens: document.getElementById("markedNonSensitive")
+        nonSens: document.getElementById("markedNonSensitive"),
+        untrustText: document.getElementById("untrustText"),
+        trustText: document.getElementById("trustText")
     };
 
     var faviconImage = document.getElementById('faviconImage'); //Favicon (Logo)
@@ -37,8 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // if they click on the safe button, add the website to a list
         buttons.safe.addEventListener("click", function () {
             handleSiteAddition(url, "safe");
-            siteStatusDivs.notMarked.style.display = "none";
-            siteStatusDivs.markedSame.style.display = "block";
         });
         buttons.misMarked.addEventListener("click", function () {
             handleSiteAddition(url, "unsafe");
@@ -62,10 +62,11 @@ document.addEventListener("DOMContentLoaded", () => {
             sitesList[url] = caInfo; //add website and caInfo to list
             browser.storage.local.set({ [type]: sitesList }); //save list to storage
         });
-
+        siteStatusDivs.notMarked.style.display = "none";
         if (type === "safe") {
-            siteStatusDivs.notMarked.style.display = "none";
-            siteStatusDivs.markedSame.style.display = "block";
+            siteStatusDivs.trustText.style.display = "block";
+        } else if (type === "unsafe") {
+            siteStatusDivs.untrustText.style.display = "block";
         }
     }
 
@@ -85,14 +86,14 @@ document.addEventListener("DOMContentLoaded", () => {
             if (isSensitiveSite || isUnsafeSite) {
                 if (previousCaInfo === currentCaInfo) { // If the stored CA info matches the current CA info, display the "same CA" message
                     siteStatusDivs.markedSame.style.display = "block";
-                    document.getElementById("notice").textContent = "SAME";
+                    document.getElementById("notice").textContent = "same certificate";
                 } else { // If the stored CA info does not match the current CA info, display the "different CA" message
                     siteStatusDivs.markedDiff.style.display = "block";
-                    document.getElementById("notice").textContent = "DIFF";
+                    document.getElementById("notice").textContent = "different certificate";
                 }
             } else { // If the website does not exist in either of the lists, display the "not marked" message
                 siteStatusDivs.notMarked.style.display = "block";
-                document.getElementById("notice").textContent = "NOPE";
+                document.getElementById("notice").textContent = "no certificate saved";
             }
         });
     }
