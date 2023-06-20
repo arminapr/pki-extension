@@ -9,4 +9,4 @@ browser.runtime.onMessage.addListener((msg) => {
         blocked = false;
         window.location.reload();
     }
-})
+});
