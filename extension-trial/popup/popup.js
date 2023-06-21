@@ -1,6 +1,7 @@
 // Global variable for CA info
 let caInfo;
 
+
 document.addEventListener("DOMContentLoaded", () => {
     const buttons = {
         safe: document.getElementById("safe"),
@@ -19,6 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     var faviconImage = document.getElementById('faviconImage'); //Favicon (Logo)
     var websiteUrlElement = document.getElementById('websiteUrl'); //URL
+
+
 
     // get the information on the extension
     browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -81,7 +84,11 @@ document.addEventListener("DOMContentLoaded", () => {
             let isSensitiveSite = result.safe && result.safe[url];
             let isUnsafeSite = result.unsafe && result.unsafe[url];
 
-            let previousCaInfo = isSensitiveSite ? result.safe[url] : (isUnsafeSite ? result.unsafe[url] : null); // If the website is found, get the stored CA info for that website
+            let previousCaInfo = isSensitiveSite
+                ? result.safe[url]
+                : (isUnsafeSite
+                    ? result.unsafe[url]
+                    : null); // If the website is found, get the stored CA info for that website
 
             if (isSensitiveSite || isUnsafeSite) {
                 siteStatusDivs.notMarked.style.display = "none";
