@@ -95,6 +95,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (previousCaInfo === currentCaInfo) { // If the stored CA info matches the current CA info, display the "same CA" message
                     siteStatusDivs.markedSame.style.display = "block";
                     document.getElementById("notice").textContent = "same certificate";
+                    setTimeout(() => {
+                        window.close();
+                    }, 3000);
                 } else { // If the stored CA info does not match the current CA info, display the "different CA" message
                     siteStatusDivs.markedDiff.style.display = "block";
                     document.getElementById("notice").textContent = "different certificate";
