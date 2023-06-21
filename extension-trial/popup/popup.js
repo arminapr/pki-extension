@@ -95,12 +95,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (previousCaInfo === currentCaInfo) { // If the stored CA info matches the current CA info, display the "same CA" message
                     siteStatusDivs.markedSame.style.display = "block";
                     document.getElementById("notice").textContent = "same certificate";
-                    setTimeout(() => {
+                    setTimeout(() => {  // Close window after 3 seconds
                         window.close();
                     }, 3000);
                 } else { // If the stored CA info does not match the current CA info, display the "different CA" message
                     siteStatusDivs.markedDiff.style.display = "block";
                     document.getElementById("notice").textContent = "different certificate";
+                    let buttons = { // Lets the user choose whether to continue to trust this site
+                        conTrust: document.getElementById("conTrust"),
+                        stopTrust: document.getElementById("stopTrust")
+                    };
+                    buttons.conTrust.addEventListener("click", function() { // If user wants to continue to trust, update CA info but keep url on safe list
+                        handleSiteAddition(url, "safe");
+                    });
+                    buttons.stopTrust.addEventListener("click", function() { // If user does not want to trust, remove url from safe list and add it to unsafe list
+                        browser.storage.local.remove(url);
+                        handleSiteAddition(url, "unsafe");
+                    });
                 }
             } else { // If the website does not exist in either of the lists, display the "not marked" message
                 siteStatusDivs.notMarked.style.display = "block";
