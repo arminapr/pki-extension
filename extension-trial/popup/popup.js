@@ -4,12 +4,14 @@ let caInfo;
 
 document.addEventListener("DOMContentLoaded", () => {
     const buttons = {
+        visit: document.getElementById("visit"),
         safe: document.getElementById("safe"),
         misMarked: document.getElementById("misMarked"),
         misClicked: document.getElementById("misClicked")
     };
 
     const siteStatusDivs = {
+        unsecure: document.getElementById("unsecure"),
         notMarked: document.getElementById("notMarked"),
         markedSame: document.getElementById("markedSameCert"),
         markedDiff: document.getElementById("markedDiffCert"),
@@ -67,8 +69,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         siteStatusDivs.notMarked.style.display = "none";
         if (type === "safe") {
+            siteStatusDivs.untrustText.style.display = "none";
             siteStatusDivs.trustText.style.display = "block";
         } else if (type === "unsafe") {
+            siteStatusDivs.trustText.style.display = "none";
             siteStatusDivs.untrustText.style.display = "block";
         }
     }
@@ -93,12 +97,14 @@ document.addEventListener("DOMContentLoaded", () => {
             if (isSensitiveSite || isUnsafeSite) {
                 siteStatusDivs.notMarked.style.display = "none";
                 if (previousCaInfo === currentCaInfo) { // If the stored CA info matches the current CA info, display the "same CA" message
+                    siteStatusDivs.markedDiff.style.display = "none";
                     siteStatusDivs.markedSame.style.display = "block";
                     document.getElementById("notice").textContent = "same certificate";
                     setTimeout(() => {  // Close window after 3 seconds
                         window.close();
                     }, 3000);
                 } else { // If the stored CA info does not match the current CA info, display the "different CA" message
+                    siteStatusDivs.markedSame.style.display = "none";
                     siteStatusDivs.markedDiff.style.display = "block";
                     document.getElementById("notice").textContent = "different certificate";
                     let buttons = { // Lets the user choose whether to continue to trust this site
