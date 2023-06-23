@@ -9,9 +9,10 @@ button {
     background-color: #B6C9;
 }
 
-html, body {
+html,
+body {
     width: 200px;
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     text-align: center;
 }
 
@@ -19,4 +20,12 @@ img {
     width: 100px;
     height: 100px;
     object-fit: contain;
+}
+
+body.blocked {
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.5;
+    filter: grayscale(100%);
+    /* Add any other styling for the blocked state */
 }

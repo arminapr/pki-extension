@@ -9,11 +9,10 @@ async function sendRootCAName(details) {
             details.requestId,
             { certificateChain: true }
         );
-
-        if (
-            (securityInfo.state === "secure"
-                || securityInfo.state === "weak")
-            && !securityInfo.isUntrusted
+        if (securityInfo.state === "insecure" || securityInfo.state === "broken") {
+            browser.runtime.sendMessage("yes");
+        }
+        else if (!securityInfo.isUntrusted
             && securityInfo.certificates.length > 0) { //if Root Info exists
             const root = securityInfo.certificates[securityInfo.certificates.length - 1].issuer; //"subject" property from CertificateInfo Object
             let rootCA = root.substring(3, root.indexOf(",")); //substring to only include the root CA name (comma seperated list)

@@ -23,8 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
     var faviconImage = document.getElementById('faviconImage'); //Favicon (Logo)
     var websiteUrlElement = document.getElementById('websiteUrl'); //URL
 
-
-
     // get the information on the extension
     browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         const url = tabs[0].url;
@@ -39,8 +37,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById("rootCAInfo").textContent = caInfo;
                 checkCA(url, caInfo);
             }
+            if (request.secure) {
+                if (request.secure === "yes") { }
+                // Add CSS class to block page interaction
+                document.body.classList.add("blocked");
+            }
         });
 
+        buttons.visit.addEventListener("click", () => {
+            unblockSite();
+        })
         // if they click on the safe button, add the website to a list
         buttons.safe.addEventListener("click", function () {
             handleSiteAddition(url, "safe");
@@ -111,10 +117,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         conTrust: document.getElementById("conTrust"),
                         stopTrust: document.getElementById("stopTrust")
                     };
-                    buttons.conTrust.addEventListener("click", function() { // If user wants to continue to trust, update CA info but keep url on safe list
+                    buttons.conTrust.addEventListener("click", function () { // If user wants to continue to trust, update CA info but keep url on safe list
                         handleSiteAddition(url, "safe");
                     });
-                    buttons.stopTrust.addEventListener("click", function() { // If user does not want to trust, remove url from safe list and add it to unsafe list
+                    buttons.stopTrust.addEventListener("click", function () { // If user does not want to trust, remove url from safe list and add it to unsafe list
                         browser.storage.local.remove(url);
                         handleSiteAddition(url, "unsafe");
                     });
@@ -124,5 +130,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById("notice").textContent = "no certificate saved";
             }
         });
+    }
+
+    function unblockSite() {
+        document.body.classList.remove("blocked");
     }
 });
