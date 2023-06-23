@@ -66,6 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         buttons.settings.addEventListener("click", () => {
+            resetText();
             
         });
 
@@ -143,16 +144,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    function blockSite() {
-        // Retrieve the website content
-        websiteContent = document.documentElement.innerHTML;
-
-        // Remove the website content
-        document.documentElement.innerHTML = "";
-    };
-
-    function restoreWebsite() {
-        // Restore the website content
-        document.documentElement.innerHTML = websiteContent;
+    function resetText() {
+        for (const key in siteStatusDivs) {
+            key.style.display = "none";
+        }
     }
 });
