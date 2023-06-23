@@ -22,10 +22,11 @@ img {
     object-fit: contain;
 }
 
-body.blocked {
-    pointer-events: none;
-    user-select: none;
-    opacity: 0.5;
-    filter: grayscale(100%);
-    /* Add any other styling for the blocked state */
+.button {
+    position: fixed;
+    top: 5px;
+    right: 5px;
+    z-index: 800;
+    width: 30px;
+    height: 30px;
 }

@@ -7,7 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
         visit: document.getElementById("visit"),
         safe: document.getElementById("safe"),
         misMarked: document.getElementById("misMarked"),
-        misClicked: document.getElementById("misClicked")
+        misClicked: document.getElementById("misClicked"),
+        settings: document.querySelectorAll('.button')
     };
 
     const siteStatusDivs = {
@@ -38,24 +39,34 @@ document.addEventListener("DOMContentLoaded", () => {
                 checkCA(url, caInfo);
             }
             if (request.secure) {
-                if (request.secure === "yes") { }
-                // Add CSS class to block page interaction
-                document.body.classList.add("blocked");
+                if (request.secure === "no") {
+                    siteStatusDivs.notMarked.style.display = "none";
+                    siteStatusDivs.unsecure.style.display = "block";
+                }
             }
         });
 
-        buttons.visit.addEventListener("click", () => {
-            unblockSite();
+
+        buttons.visit.addEventListener("click", function () {
+            window.close();
         })
-        // if they click on the safe button, add the website to a list
+        // if they click on the safe button, add the website to the safe list
         buttons.safe.addEventListener("click", function () {
             handleSiteAddition(url, "safe");
         });
+
+        // if they click on the mismarked button, add the website to the unsafe list
         buttons.misMarked.addEventListener("click", function () {
             handleSiteAddition(url, "unsafe");
         });
+
+        // if they click on the misclicked button, close the extension
         buttons.misClicked.addEventListener("click", () => {
             window.close();
+        });
+
+        buttons.settings.addEventListener("click", () => {
+            
         });
 
     });
@@ -132,7 +143,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    function unblockSite() {
-        document.body.classList.remove("blocked");
+    function blockSite() {
+        // Retrieve the website content
+        websiteContent = document.documentElement.innerHTML;
+
+        // Remove the website content
+        document.documentElement.innerHTML = "";
+    };
+
+    function restoreWebsite() {
+        // Restore the website content
+        document.documentElement.innerHTML = websiteContent;
     }
 });

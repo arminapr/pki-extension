@@ -10,7 +10,7 @@ async function sendRootCAName(details) {
             { certificateChain: true }
         );
         if (securityInfo.state === "insecure" || securityInfo.state === "broken") {
-            browser.runtime.sendMessage("yes");
+            browser.runtime.sendMessage("no");
         }
         else if (!securityInfo.isUntrusted
             && securityInfo.certificates.length > 0) { //if Root Info exists

@@ -6,6 +6,8 @@
         <link rel="stylesheet" type="text/css" href="popup.css">
     </head>
     <body>
+        <img class="button" src="../icons/settings.png" alt="Picture of a gear">
+
         <!--Favicon (Logo)-->
         <img id="faviconImage">
 
@@ -20,7 +22,7 @@
 
         <p id ="notice"></p>
 
-        <div id="unsecure" style="display: none">
+        <div id="unsecure" style="display: none; color: red">
             This website does has an unsecure connection. We have blocked access, do you want to access it?
             <button id="visit">Yes</button>
         </div>
@@ -53,6 +55,11 @@
         <div id="markedNonSensitive" style="display: none">
             <h1>This website is marked as non-sensitive. Changed your mind?</h1>
             <button id="changeToSensitive">Click here to mark as sensitive</button>
+        </div>
+
+        <div id="settings" style="display: none">
+            <button id="seeSafeList">See and change safe websites</button>
+            <button id="seeUnsafeList">See and change unsafe websites</button>
         </div>
         <script src="popup.js"></script>
     </body>
