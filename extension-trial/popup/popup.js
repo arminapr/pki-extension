@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
         safe: document.getElementById("safe"),
         misMarked: document.getElementById("misMarked"),
         misClicked: document.getElementById("misClicked"),
-        settings: document.querySelectorAll('.button')
+        settings: document.getElementById("settings")
     };
 
     const siteStatusDivs = {
@@ -67,7 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         buttons.settings.addEventListener("click", () => {
             resetText();
-
         });
 
     });
@@ -149,5 +148,6 @@ document.addEventListener("DOMContentLoaded", () => {
         for (const key in siteStatusDivs) {
             key.style.display = "none";
         }
+        return;
     }
 });

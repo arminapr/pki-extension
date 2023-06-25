@@ -5,18 +5,25 @@
 // extracts the certificate chain and sends it to the popup.js
 async function sendRootCAName(details) {
     try {
-        //get security info
+        // get security info
         const securityInfo = await browser.webRequest.getSecurityInfo(
             details.requestId,
             { certificateChain: true }
         );
         if (securityInfo.state === "insecure" || securityInfo.state === "broken") {
-            browser.runtime.sendMessage("no");
+            browser.runtime.sendMessage({ message: "no" });
         }
+        // get the root certificate authority of the domain
         else if (!securityInfo.isUntrusted
             && securityInfo.certificates.length > 0) { //if Root Info exists
-            const root = securityInfo.certificates[securityInfo.certificates.length - 1].issuer; //"subject" property from CertificateInfo Object
-            let rootCA = root.substring(3, root.indexOf(",")); //substring to only include the root CA name (comma seperated list)
+            const root = securityInfo.certificates;
+            let rootCA = "";
+            for (let i = 0; i < securityInfo.certificates.length; i++) {
+                let issuer = securityInfo.certificates[i].issuer;
+                rootCA = rootCA + issuer.substring(3, issuer.indexOf(",")) + " | ";
+            }
+            // const root = securityInfo.certificates[securityInfo.certificates.length - 1].issuer; //"subject" property from CertificateInfo Object
+            // let rootCA = root.substring(3, root.indexOf(",")); //substring to only include the root CA name (comma seperated list)
             browser.runtime.sendMessage({ rootCA }); //send to popup.js
         }
     } catch (error) {
