@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         buttons.settings.addEventListener("click", () => {
             resetText();
-            
+
         });
 
     });
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
         browser.storage.local.get(["safe", "unsafe"], (result) => { //Get current list of storage
             //Check if the current website exists in either of the lists
             let isSensitiveSite = result.safe && result.safe[url];
-            let isUnsafeSite = result.unsafe && result.unsafe[url];
+            let isUnsafeSite = result.unsafe && result.unsafe[url]; // TODO: do we need this?
 
             let previousCaInfo = isSensitiveSite
                 ? result.safe[url]
@@ -144,6 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // removes all the status 
     function resetText() {
         for (const key in siteStatusDivs) {
             key.style.display = "none";
