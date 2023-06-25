@@ -2,6 +2,7 @@
 /* write a function that would take a click on the extension and unblock
     the page */
 
+// extracts the certificate chain and sends it to the popup.js
 async function sendRootCAName(details) {
     try {
         //get security info
