@@ -30,8 +30,14 @@ document.addEventListener("DOMContentLoaded", () => {
     websiteUrlElement.textContent = url;
     faviconImage.src = favicon;
 
+    console.log("Receiver 1");
+
+    // Send message when popup is opened
+    browser.runtime.sendMessage({ data: "Trigger" });
+
     // Receive message from background.js for CA Info and update html
     browser.runtime.onMessage.addListener((request) => {
+      console.log("Receiver 2");
       if (request.rootCA) {
         // Check if root CA exists in the request
         caInfo = request.rootCA;

@@ -1,4 +1,4 @@
-"use strict";
+("use strict");
 /* write a function that would take a click on the extension and unblock
     the page */
 
@@ -28,8 +28,13 @@ async function sendRootCAName(details) {
       // const root = securityInfo.certificates[securityInfo.certificates.length - 1].issuer; //"subject" property from CertificateInfo Object
       // let rootCA = root.substring(3, root.indexOf(",")); //substring to only include the root CA name (comma seperated list)
 
-      document.addEventListener("DOMContentLoaded", () => {
-        browser.runtime.sendMessage({ rootCA }); //send to popup.js
+      console.log("Sender 1");
+
+      // Received message from popup.js, extension page is opened
+      browser.runtime.onMessage.addListener((request) => {
+        // Send root data to popup.js
+        console.log("Sender 2");
+        browser.runtime.sendMessage({ rootCA });
       });
     }
   } catch (error) {
