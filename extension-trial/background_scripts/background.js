@@ -25,7 +25,6 @@ async function sendRootCAName(details) {
         let issuer = securityInfo.certificates[i].issuer;
         rootCA = rootCA + issuer.substring(3, issuer.indexOf(",")) + " | ";
       }
-      console.log("Sender");
       // const root = securityInfo.certificates[securityInfo.certificates.length - 1].issuer; //"subject" property from CertificateInfo Object
       // let rootCA = root.substring(3, root.indexOf(",")); //substring to only include the root CA name (comma seperated list)
 
@@ -34,7 +33,6 @@ async function sendRootCAName(details) {
       });
     }
   } catch (error) {
-    console.log("Bad");
     console.error(error);
   }
 }

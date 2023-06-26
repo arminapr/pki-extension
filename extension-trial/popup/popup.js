@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
     faviconImage.src = favicon;
 
     // Receive message from background.js for CA Info and update html
-    console.log("Listener");
     browser.runtime.onMessage.addListener((request) => {
       if (request.rootCA) {
         // Check if root CA exists in the request
