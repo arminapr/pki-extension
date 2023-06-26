@@ -12,15 +12,14 @@ When users visit a website where they are entering sensitive information, like a
 
 ## Current Progress
 
-- Created a flowchart to map how the extension works
-- Began to look at how browser extensions are made
-- Began work on a simple browser extension
+- Save the domain and the CA as trusted/untrusted
+- Check if the CA has changed since the last visit
+- Notify the user if there are any changes
 
 ## Next Steps
 
-- Make sure flowchart is correct and continue fine-tune details
-- Continue to learn about development of browser extensions
-- Add features to basic extension that will used in our final product
+- Understand why the CA is not consistent for certain websites
+- Update the visuals of the extension
 
 ## Additional Features
 
