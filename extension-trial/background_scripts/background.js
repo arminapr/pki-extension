@@ -18,6 +18,8 @@ async function sendRootCAName(details) {
       !securityInfo.isUntrusted &&
       securityInfo.certificates.length > 0
     ) {
+      // Received message from popup.js, extension page is opened
+      browser.runtime.onMessage.addListener((request) => {
       //if Root Info exists
       const root = securityInfo.certificates;
       let rootCA = "";
@@ -28,8 +30,6 @@ async function sendRootCAName(details) {
       // const root = securityInfo.certificates[securityInfo.certificates.length - 1].issuer; //"subject" property from CertificateInfo Object
       // let rootCA = root.substring(3, root.indexOf(",")); //substring to only include the root CA name (comma seperated list)
 
-      // Received message from popup.js, extension page is opened
-      browser.runtime.onMessage.addListener((request) => {
         // Send root data to popup.js
         browser.runtime.sendMessage({ rootCA });
       });
@@ -39,10 +39,7 @@ async function sendRootCAName(details) {
   }
 }
 
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
+// request the CA name
 browser.webRequest.onHeadersReceived.addListener(
   sendRootCAName,
   { urls: ["<all_urls>"] },
