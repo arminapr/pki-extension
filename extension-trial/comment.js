@@ -125,3 +125,11 @@ if (!prevCA) {
         }
     }
 } */
+
+
+/* const root = securityInfo.certificates;
+      let rootCA = "";
+      for (let i = 0; i < securityInfo.certificates.length; i++) {
+        let issuer = securityInfo.certificates[i].issuer;
+        rootCA = rootCA + issuer.substring(3, issuer.indexOf(",")) + " | ";
+      } */
