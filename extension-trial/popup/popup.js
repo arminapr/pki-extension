@@ -1,7 +1,6 @@
 // Global variable for CA info
 let caInfo;
 
-
 document.addEventListener("DOMContentLoaded", () => {
     const buttons = {
         visit: document.getElementById("visit"),
