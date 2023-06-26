@@ -1,66 +1,73 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Extension Trial</title>
-        <meta charset="utf-8">
-        <link rel="stylesheet" type="text/css" href="popup.css">
-    </head>
-    <body>
-        <img class="button" src="../icons/settings.png" alt="Picture of a gear">
 
-        <!--Favicon (Logo)-->
-        <img id="faviconImage">
+<head>
+    <title>Extension Trial</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="popup.css">
+</head>
 
-        <!--Website URL-->
-        <span id="websiteUrl" style="font-size: 15px"></span>
+<body>
+    <button type="submit" id="settingButton">
+        <img src="../icons/settings.png" alt="Picture of a gear" />
+    </button>
 
-        <!--Root CA Info-->
-        <h1>Root CA: </h1>
-        <p id="rootCAInfo"></p>
+    <!--Favicon (Logo)-->
+    <img id="faviconImage">
 
-        <p id="pkInfo"></p>
+    <!--Website URL-->
+    <span id="websiteUrl"></span>
 
-        <p id ="notice"></p>
+    <!--Root CA Info-->
+    <h1 id="rootCA" style="font-size: 20">Root CA: </h1>
+    <p id="rootCAInfo"></p>
 
-        <div id="unsecure" style="display: none; color: red">
-            This website does has an unsecure connection. We have blocked access, do you want to access it?
-            <button id="visit">Yes</button>
-        </div>
+    <p id="pkInfo"></p>
 
-        <!-- when the website has not been marked yet -->
-        <div id="notMarked" style="display: block">
-            <button id="safe">Add new sensitive site</button>
-            <button id="misMarked">This was one of my sensitive websites</button>
-            <button id="misClicked">I misclicked</button>
-        </div>
+    <p id="notice"></p>
 
-        <div id="trustText" style="display:none">This website has been added to your <span style="text-decoration: underline; color: green">trusted </span>websites</div>
-        <div id="untrustText" style="display:none">This website has been added to your <span style="text-decoration: underline; color: red">untrusted </span> websites</div>
-        <!-- when the certification information has not changed -->
-        <div id="markedSameCert" style="display: none">
-            <h1>You are all set!</h1>
-        </div>
+    <div id="unsecure" style="display: none; color: red">
+        This website does has an unsecure connection. We have blocked access, do you want to access it?
+        <button id="visit">Yes</button>
+    </div>
 
-        <!-- ask the user why they do not think that this a secure website-->
-        <div id="markedDiffCert" style="display: none">
-            <h4>The following information about the certificate has changed</h4>
-            <ul>
-                <li id="changedCA">Certificate Authority</li>
-                <!-- <li id="changedPK">Public Key</li> -->
-            </ul>
-            <button id="conTrust">Continue to trust this website</button>
-            <button id="stopTrust">Distrust this website</button>
-        </div>
+    <!-- when the website has not been marked yet -->
+    <div id="notMarked" style="display: block">
+        <button id="safe">Add new sensitive site</button>
+        <button id="misMarked">This was one of my sensitive websites</button>
+        <button id="misClicked">I misclicked</button>
+    </div>
 
-        <div id="markedNonSensitive" style="display: none">
-            <h1>This website is marked as non-sensitive. Changed your mind?</h1>
-            <button id="changeToSensitive">Click here to mark as sensitive</button>
-        </div>
+    <div id="trustText" style="display:none">This website has been added to your <span
+            style="text-decoration: underline; color: green">trusted </span>websites</div>
+    <div id="untrustText" style="display:none">This website has been added to your <span
+            style="text-decoration: underline; color: red">untrusted </span> websites</div>
+    <!-- when the certification information has not changed -->
+    <div id="markedSameCert" style="display: none">
+        <h1>You are all set!</h1>
+    </div>
 
-        <div id="settings" style="display: none">
-            <button id="seeSafeList">See and change safe websites</button>
-            <button id="seeUnsafeList">See and change unsafe websites</button>
-        </div>
-        <script src="popup.js"></script>
-    </body>
+    <!-- ask the user why they do not think that this a secure website-->
+    <div id="markedDiffCert" style="display: none">
+        <h4>The following information about the certificate has changed</h4>
+        <ul>
+            <li id="changedCA">Certificate Authority</li>
+            <!-- <li id="changedPK">Public Key</li> -->
+        </ul>
+        <button id="conTrust">Continue to trust this website</button>
+        <button id="stopTrust">Distrust this website</button>
+    </div>
+
+    <div id="markedNonSensitive" style="display: none">
+        <h1>This website is marked as non-sensitive. Changed your mind?</h1>
+        <button id="changeToSensitive">Click here to mark as sensitive</button>
+    </div>
+
+    <div id="settings" style="display: none">
+        <button id="seeSafeList">See and change safe websites</button>
+        <button id="seeUnsafeList">See and change unsafe websites</button>
+    </div>
+    <script src="popup.js"></script>
+</body>
+
 </html>
