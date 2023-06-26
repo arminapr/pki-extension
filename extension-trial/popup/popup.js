@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
         nonSens: document.getElementById("markedNonSensitive"),
         untrustText: document.getElementById("untrustText"),
         trustText: document.getElementById("trustText"),
+        settings: document.getElementById("settings")
     };
 
     var faviconImage = document.getElementById("faviconImage"); //Favicon (Logo)
