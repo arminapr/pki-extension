@@ -36,27 +36,27 @@ document.addEventListener("DOMContentLoaded", () => {
         websiteUrlElement.textContent = url;
         faviconImage.src = favicon;
 
-        // console.log("Receiver 1"); // for testing purposes
+    // console.log("Receiver 1"); // for testing purposes
 
-        // Send message when popup is opened
-        browser.runtime.sendMessage({ data: "Trigger" });
+    // Send message when popup is opened
+    browser.runtime.sendMessage({ data: "Trigger" });
 
-        // Receive message from background.js for CA Info and update html
-        browser.runtime.onMessage.addListener((request) => {
-            // console.log("Receiver 2"); // for testing purposes
-            if (request.rootCA) {
-                // Check if root CA exists in the request
-                caInfo = request.rootCA;
-                document.getElementById("rootCAInfo").textContent = caInfo;
-                checkCA(url, caInfo);
-            }
-            if (request.secure) {
-                if (request.secure === "no") {
-                    siteStatusDivs.notMarked.style.display = "none";
-                    siteStatusDivs.unsecure.style.display = "block";
-                }
-            }
-        });
+    // Receive message from background.js for CA Info and update html
+    browser.runtime.onMessage.addListener((request) => {
+      // console.log("Receiver 2"); // for testing purposes
+      if (request.rootCA) {
+        // Check if root CA exists in the request
+        caInfo = request.rootCA;
+        document.getElementById("rootCAInfo").textContent = caInfo;
+        checkCA(url, caInfo);
+      }
+      if (request.secure) {
+        if (request.secure === "no") {
+          siteStatusDivs.notMarked.style.display = "none";
+          siteStatusDivs.unsecure.style.display = "block";
+        }
+      }
+    });
 
         buttons.visit.addEventListener("click", function () {
             window.close();

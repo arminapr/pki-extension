@@ -1,13 +1,7 @@
 ("use strict");
 /* write a function that would take a click on the extension and unblock
     the page */
-browser.runtime.onMessage.addListener((message) => {
-    if (message.data) {
-        if (message.data === "trigger") {
-            return;
-        }
-    }
-});
+
 // extracts the certificate chain and sends it to the popup.js
 async function sendRootCAName(details) {
   try {
@@ -17,7 +11,7 @@ async function sendRootCAName(details) {
       { certificateChain: true }
     );
     if (securityInfo.state === "insecure" || securityInfo.state === "broken") {
-      // browser.runtime.sendMessage({ message: "no" });
+      browser.runtime.sendMessage({ message: "no" });
     }
     // get the root certificate authority of the domain
     else if (
@@ -34,9 +28,11 @@ async function sendRootCAName(details) {
       // const root = securityInfo.certificates[securityInfo.certificates.length - 1].issuer; //"subject" property from CertificateInfo Object
       // let rootCA = root.substring(3, root.indexOf(",")); //substring to only include the root CA name (comma seperated list)
 
-      // document.addEventListener("DOMContentLoaded", () => {
-        browser.runtime.sendMessage({ rootCA }); //send to popup.js
-      // });
+      // Received message from popup.js, extension page is opened
+      browser.runtime.onMessage.addListener((request) => {
+        // Send root data to popup.js
+        browser.runtime.sendMessage({ rootCA });
+      });
     }
   } catch (error) {
     console.error(error);
