@@ -126,7 +126,7 @@ if (!prevCA) {
     }
 } */
 
-
+// for background.js
 /* const root = securityInfo.certificates;
       let rootCA = "";
       for (let i = 0; i < securityInfo.certificates.length; i++) {
