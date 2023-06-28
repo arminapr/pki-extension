@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
         notMarked: document.getElementById("notMarked"),
         markedSame: document.getElementById("markedSameCert"),
         markedDiff: document.getElementById("markedDiffCert"),
+        markedUnsafe: document.getElementById("markedUnsafe"),
         nonSens: document.getElementById("markedNonSensitive"),
         untrustText: document.getElementById("untrustText"),
         trustText: document.getElementById("trustText"),
@@ -117,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
             //Get current list of storage
             //Check if the current website exists in either of the lists
             let isSensitiveSite = result.safe && result.safe[url];
-            let isUnsafeSite = result.unsafe && result.unsafe[url]; // TODO: do we need this?
+            let isUnsafeSite = result.unsafe && result.unsafe[url];
 
             let previousCaInfo = isSensitiveSite
                 ? result.safe[url]
@@ -125,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     ? result.unsafe[url]
                     : null; // If the website is found, get the stored CA info for that website
 
-            if (isSensitiveSite || isUnsafeSite) {
+            if (isSensitiveSite) {
                 siteStatusDivs.notMarked.style.display = "none";
                 if (previousCaInfo === currentCaInfo) {
                     // If the stored CA info matches the current CA info, display the "same CA" message
@@ -157,6 +158,16 @@ document.addEventListener("DOMContentLoaded", () => {
                         handleSiteAddition(url, "unsafe");
                     });
                 }
+            } else if (isUnsafeSite) { 
+                //if site is unsafe, users must click button to accept the risk of the site
+                siteStatusDivs.notMarked.style.display = "none";
+                siteStatusDivs.markedUnsafe.style.display = "block";
+                let buttons = {
+                    accept: document.getElementById("accept")
+                };
+                buttons.accept.addEventListener("click", function () {
+                    window.close();
+                });
             } else {
                 // If the website does not exist in either of the lists, display the "not marked" message
                 siteStatusDivs.notMarked.style.display = "block";
