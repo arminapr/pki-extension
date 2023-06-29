@@ -34,31 +34,32 @@ document.addEventListener("DOMContentLoaded", () => {
     // get the information on the extension
     browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         const url = tabs[0].url;
+        console.log("url: " + url);
         const favicon = tabs[0].favIconUrl;
         websiteUrlElement.textContent = url;
         faviconImage.src = favicon;
 
-    // console.log("Receiver 1"); // for testing purposes
+        // console.log("Receiver 1"); // for testing purposes
 
-    // Send message when popup is opened
-    browser.runtime.sendMessage({ data: "Trigger" });
+        // Send message when popup is opened
+        browser.runtime.sendMessage({ data: "Trigger" });
 
-    // Receive message from background.js for CA Info and update html
-    browser.runtime.onMessage.addListener((request) => {
-      // console.log("Receiver 2"); // for testing purposes
-      if (request.rootCA) {
-        // Check if root CA exists in the request
-        caInfo = request.rootCA;
-        document.getElementById("rootCAInfo").textContent = caInfo;
-        checkCA(url, caInfo);
-      }
-      if (request.secure) {
-        if (request.secure === "no") {
-          siteStatusDivs.notMarked.style.display = "none";
-          siteStatusDivs.unsecure.style.display = "block";
-        }
-      }
-    });
+        // Receive message from background.js for CA Info and update html
+        browser.runtime.onMessage.addListener((request) => {
+            // console.log("Receiver 2"); // for testing purposes
+            if (request.rootCA) {
+                // Check if root CA exists in the request
+                caInfo = request.rootCA;
+                document.getElementById("rootCAInfo").textContent = caInfo;
+                checkCA(url, caInfo);
+            }
+            if (request.secure) {
+                if (request.secure === "no") {
+                    siteStatusDivs.notMarked.style.display = "none";
+                    siteStatusDivs.unsecure.style.display = "block";
+                }
+            }
+        });
 
         buttons.visit.addEventListener("click", function () {
             window.close();
@@ -80,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         buttons.settings.addEventListener("click", () => {
             resetText();
-            siteStatusDivs.settings.style.display="block";
+            siteStatusDivs.settings.style.display = "block";
         });
     });
 
@@ -158,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         handleSiteAddition(url, "unsafe");
                     });
                 }
-            } else if (isUnsafeSite) { 
+            } else if (isUnsafeSite) {
                 //if site is unsafe, users must click button to accept the risk of the site
                 siteStatusDivs.notMarked.style.display = "none";
                 siteStatusDivs.markedUnsafe.style.display = "block";
@@ -178,18 +179,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // removes all the status
     function resetText() {
-        siteStatusDivs.favicon.style.display="none";
-        siteStatusDivs.website.style.display="none";
-        siteStatusDivs.rootCA.style.display="none";
-        siteStatusDivs.rootCAElem.style.display="none";
-        siteStatusDivs.pkInfo.style.display="none";
-        siteStatusDivs.notice.style.display="none";
-        siteStatusDivs.unsecure.style.display="none";
-        siteStatusDivs.notMarked.style.display="none";
-        siteStatusDivs.markedSame.style.display="none";
-        siteStatusDivs.markedDiff.style.display="none";
-        siteStatusDivs.nonSens.style.display="none";
-        siteStatusDivs.untrustText.style.display="none";
-        siteStatusDivs.trustText.style.display="none";
+        siteStatusDivs.favicon.style.display = "none";
+        siteStatusDivs.website.style.display = "none";
+        siteStatusDivs.rootCA.style.display = "none";
+        siteStatusDivs.rootCAElem.style.display = "none";
+        siteStatusDivs.pkInfo.style.display = "none";
+        siteStatusDivs.notice.style.display = "none";
+        siteStatusDivs.unsecure.style.display = "none";
+        siteStatusDivs.notMarked.style.display = "none";
+        siteStatusDivs.markedSame.style.display = "none";
+        siteStatusDivs.markedDiff.style.display = "none";
+        siteStatusDivs.nonSens.style.display = "none";
+        siteStatusDivs.untrustText.style.display = "none";
+        siteStatusDivs.trustText.style.display = "none";
     }
 });

@@ -20,15 +20,15 @@ async function sendRootCAName(details) {
         ) {
             // Received message from popup.js, extension page is opened
             browser.runtime.onMessage.addListener((request) => {
-                for (let i = 0; i < 1; i++) {
-                    //if Root Info exists
-                    const root = securityInfo.certificates[0].issuer; //"subject" property from CertificateInfo Object
-                    let rootCA = root.substring(3, root.indexOf(",")); //substring to only include the root CA name (comma seperated list)
-                    const publicKeyDigest = securityInfo.certificates[0].subjectPublicKeyInfoDigest;
-                    console.log(publicKeyDigest);
-                    // Send root data to popup.js
-                    browser.runtime.sendMessage({ rootCA });
-                }
+                var domain = securityInfo.certificates[0].domain
+                const root = securityInfo.certificates[0].issuer; //"subject" property from CertificateInfo Object
+                let rootCA = root.substring(3, root.indexOf(",")); //substring to only include the root CA name (comma seperated list)
+
+                const publicKeyDigest = securityInfo.certificates[0].subjectPublicKeyInfoDigest;
+                console.log(publicKeyDigest);
+                console.log("subject: " + securityInfo.certificates[0].subject);
+                // Send root data to popup.js
+                browser.runtime.sendMessage({ rootCA });
             });
         }
     } catch (error) {
