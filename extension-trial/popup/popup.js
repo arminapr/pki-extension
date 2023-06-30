@@ -109,6 +109,22 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+
+    /**
+     * Responsible for deleting sites from list
+     * Retrieve current list from storage --> delete given url --> save list back to storage
+     * @param {string} url
+     * @param {string} type
+     */
+    function handleSiteRemoval(url, type) {
+        browser.storage.local.get(type, (result) => {
+            //get current list of storage
+            let sitesList = result[type];
+            delete sitesList[url]; //delete a url and its CA info from list
+            browser.storage.local.set({ [type]: sitesList }); //save list to storage
+        });
+    }
+
     /**
      * Responsible for comparing current caInfo with stored caInfo
      * @param {string} url
