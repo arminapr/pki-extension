@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
                     buttons.stopTrust.addEventListener("click", function () {
                         // If user does not want to trust, remove url from safe list and add it to unsafe list
-                        browser.storage.local.remove(url);
+                        handleSiteRemoval(url, "safe");
                         handleSiteAddition(url, "unsafe");
                         siteStatusDivs.markedDiff.style.display = "none";
                     });
