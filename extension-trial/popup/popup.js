@@ -152,11 +152,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     buttons.conTrust.addEventListener("click", function () {
                         // If user wants to continue to trust, update CA info but keep url on safe list
                         handleSiteAddition(url, "safe");
+                        siteStatusDivs.markedDiff.style.display = "none";
                     });
                     buttons.stopTrust.addEventListener("click", function () {
                         // If user does not want to trust, remove url from safe list and add it to unsafe list
                         browser.storage.local.remove(url);
                         handleSiteAddition(url, "unsafe");
+                        siteStatusDivs.markedDiff.style.display = "none";
                     });
                 }
             } else if (isUnsafeSite) {
