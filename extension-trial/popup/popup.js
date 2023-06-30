@@ -139,6 +139,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         window.close();
                     }, 3000);
                 } else {
+                    document.getElementById("test").textContent = "TEST"
+                    browser.runtime.sendMessage({
+                        action: "blockWebsite"
+                    });
                     // If the stored CA info does not match the current CA info, display the "different CA" message
                     siteStatusDivs.markedSame.style.display = "none";
                     siteStatusDivs.markedDiff.style.display = "block";

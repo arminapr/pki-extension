@@ -1,6 +1,13 @@
 ("use strict");
-/* write a function that would take a click on the extension and unblock
-    the page */
+
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === "blockWebsite") {
+        // Get active tab
+        browser.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            browser.tabs.sendMessage(tabs[0].id, {action: "blockWebsite"});
+        });
+    }
+});
 
 // extracts the certificate chain and sends it to the popup.js
 async function sendRootCAName(details) {
