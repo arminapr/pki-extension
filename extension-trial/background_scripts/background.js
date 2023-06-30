@@ -2,6 +2,10 @@
 /* write a function that would take a click on the extension and unblock
     the page */
 
+// declare an empty root
+var rootCA;
+
+
 // extracts the certificate chain and sends it to the popup.js
 async function sendRootCAName(details) {
     try {
@@ -18,20 +22,26 @@ async function sendRootCAName(details) {
             !securityInfo.isUntrusted &&
             securityInfo.certificates.length > 0
         ) {
-            // Received message from popup.js, extension page is opened
-            browser.runtime.onMessage.addListener((request) => {
-                var domain = securityInfo.certificates[0].domain
-                const root = securityInfo.certificates[0].issuer; //"subject" property from CertificateInfo Object
-                let rootCA = root.substring(3, root.indexOf(",")); //substring to only include the root CA name (comma seperated list)
+            if (typeof rootCA === "undefined") {
+                // Received message from popup.js, extension page is opened
+                var domain = securityInfo.certificates[0].subject;
+                var root = securityInfo.certificates[0].issuer; //"subject" property from CertificateInfo Object
+                console.log("domain: " + domain);
+                browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+                if (domain.charAt(3) != '*' || tabs[0].url === "https://www.google.com/") {
+                    rootCA = root.substring(3, root.indexOf(",")); //substring to only include the root CA name (comma seperated list)
 
-                const publicKeyDigest = securityInfo.certificates[0].subjectPublicKeyInfoDigest;
-                console.log(publicKeyDigest);
-                console.log("subject: " + securityInfo.certificates[0].subject);
+                    const publicKeyDigest = securityInfo.certificates[0].subjectPublicKeyInfoDigest;
+                    console.log(publicKeyDigest);
+                }
+                })
+            }
+        }
+            browser.runtime.onMessage.addListener((request) => {
                 // Send root data to popup.js
                 browser.runtime.sendMessage({ rootCA });
             });
-        }
-    } catch (error) {
+        } catch (error) {
         console.error(error);
     }
 }
@@ -42,3 +52,17 @@ browser.webRequest.onHeadersReceived.addListener(
     { urls: ["<all_urls>"] },
     ["blocking"]
 );
+
+// Listen for tab update events
+browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (changeInfo.status === "complete") {
+        // Reset rootCA when the page is refreshed
+        rootCA = undefined;
+    }
+});
+
+// Listen for tab switch events
+browser.tabs.onActivated.addListener(activeInfo => {
+    // Reset rootCA when the tab is changed
+    rootCA = undefined;
+});
