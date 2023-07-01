@@ -150,10 +150,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     siteStatusDivs.markedDiff.style.display = "none";
                     siteStatusDivs.markedSame.style.display = "block";
                     document.getElementById("notice").textContent = "same certificate";
-                    // setTimeout(() => {
-                    //     // Close window after 3 seconds
-                    //     window.close();
-                    // }, 3000);
+                    setTimeout(() => {
+                        // Close window after 3 seconds
+                        window.close();
+                    }, 3000);
                 } else {
                     // If the stored CA info does not match the current CA info, display the "different CA" message
                     siteStatusDivs.markedSame.style.display = "none";
