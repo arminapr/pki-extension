@@ -109,6 +109,22 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+
+    /**
+     * Responsible for deleting sites from list
+     * Retrieve current list from storage --> delete given url --> save list back to storage
+     * @param {string} url
+     * @param {string} type
+     */
+    function handleSiteRemoval(url, type) {
+        browser.storage.local.get(type, (result) => {
+            //get current list of storage
+            let sitesList = result[type];
+            delete sitesList[url]; //delete a url and its CA info from list
+            browser.storage.local.set({ [type]: sitesList }); //save list to storage
+        });
+    }
+
     /**
      * Responsible for comparing current caInfo with stored caInfo
      * @param {string} url
@@ -156,11 +172,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     buttons.conTrust.addEventListener("click", function () {
                         // If user wants to continue to trust, update CA info but keep url on safe list
                         handleSiteAddition(url, "safe");
+                        siteStatusDivs.markedDiff.style.display = "none";
                     });
                     buttons.stopTrust.addEventListener("click", function () {
                         // If user does not want to trust, remove url from safe list and add it to unsafe list
-                        browser.storage.local.remove(url);
+                        handleSiteRemoval(url, "safe");
                         handleSiteAddition(url, "unsafe");
+                        siteStatusDivs.markedDiff.style.display = "none";
                     });
                 }
             } else if (isUnsafeSite) {
