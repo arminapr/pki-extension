@@ -1,16 +1,25 @@
 ("use strict");
 
-browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === "blockWebsite") {
-        // Get active tab
-        browser.tabs.query({active: true, currentWindow: true}, function(tabs) {
-            browser.tabs.sendMessage(tabs[0].id, {action: "blockWebsite"});
-        });
-    }
-});
-
 // declare an empty root
 var rootCA;
+
+browser.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+    
+    // Communicate with the popup.js script
+    browser.tabs.sendMessage(tabId, { tabUpdated: true });
+  });
+
+  browser.runtime.onMessage.addListener((message, sender) => {
+    // Check if the message is the one we're expecting
+    if (message.command === "blockSite") {
+      // Get the current active tab
+      browser.tabs.query({active: true, currentWindow: true}, tabs => {
+        // Inject the content script into the active tab
+        browser.tabs.executeScript(tabs[0].id, {file: 'contentScript.js'});
+      });
+    }
+  });
+
 
 // extracts the certificate chain and sends it to the popup.js
 async function sendRootCAName(details) {
@@ -59,17 +68,3 @@ browser.webRequest.onHeadersReceived.addListener(
     { urls: ["<all_urls>"] },
     ["blocking"]
 );
-
-// Listen for tab update events
-browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (changeInfo.status === "complete") {
-        // Reset rootCA when the page is refreshed
-        rootCA = undefined;
-    }
-});
-
-// Listen for tab switch events
-browser.tabs.onActivated.addListener(activeInfo => {
-    // Reset rootCA when the tab is changed
-    rootCA = undefined;
-});
