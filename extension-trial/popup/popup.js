@@ -25,7 +25,9 @@ document.addEventListener("DOMContentLoaded", () => {
         nonSens: document.getElementById("markedNonSensitive"),
         untrustText: document.getElementById("untrustText"),
         trustText: document.getElementById("trustText"),
-        settings: document.getElementById("settings")
+        settings: document.getElementById("settings"),
+        safeList: document.getElementById("safeList"),
+        unsafeList: document.getElementById("unsafeList")
     };
 
     var faviconImage = document.getElementById("faviconImage"); //Favicon (Logo)
@@ -82,6 +84,16 @@ document.addEventListener("DOMContentLoaded", () => {
         buttons.settings.addEventListener("click", () => {
             resetText();
             siteStatusDivs.settings.style.display = "block";
+            const buttons = {
+                seeSafeList: document.getElementById("seeSafeList"),
+                seeUnsafeList: document.getElementById("seeUnsafeList")
+            }
+            buttons.seeSafeList.addEventListener("click", () => {
+                showList("safe");
+            });
+            buttons.seeUnsafeList.addEventListener("click", () => {
+                showList("unsafe");
+            });
         });
     });
 
@@ -206,6 +218,31 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    function showList(type) {
+        browser.storage.local.get(type, (result) => {
+            let sitesList = result[type];
+            // Get all the urls on the list
+            urls = Object.keys(sitesList);
+            // Add header to popup tab
+            if (type === "safe") {
+                document.getElementById(type + "List").innerHTML = "<h1>Sensitive Sites</h1>"
+            } else {
+                document.getElementById(type + "List").innerHTML = "<h1>Unsafe Sites</h1>"
+            }
+            document.getElementById(type + "List").innerHTML += "<ul>"
+            // Add each url to the html
+            urls.forEach((url) => document.getElementById(type + "List").innerHTML += "<li>" + url + "</li>");
+            document.getElementById(type + "List").innerHTML += "</ul>"
+            resetText();
+            // Display list
+            if (type === "safe") {
+                siteStatusDivs.safeList.style.display = "block";
+            } else {
+                siteStatusDivs.unsafeList.style.display = "block";
+            }
+        });
+    }
+
     browser.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         if (message.tabUpdated) {
           // Execute your function here
@@ -254,5 +291,8 @@ document.addEventListener("DOMContentLoaded", () => {
         siteStatusDivs.nonSens.style.display = "none";
         siteStatusDivs.untrustText.style.display = "none";
         siteStatusDivs.trustText.style.display = "none";
+        siteStatusDivs.settings.style.display = "none";
+        siteStatusDivs.safeList.style.display = "none";
+        siteStatusDivs.unsafeList.style.display = "none";
     }
 });
