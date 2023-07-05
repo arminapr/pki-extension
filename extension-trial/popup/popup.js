@@ -132,6 +132,8 @@ document.addEventListener("DOMContentLoaded", () => {
      */
     function checkCA(url, currentCaInfo) {
         browser.storage.local.get(["safe", "unsafe"], (result) => {
+            document.getElementById("test1").textContent = "kela";
+            browser.runtime.sendMessage({command: "blockSite"});
             //Get current list of storage
             //Check if the current website exists in either of the lists
             let isSensitiveSite = result.safe && result.safe[url];
@@ -144,9 +146,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     : null; // If the website is found, get the stored CA info for that website
 
             if (isSensitiveSite) {
+                document.getElementById("test").textContent = "TEST";
                 siteStatusDivs.notMarked.style.display = "none";
                 if (previousCaInfo === currentCaInfo) {
                     // If the stored CA info matches the current CA info, display the "same CA" message
+                    document.getElementById("test1").textContent = "TEST1";
                     siteStatusDivs.markedDiff.style.display = "none";
                     siteStatusDivs.markedSame.style.display = "block";
                     document.getElementById("notice").textContent = "same certificate";
@@ -155,10 +159,11 @@ document.addEventListener("DOMContentLoaded", () => {
                         window.close();
                     }, 3000);
                 } else {
-                    document.getElementById("test").textContent = "TEST"
-                    browser.runtime.sendMessage({
-                        action: "blockWebsite"
-                    });
+                    document.getElementById("test2").textContent = "TEST2";
+                    //document.getElementById("test").textContent = "TEST"
+                    //browser.runtime.sendMessage({
+                    //    action: "blockWebsite"
+                    //});
                     // If the stored CA info does not match the current CA info, display the "different CA" message
                     siteStatusDivs.markedSame.style.display = "none";
                     siteStatusDivs.markedDiff.style.display = "block";
@@ -182,6 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
                 }
             } else if (isUnsafeSite) {
+                document.getElementById("test3").textContent = "TEST3";
                 //if site is unsafe, users must click button to accept the risk of the site
                 siteStatusDivs.notMarked.style.display = "none";
                 siteStatusDivs.markedUnsafe.style.display = "block";
@@ -192,10 +198,44 @@ document.addEventListener("DOMContentLoaded", () => {
                     window.close();
                 });
             } else {
+                document.getElementById("test4").textContent = "TEST4";
                 // If the website does not exist in either of the lists, display the "not marked" message
                 siteStatusDivs.notMarked.style.display = "block";
                 document.getElementById("notice").textContent = "no certificate saved";
             }
+        });
+    }
+
+    browser.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+        if (message.tabUpdated) {
+          // Execute your function here
+          myFunction();
+        }
+      });
+
+    function myFunction(){
+        browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            const url = tabs[0].url;
+
+            // Send message when popup is opened
+            browser.runtime.sendMessage({ data: "Trigger" });
+
+             // Receive message from background.js for CA Info and update html
+            browser.runtime.onMessage.addListener((request) => {
+            // console.log("Receiver 2"); // for testing purposes
+                if (request.rootCA) {
+                // Check if root CA exists in the request
+                caInfo = request.rootCA;
+                document.getElementById("rootCAInfo").textContent = caInfo;
+                //checkCA(url, caInfo);
+             }
+                if (request.secure) {
+                    if (request.secure === "no") {
+                    siteStatusDivs.notMarked.style.display = "none";
+                    siteStatusDivs.unsecure.style.display = "block";
+                }
+            }
+        });
         });
     }
 
