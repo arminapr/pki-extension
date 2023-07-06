@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
         safe: document.getElementById("safe"),
         misMarked: document.getElementById("misMarked"),
         misClicked: document.getElementById("misClicked"),
-        settings: document.getElementById("settingButton"),
+        settings: document.getElementById("settingButton")
     };
 
     const siteStatusDivs = {
