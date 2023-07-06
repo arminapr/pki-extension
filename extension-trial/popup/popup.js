@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
         visit: document.getElementById("visit"),
         safe: document.getElementById("safe"),
         misMarked: document.getElementById("misMarked"),
-        misClicked: document.getElementById("misClicked"),
         settings: document.getElementById("settingButton")
     };
 
@@ -75,11 +74,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // if they click on the mismarked button, add the website to the unsafe list
         buttons.misMarked.addEventListener("click", function () {
             handleSiteAddition(url, "unsafe");
-        });
-
-        // if they click on the misclicked button, close the extension
-        buttons.misClicked.addEventListener("click", () => {
-            window.close();
         });
 
         buttons.settings.addEventListener("click", () => {
