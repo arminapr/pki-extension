@@ -4,10 +4,28 @@
 var rootCA;
 
 browser.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-    
-    // Communicate with the popup.js script
-    browser.tabs.sendMessage(tabId, { tabUpdated: true });
-  });
+    if (changeInfo.status === "complete") {
+        // Reset rootCA when the page is refreshed
+        rootCA = undefined;
+    }
+    browser.tabs.query({ active: true, currentWindow: true})
+    .then((tabs) => {
+        const url = tabs[0].url; //getURL
+        browser.storage.local.get(["safe", "unsafe"], (result) => {
+            let isSensitiveSite = result.safe && result.safe[url];
+            let isUnsafeSite = result.unsafe && result.unsafe[url];
+            //unblock website
+            if (isSensitiveSite || !isUnsafeSite){
+                browser.tabs.executeScript(tabs[0].id, {
+                    code: 'var blockerDiv = document.getElementById("myBlockerDiv"); if (blockerDiv) { blockerDiv.parentNode.removeChild(blockerDiv); }'
+                });
+            }
+            else{ //block website
+                browser.tabs.executeScript(tabs[0].id, {file: 'contentScript.js'}); //inject contentScript.js           
+            }
+        });
+    });
+});
 
   browser.runtime.onMessage.addListener((message, sender) => {
     // Check if the message is the one we're expecting
@@ -68,3 +86,9 @@ browser.webRequest.onHeadersReceived.addListener(
     { urls: ["<all_urls>"] },
     ["blocking"]
 );
+
+// Listen for tab switch events
+browser.tabs.onActivated.addListener(activeInfo => {
+    // Reset rootCA when the tab is changed
+    rootCA = undefined;
+});

@@ -1,16 +1,16 @@
-document.body.innerHTML = `
-  <div style="
-    background-color: red; 
-    width: 100vw; 
-    height: 100vh; 
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    z-index: 999999; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    color: white; 
-    text-align: center;">
-    <h1>This site has been blocked by the Website Blocker extension</h1>
-  </div>`;
+var blockerDiv = document.createElement('div');
+blockerDiv.id = 'myBlockerDiv';
+blockerDiv.style.position = 'fixed';
+blockerDiv.style.left = '0';
+blockerDiv.style.top = '0';
+blockerDiv.style.width = '100%';
+blockerDiv.style.height = '100%';
+blockerDiv.style.zIndex = '10000';
+blockerDiv.style.backgroundColor = 'rgba(0,0,0,0.5)';
+
+var blockerMessage = document.createElement('h1');
+blockerMessage.style.color = 'white';
+blockerMessage.innerHTML = 'This site is blocked by the extension.';
+blockerDiv.appendChild(blockerMessage);
+
+document.body.appendChild(blockerDiv);

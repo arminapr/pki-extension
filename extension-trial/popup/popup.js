@@ -243,39 +243,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    browser.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-        if (message.tabUpdated) {
-          // Execute your function here
-          myFunction();
-        }
-      });
-
-    function myFunction(){
-        browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            const url = tabs[0].url;
-
-            // Send message when popup is opened
-            browser.runtime.sendMessage({ data: "Trigger" });
-
-             // Receive message from background.js for CA Info and update html
-            browser.runtime.onMessage.addListener((request) => {
-            // console.log("Receiver 2"); // for testing purposes
-                if (request.rootCA) {
-                // Check if root CA exists in the request
-                caInfo = request.rootCA;
-                document.getElementById("rootCAInfo").textContent = caInfo;
-                //checkCA(url, caInfo);
-             }
-                if (request.secure) {
-                    if (request.secure === "no") {
-                    siteStatusDivs.notMarked.style.display = "none";
-                    siteStatusDivs.unsecure.style.display = "block";
-                }
-            }
-        });
-        });
-    }
-
     // removes all the status
     function resetText() {
         siteStatusDivs.favicon.style.display = "none";
