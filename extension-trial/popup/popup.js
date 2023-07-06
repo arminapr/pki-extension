@@ -106,9 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
      */
     function handleSiteAddition(url, type) {
         browser.storage.local.get(type, (result) => {
-            //get current list of storage
-            let sitesList = result[type] ? result[type] : {}; //If list exists, use it. Otherwise, create new object
-            
+            /**
             //case where the URL already exists
             safeSites = result["safe"];
             unsafeSites = result["unsafe"];
@@ -116,7 +114,10 @@ document.addEventListener("DOMContentLoaded", () => {
             browser.storage.local.set({ ["safe"]: sitesList }); //save list to storage
             delete unsafeSites[url]; //delete a url and its CA info from list
             browser.storage.local.set({ ["unsafe"]: sitesList }); //save list to storage
-
+            */
+            
+            //get current list of storage
+            let sitesList = result[type] ? result[type] : {}; //If list exists, use it. Otherwise, create new object
             sitesList[url] = caInfo; //add website and caInfo to list
             browser.storage.local.set({ [type]: sitesList }); //save list to storage
         });
