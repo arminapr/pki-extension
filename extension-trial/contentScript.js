@@ -10,7 +10,7 @@ blockerDiv.style.backgroundColor = 'rgba(0,0,0,0.5)';
 
 var blockerMessage = document.createElement('h1');
 blockerMessage.style.color = 'white';
-blockerMessage.innerHTML = 'This site is blocked by the extension.';
+blockerMessage.innerHTML = 'This site is blocked by the extension. Click on the extension to continue';
 blockerDiv.appendChild(blockerMessage);
 
 document.body.appendChild(blockerDiv);
