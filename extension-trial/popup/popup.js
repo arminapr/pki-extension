@@ -27,7 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
         trustText: document.getElementById("trustText"),
         settings: document.getElementById("settings"),
         safeList: document.getElementById("safeList"),
-        unsafeList: document.getElementById("unsafeList")
+        unsafeList: document.getElementById("unsafeList"),
+        buttons: document.getElementById("buttons")
     };
 
     var faviconImage = document.getElementById("faviconImage"); //Favicon (Logo)
@@ -230,18 +231,28 @@ document.addEventListener("DOMContentLoaded", () => {
     function showList(type) {
         browser.storage.local.get(type, (result) => {
             let sitesList = result[type];
+            if (sitesList === undefined) {
+                document.getElementById("buttons").innerHTML = "<h3>No websites on this list. Please add some sites then check again!</h3>";
+            } else {
+            document.getElementById(type).innerHTML += "<h3>Click on a website to remove it from the list.</h3>";
+            // Reset button list
+            document.getElementById("buttons").innerHTML = "";
             // Get all the urls on the list
             urls = Object.keys(sitesList);
-            // Add header to popup tab
-            if (type === "safe") {
-                document.getElementById(type + "List").innerHTML = "<h1>Sensitive Sites</h1>"
-            } else {
-                document.getElementById(type + "List").innerHTML = "<h1>Unsafe Sites</h1>"
-            }
-            document.getElementById(type + "List").innerHTML += "<ul>"
+            const urlButtons = {};
             // Add each url to the html
-            urls.forEach((url) => document.getElementById(type + "List").innerHTML += "<li>" + url + "</li>");
-            document.getElementById(type + "List").innerHTML += "</ul>"
+            urls.forEach((url) => {
+                // Create button
+                document.getElementById("buttons").innerHTML += '<button id= "'+url+'">' + url + '</button>';
+                urlButtons[url] = document.getElementById(url);
+                // Add event listener for button
+                urlButtons[url].addEventListener("click", () => {
+                    // Remove url from list and reload list
+                    handleSiteRemoval(url, type);
+                    showList(type);
+                });
+            });
+            }
             resetText();
             // Display list
             if (type === "safe") {
@@ -249,8 +260,10 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 siteStatusDivs.unsafeList.style.display = "block";
             }
+            siteStatusDivs.buttons.style.display = "block";
         });
     }
+
 
     // removes all the status
     function resetText() {
@@ -270,5 +283,6 @@ document.addEventListener("DOMContentLoaded", () => {
         siteStatusDivs.settings.style.display = "none";
         siteStatusDivs.safeList.style.display = "none";
         siteStatusDivs.unsafeList.style.display = "none";
+        siteStatusDivs.buttons.style.display = "none";
     }
 });
