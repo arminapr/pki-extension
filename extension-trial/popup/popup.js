@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const favicon = tabs[0].favIconUrl;
         websiteUrlElement.textContent = url;
         faviconImage.src = favicon;
-
+        browser.runtime.sendMessage({ websiteUrl: url });
         // console.log("Receiver 1"); // for testing purposes
 
         // Send message when popup is opened
