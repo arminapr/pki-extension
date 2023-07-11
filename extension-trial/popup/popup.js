@@ -27,7 +27,9 @@ document.addEventListener("DOMContentLoaded", () => {
         settings: document.getElementById("settings"),
         safeList: document.getElementById("safeList"),
         unsafeList: document.getElementById("unsafeList"),
-        buttons: document.getElementById("buttons")
+        buttons: document.getElementById("buttons"),
+        addDistrust: document.getElementById("addDistrust")
+
     };
 
     var faviconImage = document.getElementById("faviconImage"); //Favicon (Logo)
@@ -229,7 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (sitesList === undefined) {
                 document.getElementById("buttons").innerHTML = "<h3>No websites on this list. Please add some sites then check again!</h3>";
             } else {
-            document.getElementById(type).innerHTML += "<h3>Click on a website to remove it from the list.</h3>";
+            document.getElementById("buttons").innerHTML += "<h3>Click on a website to remove it from the list.</h3>";
             // Reset button list
             document.getElementById("buttons").innerHTML = "";
             // Get all the urls on the list
@@ -254,6 +256,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 siteStatusDivs.safeList.style.display = "block";
             } else {
                 siteStatusDivs.unsafeList.style.display = "block";
+                let button = document.getElementById("addDistrusted");
+                button.addEventListener("click", () => {
+                    resetText();
+                    siteStatusDivs.addDistrust.style.display = "block";
+                    const form = document.getElementById("form");
+                    form.addEventListener("submit", () => {
+                        var url = document.getElementById("siteName").value;
+                        handleSiteAddition(url, "unsafe");
+                    });
+                });
             }
             siteStatusDivs.buttons.style.display = "block";
         });
@@ -279,5 +291,6 @@ document.addEventListener("DOMContentLoaded", () => {
         siteStatusDivs.safeList.style.display = "none";
         siteStatusDivs.unsafeList.style.display = "none";
         siteStatusDivs.buttons.style.display = "none";
+        siteStatusDivs.addDistrust.style.display = "none";
     }
 });
