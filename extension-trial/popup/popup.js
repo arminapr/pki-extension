@@ -227,8 +227,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function showList(type) {
         browser.storage.local.get(type, (result) => {
+            // Get the list of urls
             let sitesList = result[type];
-            if (sitesList === undefined) {
+            // If there is none, tell user
+            if (sitesList === undefined || Object.keys(sitesList).length === 0) {
                 document.getElementById("buttons").innerHTML = "<h3>No websites on this list. Please add some sites then check again!</h3>";
             } else {
             document.getElementById("buttons").innerHTML += "<h3>Click on a website to remove it from the list.</h3>";
@@ -245,7 +247,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Add event listener for button
                 urlButtons[url].addEventListener("click", () => {
                     // Remove url from list and reload list
-                    handleSiteRemoval(url, type);
+                    delete sitesList[url];
+                    browser.storage.local.set({ [type]: sitesList });
                     showList(type);
                 });
             });
@@ -256,11 +259,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 siteStatusDivs.safeList.style.display = "block";
             } else {
                 siteStatusDivs.unsafeList.style.display = "block";
+                // Give user to option to manually add site to distrusted list
                 let button = document.getElementById("addDistrusted");
                 button.addEventListener("click", () => {
                     resetText();
                     siteStatusDivs.addDistrust.style.display = "block";
+                    // If they want to, display html form
                     const form = document.getElementById("form");
+                    // When the form is submitted, add the given input to the distrusted list
                     form.addEventListener("submit", () => {
                         var url = document.getElementById("siteName").value;
                         handleSiteAddition(url, "unsafe");
