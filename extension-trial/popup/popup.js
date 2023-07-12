@@ -103,20 +103,31 @@ document.addEventListener("DOMContentLoaded", () => {
      */
     function handleSiteAddition(url, type) {
         browser.storage.local.get(type, (result) => {
-            /**
-            //case where the URL already exists
-            safeSites = result["safe"];
-            unsafeSites = result["unsafe"];
-            delete safeSites[url]; //delete a url and its CA info from list
-            browser.storage.local.set({ ["safe"]: sitesList }); //save list to storage
-            delete unsafeSites[url]; //delete a url and its CA info from list
-            browser.storage.local.set({ ["unsafe"]: sitesList }); //save list to storage
-            */
+
+            // check if lists exist, otherwise create new objects
+            let safeList = result["safe"] ? result["safe"] : {};
+            let unsafeList = result["unsafe"] ? result["unsafe"] : {};
+
+            // check if URL exists in either list, and if so, remove it
+            if (safeList[url]) {
+               delete safeList[url];
+            }
+            if (unsafeList[url]) {
+                delete unsafeList[url];
+            }
+
+            // add website and caInfo to the appropriate list
+            if (type === "safe") {
+                safeList[url] = caInfo;
+            } else if (type === "unsafe") {
+                unsafeList[url] = caInfo;
+            }
             
-            //get current list of storage
-            let sitesList = result[type] ? result[type] : {}; //If list exists, use it. Otherwise, create new object
-            sitesList[url] = caInfo; //add website and caInfo to list
-            browser.storage.local.set({ [type]: sitesList }); //save list to storage
+            //save lists back to storage
+            browser.storage.local.set({
+                "safe": safeList,
+                "unsafe": unsafeList
+            });
         });
         siteStatusDivs.notMarked.style.display = "none";
         if (type === "safe") {
