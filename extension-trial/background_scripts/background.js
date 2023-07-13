@@ -2,6 +2,7 @@
 
 // declare an empty root
 var rootCA;
+var waitingTabs = {};
 
 browser.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     if (changeInfo.status === "complete") {
@@ -11,14 +12,14 @@ browser.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     browser.tabs.query({ active: true, currentWindow: true })
         .then((tabs) => {
             const url = tabs[0].url; //getURL
+            console.log("tab ID in onUpdated: ", tabId);
             browser.storage.local.get(["safe", "unsafe"], (result) => {
                 let isSensitiveSite = result.safe && result.safe[url];
                 let isUnsafeSite = result.unsafe && result.unsafe[url];
                 //unblock website
                 if (isSensitiveSite || !isUnsafeSite) {
-                    browser.tabs.executeScript(tabs[0].id, {
-                        code: 'var blockerDiv = document.getElementById("myBlockerDiv"); if (blockerDiv) { blockerDiv.parentNode.removeChild(blockerDiv); }'
-                    });
+                    browser.tabs.executeScript(tabs[0].id, { file: 'contentScript.js' }); 
+                    waitingTabs[tabId] = true;
                 }
                 else { //block website
                     browser.tabs.executeScript(tabs[0].id, { file: 'contentScript.js' }); //inject contentScript.js           
@@ -26,6 +27,7 @@ browser.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
             });
         });
 });
+
 
 browser.runtime.onMessage.addListener((message, sender) => {
     // Check if the message is the one we're expecting
@@ -104,4 +106,14 @@ browser.webRequest.onHeadersReceived.addListener(
 browser.tabs.onActivated.addListener(activeInfo => {
     // Reset rootCA when the tab is changed
     rootCA = undefined;
+});
+
+browser.runtime.onMessage.addListener(request => {
+    console.log("Received message in background for tab ID: ", request.tabId);
+    if (waitingTabs[request.tabId]) {
+        browser.tabs.executeScript(request.tabId, {
+            code: 'var blockerDiv = document.getElementById("myBlockerDiv"); if (blockerDiv) { blockerDiv.parentNode.removeChild(blockerDiv); }'
+        });
+        delete waitingTabs[request.tabId];
+    }
 });

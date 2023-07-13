@@ -35,6 +35,14 @@ document.addEventListener("DOMContentLoaded", () => {
     var faviconImage = document.getElementById("faviconImage"); //Favicon (Logo)
     var websiteUrlElement = document.getElementById("websiteUrl"); //URL
 
+    document.getElementById('unblock').addEventListener('click', function () {
+        browser.tabs.query({ active: true, currentWindow: true }).then(tabs => {
+            let activeTab = tabs[0];
+            console.log("Sending message from popup for tab ID: ", activeTab.id);
+            browser.runtime.sendMessage({tabId: activeTab.id});
+        });
+    });
+
     // get the information on the extension
     browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         const url = tabs[0].url;
