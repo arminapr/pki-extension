@@ -277,21 +277,11 @@ document.addEventListener("DOMContentLoaded", () => {
             // Display list
             if (type === "safe") {
                 siteStatusDivs.safeList.style.display = "block";
+                addWebsite(document.getElementById("addTrusted"));
             } else {
                 siteStatusDivs.unsafeList.style.display = "block";
                 // Give user to option to manually add site to distrusted list
-                let button = document.getElementById("addDistrusted");
-                button.addEventListener("click", () => {
-                    resetText();
-                    siteStatusDivs.addDistrust.style.display = "block";
-                    // If they want to, display html form
-                    const form = document.getElementById("form");
-                    // When the form is submitted, add the given input to the distrusted list
-                    form.addEventListener("submit", () => {
-                        var url = document.getElementById("siteName").value;
-                        handleSiteAddition(url, "unsafe");
-                    });
-                });
+                addWebsite(document.getElementById("addDistrusted"));
             }
             siteStatusDivs.buttons.style.display = "block";
         });
@@ -317,6 +307,22 @@ document.addEventListener("DOMContentLoaded", () => {
         siteStatusDivs.safeList.style.display = "none";
         siteStatusDivs.unsafeList.style.display = "none";
         siteStatusDivs.buttons.style.display = "none";
+        siteStatusDivs.add
         siteStatusDivs.addDistrust.style.display = "none";
+    }
+
+    // add websites manually to trusted/untrusted lists
+    function addWebsite(button) {
+        button.addEventListener("click", () => {
+            resetText();
+            siteStatusDivs.addDistrust.style.display = "block";
+            // If they want to, display html form
+            const form = document.getElementById("form");
+            // When the form is submitted, add the given input to the distrusted list
+            form.addEventListener("submit", () => {
+                var url = document.getElementById("siteName").value;
+                handleSiteAddition(url, "unsafe");
+            });
+        });
     }
 });
