@@ -6,14 +6,22 @@ button {
     text-align: center;
     font-size: 1.5em;
     cursor: pointer;
-    background-color: #B6C9;
+    background-color: rgb(223, 158, 175);
+    box-shadow: 0 4px 4px 0 gray, 0 4px 4px 0 rgba(45, 39, 39, 0.19);
+    border-radius: 5px;
 }
+
+button:hover {
+    background-color: gray;
+}
+
 
 html,
 body {
     width: 200px;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     text-align: center;
+    overflow-wrap: break-word;
 }
 
 img {
@@ -24,12 +32,17 @@ img {
 
 button[type="submit"] {
     position: fixed;
-    top: 5px;
-    right: 5px;
-    z-index: 800;
-    width: 30px;
-    height: 30px;
+    top: 4px;
+    right: 0px;
+    z-index: 600;
+    width: 32px;
+    height: 32px;
     background-color: white;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: gray;
 }
 
 img[src="../icons/settings.png"] {

@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let activeTab = tabs[0];
             console.log("Sending message from popup for tab ID: ", activeTab.id);
             browser.runtime.sendMessage({tabId: activeTab.id});
+            window.close();
         });
     });
 
