@@ -29,18 +29,6 @@ browser.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 });
 
 
-browser.runtime.onMessage.addListener((message, sender) => {
-    // Check if the message is the one we're expecting
-    if (message.command === "blockSite") {
-        // Get the current active tab
-        browser.tabs.query({ active: true, currentWindow: true }, tabs => {
-            // Inject the content script into the active tab
-            browser.tabs.executeScript(tabs[0].id, { file: 'contentScript.js' });
-        });
-    }
-});
-
-
 // extracts the certificate chain and sends it to the popup.js
 async function sendRootCAName(details) {
     try {

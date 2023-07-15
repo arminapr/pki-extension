@@ -171,8 +171,6 @@ document.addEventListener("DOMContentLoaded", () => {
      */
     function checkCA(url, currentCaInfo) {
         browser.storage.local.get(["safe", "unsafe"], (result) => {
-            document.getElementById("test1").textContent = "kela";
-            browser.runtime.sendMessage({ command: "blockSite" });
             //Get current list of storage
             //Check if the current website exists in either of the lists
             let isSensitiveSite = result.safe && result.safe[url];
@@ -185,11 +183,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     : null; // If the website is found, get the stored CA info for that website
 
             if (isSensitiveSite) {
-                document.getElementById("test").textContent = "TEST";
                 siteStatusDivs.notMarked.style.display = "none";
                 if (previousCaInfo === currentCaInfo) {
                     // If the stored CA info matches the current CA info, display the "same CA" message
-                    document.getElementById("test1").textContent = "TEST1";
                     siteStatusDivs.markedDiff.style.display = "none";
                     siteStatusDivs.markedSame.style.display = "block";
                     document.getElementById("notice").textContent = "same certificate";
@@ -198,11 +194,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         window.close();
                     }, 3000);
                 } else {
-                    document.getElementById("test2").textContent = "TEST2";
-                    //document.getElementById("test").textContent = "TEST"
-                    //browser.runtime.sendMessage({
-                    //    action: "blockWebsite"
-                    //});
                     // If the stored CA info does not match the current CA info, display the "different CA" message
                     siteStatusDivs.markedSame.style.display = "none";
                     siteStatusDivs.markedDiff.style.display = "block";
@@ -226,7 +217,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
                 }
             } else if (isUnsafeSite) {
-                document.getElementById("test3").textContent = "TEST3";
                 //if site is unsafe, users must click button to accept the risk of the site
                 siteStatusDivs.notMarked.style.display = "none";
                 siteStatusDivs.markedUnsafe.style.display = "block";
