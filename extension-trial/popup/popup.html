@@ -79,19 +79,30 @@
 
     <div id="safeList" style="display: none">
         <h1>Sensitive Sites</h1>
+        <h4>Click the website URL to delete it from the safe list.</h4>
         <button id="addTrusted">Click to add a trusted site</button>
     </div>
 
     <div id="unsafeList" style="display: none">
         <h1>Unsafe Sites</h1>
+        <h4>Click the website URL to delete it from the unsafe list.</h4>
         <button id="addDistrusted">Click to add a distrusted site</button>
+    </div>
+
+    <div id="addTrust" style="display: none">
+        <h2>Add a site to the trusted list:</h2>
+        <form id="formTrust">
+            <label for="siteName">Please copy and paste the full URL of the site you would like to trust.</label><br>
+            <input type="text" id="siteNameTrust" name="siteName"><br>
+            <input type="submit" value="Submit">
+        </form>
     </div>
 
     <div id="addDistrust" style="display: none">
         <h2>Add a site to the distrusted list:</h2>
-        <form id="form">
+        <form id="formDistrust">
             <label for="siteName">Please copy and paste the full URL of the site you would like to distrust.</label><br>
-            <input type="text" id="siteName" name="siteName"><br>
+            <input type="text" id="siteNameDisrust" name="siteName"><br>
             <input type="submit" value="Submit">
         </form>
     </div>

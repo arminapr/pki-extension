@@ -28,8 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
         safeList: document.getElementById("safeList"),
         unsafeList: document.getElementById("unsafeList"),
         buttons: document.getElementById("buttons"),
-        addDistrust: document.getElementById("addDistrust")
-
+        addDistrust: document.getElementById("addDistrust"),
+        addTrust: document.getElementById("addTrust")
     };
 
     var faviconImage = document.getElementById("faviconImage"); //Favicon (Logo)
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
         browser.tabs.query({ active: true, currentWindow: true }).then(tabs => {
             let activeTab = tabs[0];
             console.log("Sending message from popup for tab ID: ", activeTab.id);
-            browser.runtime.sendMessage({tabId: activeTab.id});
+            browser.runtime.sendMessage({ tabId: activeTab.id });
             window.close();
         });
     });
@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // check if URL exists in either list, and if so, remove it
             if (safeList[url]) {
-               delete safeList[url];
+                delete safeList[url];
             }
             if (unsafeList[url]) {
                 delete unsafeList[url];
@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } else if (type === "unsafe") {
                 unsafeList[url] = caInfo;
             }
-            
+
             //save lists back to storage
             browser.storage.local.set({
                 "safe": safeList,
@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function checkCA(url, currentCaInfo) {
         browser.storage.local.get(["safe", "unsafe"], (result) => {
             document.getElementById("test1").textContent = "kela";
-            browser.runtime.sendMessage({command: "blockSite"});
+            browser.runtime.sendMessage({ command: "blockSite" });
             //Get current list of storage
             //Check if the current website exists in either of the lists
             let isSensitiveSite = result.safe && result.safe[url];
@@ -253,25 +253,25 @@ document.addEventListener("DOMContentLoaded", () => {
             if (sitesList === undefined || Object.keys(sitesList).length === 0) {
                 document.getElementById("buttons").innerHTML = "<h3>No websites on this list. Please add some sites then check again!</h3>";
             } else {
-            document.getElementById("buttons").innerHTML += "<h3>Click on a website to remove it from the list.</h3>";
-            // Reset button list
-            document.getElementById("buttons").innerHTML = "";
-            // Get all the urls on the list
-            urls = Object.keys(sitesList);
-            const urlButtons = {};
-            // Add each url to the html
-            urls.forEach((url) => {
-                // Create button
-                document.getElementById("buttons").innerHTML += '<button id= "'+url+'">' + url + '</button>';
-                urlButtons[url] = document.getElementById(url);
-                // Add event listener for button
-                urlButtons[url].addEventListener("click", () => {
-                    // Remove url from list and reload list
-                    delete sitesList[url];
-                    browser.storage.local.set({ [type]: sitesList });
-                    showList(type);
+                document.getElementById("buttons").innerHTML += "<h3>Click on a website to remove it from the list.</h3>";
+                // Reset button list
+                document.getElementById("buttons").innerHTML = "";
+                // Get all the urls on the list
+                urls = Object.keys(sitesList);
+                const urlButtons = {};
+                // Add each url to the html
+                urls.forEach((url) => {
+                    // Create button
+                    document.getElementById("buttons").innerHTML += '<button id= "' + url + '">' + url + '</button>';
+                    urlButtons[url] = document.getElementById(url);
+                    // Add event listener for button
+                    urlButtons[url].addEventListener("click", () => {
+                        // Remove url from list and reload list
+                        delete sitesList[url];
+                        browser.storage.local.set({ [type]: sitesList });
+                        showList(type);
+                    });
                 });
-            });
             }
             resetText();
             // Display list
@@ -307,7 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
         siteStatusDivs.safeList.style.display = "none";
         siteStatusDivs.unsafeList.style.display = "none";
         siteStatusDivs.buttons.style.display = "none";
-        siteStatusDivs.add
+        siteStatusDivs.addTrust.style.display = "none";
         siteStatusDivs.addDistrust.style.display = "none";
     }
 
@@ -315,14 +315,26 @@ document.addEventListener("DOMContentLoaded", () => {
     function addWebsite(button) {
         button.addEventListener("click", () => {
             resetText();
-            siteStatusDivs.addDistrust.style.display = "block";
-            // If they want to, display html form
-            const form = document.getElementById("form");
-            // When the form is submitted, add the given input to the distrusted list
-            form.addEventListener("submit", () => {
-                var url = document.getElementById("siteName").value;
-                handleSiteAddition(url, "unsafe");
-            });
+            if (button === document.getElementById("addTrusted")) {
+                siteStatusDivs.addTrust.style.display = "block";
+                // If they want to, display html form
+                const formTrust = document.getElementById("formTrust");
+                // When the form is submitted, add the given input to the trusted list
+                formTrust.addEventListener("submit", () => {
+                    var url = document.getElementById("siteNameTrust").value;
+                    handleSiteAddition(url, "safe");
+                });
+            } else {
+                siteStatusDivs.addDistrust.style.display = "block";
+                // If they want to, display html form
+                const formDistrust = document.getElementById("formDistrust");
+                // When the form is submitted, add the given input to the distrusted list
+                formDistrust.addEventListener("submit", () => {
+                    var url = document.getElementById("siteNameDistrust").value;
+                    handleSiteAddition(url, "unsafe");
+                });
+            }
+
         });
     }
 });
