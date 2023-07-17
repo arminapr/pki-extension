@@ -35,14 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
     var faviconImage = document.getElementById("faviconImage"); //Favicon (Logo)
     var websiteUrlElement = document.getElementById("websiteUrl"); //URL
 
-    document.getElementById('unblock').addEventListener('click', function () {
-        browser.tabs.query({ active: true, currentWindow: true }).then(tabs => {
-            let activeTab = tabs[0];
-            console.log("Sending message from popup for tab ID: ", activeTab.id);
-            browser.runtime.sendMessage({ tabId: activeTab.id });
-            window.close();
-        });
-    });
+    // unblock the page and let the user use the website
+    document.getElementById('unblock').addEventListener('click', unblockWebsite);
 
     // get the information on the extension
     browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -111,6 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
      * @param {string} type
      */
     function handleSiteAddition(url, type) {
+        unblockWebsite();
         browser.storage.local.get(type, (result) => {
 
             // check if lists exist, otherwise create new objects
@@ -299,6 +294,16 @@ document.addEventListener("DOMContentLoaded", () => {
         siteStatusDivs.buttons.style.display = "none";
         siteStatusDivs.addTrust.style.display = "none";
         siteStatusDivs.addDistrust.style.display = "none";
+    }
+
+    // unblock the website for the user
+    function unblockWebsite() {
+        browser.tabs.query({ active: true, currentWindow: true }).then(tabs => {
+            let activeTab = tabs[0];
+            console.log("Sending message from popup for tab ID: ", activeTab.id);
+            browser.runtime.sendMessage({ tabId: activeTab.id });
+            window.close();
+        });
     }
 
     // add websites manually to trusted/untrusted lists
