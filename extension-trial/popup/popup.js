@@ -46,14 +46,12 @@ document.addEventListener("DOMContentLoaded", () => {
         websiteUrlElement.textContent = url;
         faviconImage.src = favicon;
         browser.runtime.sendMessage({ websiteUrl: url });
-        // console.log("Receiver 1"); // for testing purposes
 
         // Send message when popup is opened
         browser.runtime.sendMessage({ data: "Trigger" });
 
         // Receive message from background.js for CA Info and update html
         browser.runtime.onMessage.addListener((request) => {
-            // console.log("Receiver 2"); // for testing purposes
             if (request.rootCA) {
                 // Check if root CA exists in the request
                 caInfo = request.rootCA;
@@ -230,6 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // present the list of safe/unsafe websites to the user
     function showList(type) {
         browser.storage.local.get(type, (result) => {
             // Get the list of urls
@@ -331,5 +330,16 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
         });
+    }
+
+    // Test the user randomly on certain visits
+    function randomTesting() {
+        var randomNumber = Marh.random() * 1000;
+        if (randomNumber % 25 === 0) {
+            // TODO: change the domain name and ask the user if they think this is a safe website
+            // pretend it's their first visit
+            // have a point-based system, if they get it right give them 10 points, if wrong, reduce 5 points
+            // put logos for each point range
+        }
     }
 });
