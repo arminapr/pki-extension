@@ -68,10 +68,6 @@ async function sendRootCAName(details) {
                         }
                     }
                 })
-                // browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-                // let url = tabs[0].url;
-                // there are more domains that we need to filter
-                //})
             }
         }
         browser.runtime.onMessage.addListener((request) => {
