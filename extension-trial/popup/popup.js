@@ -336,6 +336,13 @@ document.addEventListener("DOMContentLoaded", () => {
     function randomTesting() {
         var randomNumber = Marh.random() * 1000;
         if (randomNumber % 25 === 0) {
+            var urlID = document.getElementById("websiteUrl");
+            var urlContent = urlID.textContent;
+            var randomIndex = Math.random() * urlContent.length - 1;
+            const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+            var randomLetterNum = Math.random() * 27;
+            var randomLetter = alphabet[randomLetterNum];
+            urlID.textContent = urlContent.substring(0, randomIndex) + randomLetter + urlContent(randomIndex + 1);
             // TODO: change the domain name and ask the user if they think this is a safe website
             // pretend it's their first visit
             // have a point-based system, if they get it right give them 10 points, if wrong, reduce 5 points
