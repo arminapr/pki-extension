@@ -2,6 +2,8 @@
 
 // declare an empty root
 var rootCA;
+// declare whether certificate is EV
+var evStatus;
 var waitingTabs = {};
 
 browser.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
@@ -37,6 +39,15 @@ async function sendRootCAName(details) {
             details.requestId,
             { certificateChain: true }
         );
+        // get certificate subject info
+        const subjectInfo = securityInfo.certificates[0].subject;
+        // check if certificate has "businessCategory" value (only found in EV certs)
+        if (subjectInfo.includes("businessCategory")) {
+            evStatus = true;
+        }
+        else {
+            evStatus = false;
+        }
         if (securityInfo.state === "insecure" || securityInfo.state === "broken") {
             browser.runtime.sendMessage({ message: "no" });
         }
