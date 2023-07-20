@@ -38,7 +38,8 @@ document.addEventListener("DOMContentLoaded", () => {
     var websiteUrlElement = document.getElementById("websiteUrl"); //URL
 
     // unblock the page and let the user use the website
-    document.getElementById('unblock').addEventListener('click', unblockWebsite);
+    //document.getElementById('unblock').addEventListener('click', unblockWebsite);
+    unblockWebsite();
 
     // get the information on the extension
     browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -214,7 +215,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     accept: document.getElementById("accept")
                 };
                 buttons.accept.addEventListener("click", function () {
-                    window.close();
+                    siteStatusDivs.markedUnsafe.textContent = "ABEY";
+                    unblockWebsite();
+                    //window.close();
                 });
             } else {
                 document.getElementById("test4").textContent = "TEST4";
@@ -298,7 +301,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let activeTab = tabs[0];
             console.log("Sending message from popup for tab ID: ", activeTab.id);
             browser.runtime.sendMessage({ tabId: activeTab.id });
-            window.close();
+            //window.close();
         });
     }
 

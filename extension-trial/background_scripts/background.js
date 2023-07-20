@@ -19,12 +19,12 @@ browser.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
                 let isSensitiveSite = result.safe && result.safe[url];
                 let isUnsafeSite = result.unsafe && result.unsafe[url];
                 //unblock website
-                if (isSensitiveSite || !isUnsafeSite) {
+                if (isSensitiveSite) {
                     browser.tabs.executeScript(tabs[0].id, { file: 'contentScript.js' }); 
-                    waitingTabs[tabId] = true;
+                    waitingTabs[tabId] = true; 
                 }
-                else { //block website
-                    browser.tabs.executeScript(tabs[0].id, { file: 'contentScript.js' }); //inject contentScript.js           
+                else if (isUnsafeSite) {
+                    browser.tabs.executeScript(tabs[0].id, { file: 'contentScript.js' });
                 }
             });
         });
