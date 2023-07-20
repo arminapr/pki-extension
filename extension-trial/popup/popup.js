@@ -6,7 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
         visit: document.getElementById("visit"),
         safe: document.getElementById("safe"),
         misMarked: document.getElementById("misMarked"),
-        settings: document.getElementById("settingButton")
+        settings: document.getElementById("settingButton"),
+        conTrust: document.getElementById("conTrust"),
+        stopTrust: document.getElementById("stopTrust")
     };
 
     const siteStatusDivs = {
@@ -192,11 +194,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     siteStatusDivs.markedDiff.style.display = "block";
                     document.getElementById("notice").textContent =
                         "different certificate";
-                    let buttons = {
-                        // Lets the user choose whether to continue to trust this site
-                        conTrust: document.getElementById("conTrust"),
-                        stopTrust: document.getElementById("stopTrust"),
-                    };
                     buttons.conTrust.addEventListener("click", function () {
                         // If user wants to continue to trust, update CA info but keep url on safe list
                         handleSiteAddition(url, "safe");
@@ -349,10 +346,32 @@ document.addEventListener("DOMContentLoaded", () => {
             siteStatusDivs.notMarked.style.display = "none";
             siteStatusDivs.markedSame.style.display = "none";
             siteStatusDivs.markedDiff.style.display = "block";
+            buttons.conTrust.addEventListener('click', () => {
+                if (urlID.textContent !== urlContent) {
+                    // reduce points
+                } else {
+                    // add points
+                }
+            });
+            buttons.stopTrust.addEventListener('click', () => {
+                if (urlID.textContent !== urlContent) {
+                    // add points
+                } else {
+                    // reduce points
+                }
+            });
             // TODO: change the domain name and ask the user if they think this is a safe website
             // pretend it's their first visit
             // have a point-based system, if they get it right give them 10 points, if wrong, reduce 5 points
             // put logos for each point range
         }
+    }
+
+    // updating the avatar based on the points that the user has
+    function updateAvatar() {
+        browser.storage.local.get("avatar", (result) => {
+            var avatar = result.avatar;
+            document.getElementById("avatar").src = avatar;
+        });
     }
 });
