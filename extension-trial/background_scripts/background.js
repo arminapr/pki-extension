@@ -105,6 +105,11 @@ browser.tabs.onActivated.addListener(activeInfo => {
 
 browser.runtime.onMessage.addListener(request => {
     console.log("Received message in background for tab ID: ", request.tabId);
+    if (request.message==="force-unblock"){
+        browser.tabs.executeScript(request.tabId, {
+            code: 'var blockerDiv = document.getElementById("myBlockerDiv"); if (blockerDiv) { blockerDiv.parentNode.removeChild(blockerDiv); }'
+        });
+    }
     if (waitingTabs[request.tabId]) {
         browser.tabs.executeScript(request.tabId, {
             code: 'var blockerDiv = document.getElementById("myBlockerDiv"); if (blockerDiv) { blockerDiv.parentNode.removeChild(blockerDiv); }'
