@@ -33,12 +33,13 @@ document.addEventListener("DOMContentLoaded", () => {
         addDistrust: document.getElementById("addDistrust"),
         addTrust: document.getElementById("addTrust")
     };
-
+    
     var faviconImage = document.getElementById("faviconImage"); //Favicon (Logo)
     var websiteUrlElement = document.getElementById("websiteUrl"); //URL
 
     // unblock the page and let the user use the website
-    document.getElementById('unblock').addEventListener('click', unblockWebsite);
+    //document.getElementById('unblock').addEventListener('click', unblockWebsite);
+    unblockWebsite("message");
 
     // get the information on the extension
     browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -106,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
      * @param {string} type
      */
     function handleSiteAddition(url, type) {
-        unblockWebsite();
+        unblockWebsite("message");
         browser.storage.local.get(type, (result) => {
 
             // check if lists exist, otherwise create new objects
@@ -217,6 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     accept: document.getElementById("accept")
                 };
                 buttons.accept.addEventListener("click", function () {
+                    unblockWebsite("force-unblock");
                     window.close();
                 });
             } else {
@@ -296,12 +298,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // unblock the website for the user
-    function unblockWebsite() {
+    function unblockWebsite(message) {
         browser.tabs.query({ active: true, currentWindow: true }).then(tabs => {
             let activeTab = tabs[0];
             console.log("Sending message from popup for tab ID: ", activeTab.id);
+            if (message==="force-unblock"){
+                browser.runtime.sendMessage({ tabId: activeTab.id, message: "force-unblock" });
+            }
             browser.runtime.sendMessage({ tabId: activeTab.id });
-            window.close();
+            //window.close();
         });
     }
 
