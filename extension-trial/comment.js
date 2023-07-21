@@ -133,3 +133,28 @@ if (!prevCA) {
         let issuer = securityInfo.certificates[i].issuer;
         rootCA = rootCA + issuer.substring(3, issuer.indexOf(",")) + " | ";
       } */
+
+
+      // commented out from popup.js in randomTesting() function 
+      /* buttons.conTrust.addEventListener('click', () => {
+        if (urlID.textContent !== urlContent) {
+            // reduce points
+            points -= 5;
+            browser.storage.local.set({ points: points });
+        } else {
+            // add points
+            points += 10;
+            browser.storage.local.set({ points: points });
+        }
+    });
+    buttons.stopTrust.addEventListener('click', () => {
+        if (urlID.textContent !== urlContent) {
+            // add points
+            points += 10;
+            browser.storage.local.set({ points: points });
+        } else {
+            // reduce points
+            points -= 5;
+            browser.storage.local.set({ points: points });
+        }
+    }); */

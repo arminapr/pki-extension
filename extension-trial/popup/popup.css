@@ -15,7 +15,6 @@ button:hover {
     background-color: gray;
 }
 
-
 html,
 body {
     width: 200px;
@@ -48,4 +47,13 @@ button[type="submit"]:hover {
 img[src="../icons/settings.png"] {
     width: 25px;
     height: 25px;
+}
+
+img[src="../icons/frog.png"] {
+    width: 35px;
+    height: 35px;
+    background-color: white;
+    position: fixed;
+    top: 4px;
+    left: 0px;
 }

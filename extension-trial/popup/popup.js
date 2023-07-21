@@ -95,6 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 showList("unsafe");
             });
         });
+        randomTesting();
     });
 
     /**
@@ -198,12 +199,14 @@ document.addEventListener("DOMContentLoaded", () => {
                         // If user wants to continue to trust, update CA info but keep url on safe list
                         handleSiteAddition(url, "safe");
                         siteStatusDivs.markedDiff.style.display = "none";
+                        updatePoints(true);
                     });
                     buttons.stopTrust.addEventListener("click", function () {
                         // If user does not want to trust, remove url from safe list and add it to unsafe list
                         handleSiteRemoval(url, "safe");
                         handleSiteAddition(url, "unsafe");
                         siteStatusDivs.markedDiff.style.display = "none";
+                        updatePoints(false);
                     });
                 }
             } else if (isUnsafeSite) {
@@ -217,7 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     window.close();
                 });
             } else {
-                document.getElementById("test4").textContent = "TEST4";
+                // document.getElementById("test4").textContent = "TEST4";
                 // If the website does not exist in either of the lists, display the "not marked" message
                 siteStatusDivs.notMarked.style.display = "block";
                 document.getElementById("notice").textContent = "no certificate saved";
@@ -331,47 +334,89 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Test the user randomly on certain visits
     function randomTesting() {
-        var randomNumber = Math.random() * 1000;
-        if (randomNumber % 25 === 0) {
-            var urlID = document.getElementById("websiteUrl");
-            var urlContent = urlID.textContent;
-            var randomIndex = Math.random() * urlContent.length - 1;
-            const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-            var randomLetterNum = Math.floor(Math.random() * 27);
-            var randomLetter = alphabet[randomLetterNum];
-            // to see which letter it's being changed to
-            console.log("random index: " + randomIndex);
-            console.log("random letter: " + randomLetter);
-            urlID.textContent = urlContent.substring(0, randomIndex) + randomLetter + urlContent.substring(randomIndex + 1);
-            siteStatusDivs.notMarked.style.display = "none";
-            siteStatusDivs.markedSame.style.display = "none";
-            siteStatusDivs.markedDiff.style.display = "block";
-            buttons.conTrust.addEventListener('click', () => {
-                if (urlID.textContent !== urlContent) {
-                    // reduce points
-                } else {
-                    // add points
-                }
-            });
-            buttons.stopTrust.addEventListener('click', () => {
-                if (urlID.textContent !== urlContent) {
-                    // add points
-                } else {
-                    // reduce points
-                }
-            });
-            // TODO: change the domain name and ask the user if they think this is a safe website
-            // pretend it's their first visit
-            // have a point-based system, if they get it right give them 10 points, if wrong, reduce 5 points
-            // put logos for each point range
-        }
+        console.log("doing random test");
+        browser.storage.local.get("points", (result) => {
+            let points = result.points ? result.points : 0;
+            // code below commented because it needs to be written in the html content first
+            // document.getElementById("points").textContent = points;
+
+            var randomNumber = Math.random() * 1000;
+            if (randomNumber % 10 === 0) {
+                console.log("random test activated");
+                var urlID = document.getElementById("websiteUrl");
+                var urlContent = urlID.textContent;
+                var randomIndex = Math.random() * urlContent.length - 1;
+                const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+                var randomLetterNum = Math.floor(Math.random() * 27);
+                var randomLetter = alphabet[randomLetterNum];
+                // to see which letter it's being changed to
+                console.log("random index: " + randomIndex);
+                console.log("random letter: " + randomLetter);
+                // change the url on the extension
+                urlID.textContent = urlContent.substring(0, randomIndex) + randomLetter + urlContent.substring(randomIndex + 1);
+                // tell the user some information has changed and ask if they still trust the website
+                siteStatusDivs.notMarked.style.display = "none";
+                siteStatusDivs.markedSame.style.display = "none";
+                siteStatusDivs.markedDiff.style.display = "block";
+                console.log("points: " + points);
+            }
+        });
     }
 
     // updating the avatar based on the points that the user has
-    function updateAvatar() {
-        browser.storage.local.get("avatar", (result) => {
-            var avatar = result.avatar;
-            document.getElementById("avatar").src = avatar;
+    function updateAvatar(points) {
+        var avatarSrc;
+        // change the avatar based on the point
+        switch (points) {
+            case (points < 50):
+                avatarSrc = "../icons/goldfish.png";
+                break;
+            case (points < 100):
+                avatarSrc = "../icons/sardine.png";
+                break;
+            case (points < 200):
+                avatarSrc = "../icons/salmon.png";
+                break;
+            case (points >= 200):
+                avatarSrc = "../icons/whale.png";
+                break;
+        }
+        document.getElementById("avatarPic").src = avatarSrc;
+    }
+
+    // update the points as needed
+    function updatePoints(type) {
+        browser.storage.local.get("points", (result) => {
+            let points = result.points ? result.points : 0;
+            var urlID = document.getElementById("websiteUrl");
+            var urlContent = urlID.textContent;
+            // not sure if I have to do this or just leave it as (type) because I think that also checks if it has a value at all
+            if (type == true) {
+                console.log("initial: " + points);
+                if (urlID.textContent !== urlContent) {
+                    // reduce points
+                    points -= 5;
+                    browser.storage.local.set({ points: points });
+                    console.log("points: " + points);
+                } else {
+                    // add points
+                    points += 10;
+                    browser.storage.local.set({ points: points });
+                    console.log("points: " + points);
+                }
+            } else if (type == false) {
+                if (urlID.textContent !== urlContent) {
+                    // add points
+                    points += 10;
+                    browser.storage.local.set({ points: points });
+                } else {
+                    // reduce points
+                    points -= 5;
+                    browser.storage.local.set({ points: points });
+                }
+            }
+            // update the user avatar
+            updateAvatar(points);
         });
     }
 });
