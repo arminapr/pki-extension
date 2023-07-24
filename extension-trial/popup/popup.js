@@ -1,5 +1,7 @@
 // Global variable for CA info
 let caInfo;
+let evCert;
+let timeout;
 
 document.addEventListener("DOMContentLoaded", () => {
     const buttons = {
@@ -61,6 +63,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById("rootCAInfo").textContent = caInfo;
                 checkCA(url, caInfo);
             }
+            if (request.evStatus != undefined) {
+                evCert = request.evStatus;
+            }
             if (request.secure) {
                 if (request.secure === "no") {
                     siteStatusDivs.notMarked.style.display = "none";
@@ -84,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         buttons.settings.addEventListener("click", () => {
             resetText();
+            clearTimeout(timeout);
             siteStatusDivs.settings.style.display = "block";
             const buttons = {
                 seeSafeList: document.getElementById("seeSafeList"),
@@ -124,9 +130,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // add website and caInfo to the appropriate list
             if (type === "safe") {
-                safeList[url] = caInfo;
+                safeList[url] = [caInfo, evCert];
+                console.log(safeList[url]);
             } else if (type === "unsafe") {
-                unsafeList[url] = caInfo;
+                unsafeList[url] = [caInfo, evCert];
+                console.log(unsafeList[url]);
             }
 
             //save lists back to storage
@@ -174,9 +182,9 @@ document.addEventListener("DOMContentLoaded", () => {
             let isUnsafeSite = result.unsafe && result.unsafe[url];
 
             let previousCaInfo = isSensitiveSite
-                ? result.safe[url]
+                ? result.safe[url][0]
                 : isUnsafeSite
-                    ? result.unsafe[url]
+                    ? result.unsafe[url][0]
                     : null; // If the website is found, get the stored CA info for that website
 
             if (isSensitiveSite) {
@@ -186,10 +194,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     siteStatusDivs.markedDiff.style.display = "none";
                     siteStatusDivs.markedSame.style.display = "block";
                     document.getElementById("notice").textContent = "same certificate";
-                    setTimeout(() => {
+                    if (timeout === undefined) {
+                    timeout = setTimeout(() => {
                         // Close window after 3 seconds
                         window.close();
+                        timeout = undefined;
                     }, 3000);
+                    }
                 } else {
                     // If the stored CA info does not match the current CA info, display the "different CA" message
                     siteStatusDivs.markedSame.style.display = "none";
@@ -286,6 +297,7 @@ document.addEventListener("DOMContentLoaded", () => {
         siteStatusDivs.notMarked.style.display = "none";
         siteStatusDivs.markedSame.style.display = "none";
         siteStatusDivs.markedDiff.style.display = "none";
+        siteStatusDivs.markedUnsafe.style.display = "none";
         siteStatusDivs.nonSens.style.display = "none";
         siteStatusDivs.untrustText.style.display = "none";
         siteStatusDivs.trustText.style.display = "none";
