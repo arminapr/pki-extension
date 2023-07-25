@@ -14,10 +14,12 @@ browser.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     browser.tabs.query({ active: true, currentWindow: true })
         .then((tabs) => {
             const url = tabs[0].url; //getURL
+            const urlObj = new URL(url);
+            const domain = urlObj.hostname;
             console.log("tab ID in onUpdated: ", tabId);
             browser.storage.local.get(["safe", "unsafe"], (result) => {
-                let isSensitiveSite = result.safe && result.safe[url];
-                let isUnsafeSite = result.unsafe && result.unsafe[url];
+                let isSensitiveSite = result.safe && result.safe[domain];
+                let isUnsafeSite = result.unsafe && result.unsafe[domain];
                 //unblock website
                 if (isSensitiveSite) {
                     browser.tabs.executeScript(tabs[0].id, { file: 'contentScript.js' }); 
@@ -107,12 +109,15 @@ browser.tabs.onActivated.addListener(activeInfo => {
 
 browser.runtime.onMessage.addListener(request => {
     console.log("Received message in background for tab ID: ", request.tabId);
+    console.log("do we block?")
     if (request.message==="force-unblock"){
+        console.log("need to block")
         browser.tabs.executeScript(request.tabId, {
             code: 'var blockerDiv = document.getElementById("myBlockerDiv"); if (blockerDiv) { blockerDiv.parentNode.removeChild(blockerDiv); }'
         });
     }
     if (waitingTabs[request.tabId]) {
+        console.log("need to block");
         browser.tabs.executeScript(request.tabId, {
             code: 'var blockerDiv = document.getElementById("myBlockerDiv"); if (blockerDiv) { blockerDiv.parentNode.removeChild(blockerDiv); }'
         });
