@@ -158,3 +158,4 @@ if (!prevCA) {
             browser.storage.local.set({ points: points });
         }
     }); */
+    
