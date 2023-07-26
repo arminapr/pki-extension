@@ -44,7 +44,7 @@ async function sendRootCAName(details) {
         // get certificate subject info
         const subjectInfo = securityInfo.certificates[0].subject;
         // check if certificate has "businessCategory" value (only found in EV certs)
-        if (subjectInfo.includes("businessCategory")) {
+        if (subjectInfo.includes("businessCategory=")) {
             evStatus = true;
         }
         else {
@@ -86,6 +86,7 @@ async function sendRootCAName(details) {
         browser.runtime.onMessage.addListener((request) => {
             // Send root data to popup.js
             browser.runtime.sendMessage({ rootCA });
+            browser.runtime.sendMessage({ evStatus });
         });
     } catch (error) {
         console.error(error);
@@ -103,6 +104,7 @@ browser.webRequest.onHeadersReceived.addListener(
 browser.tabs.onActivated.addListener(activeInfo => {
     // Reset rootCA when the tab is changed
     rootCA = undefined;
+    evStatus = undefined;
 });
 
 browser.runtime.onMessage.addListener(request => {
