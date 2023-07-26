@@ -111,13 +111,13 @@ browser.runtime.onMessage.addListener(request => {
     console.log("Received message in background for tab ID: ", request.tabId);
     console.log("do we block?")
     if (request.message==="force-unblock"){
-        console.log("need to block")
+        console.log("need to unblock")
         browser.tabs.executeScript(request.tabId, {
             code: 'var blockerDiv = document.getElementById("myBlockerDiv"); if (blockerDiv) { blockerDiv.parentNode.removeChild(blockerDiv); }'
         });
     }
     if (waitingTabs[request.tabId]) {
-        console.log("need to block");
+        console.log("need to unblock");
         browser.tabs.executeScript(request.tabId, {
             code: 'var blockerDiv = document.getElementById("myBlockerDiv"); if (blockerDiv) { blockerDiv.parentNode.removeChild(blockerDiv); }'
         });
