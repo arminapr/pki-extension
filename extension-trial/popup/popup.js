@@ -1,7 +1,5 @@
 // Global variable for CA info
 let caInfo;
-let evCert;
-let timeout;
 
 document.addEventListener("DOMContentLoaded", () => {
     const buttons = {
@@ -64,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Check if root CA exists in the request
                 caInfo = request.rootCA;
                 document.getElementById("rootCAInfo").textContent = caInfo;
-                checkCA(domain, caInfo);
+                checkCA(url, caInfo);
             }
             if (request.evStatus != undefined) {
                 evCert = request.evStatus;
@@ -92,7 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         buttons.settings.addEventListener("click", () => {
             resetText();
-            clearTimeout(timeout);
             siteStatusDivs.settings.style.display = "block";
             const buttons = {
                 seeSafeList: document.getElementById("seeSafeList"),
@@ -300,7 +297,6 @@ document.addEventListener("DOMContentLoaded", () => {
         siteStatusDivs.notMarked.style.display = "none";
         siteStatusDivs.markedSame.style.display = "none";
         siteStatusDivs.markedDiff.style.display = "none";
-        siteStatusDivs.markedUnsafe.style.display = "none";
         siteStatusDivs.nonSens.style.display = "none";
         siteStatusDivs.untrustText.style.display = "none";
         siteStatusDivs.trustText.style.display = "none";
