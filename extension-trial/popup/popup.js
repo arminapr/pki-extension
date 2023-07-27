@@ -49,8 +49,10 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("at the top");
         const url = tabs[0].url;
         console.log("url: " + url);
+        const urlObj = new URL(url);
+        const domain = urlObj.hostname;
         const favicon = tabs[0].favIconUrl;
-        websiteUrlElement.textContent = url;
+        websiteUrlElement.textContent = domain;
         faviconImage.src = favicon;
         browser.runtime.sendMessage({ websiteUrl: url });
 
@@ -63,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Check if root CA exists in the request
                 caInfo = request.rootCA;
                 document.getElementById("rootCAInfo").textContent = caInfo;
-                checkCA(url, caInfo);
+                checkCA(domain, caInfo);
             }
             if (request.evStatus != undefined) {
                 evCert = request.evStatus;
@@ -81,12 +83,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         // if they click on the safe button, add the website to the safe list
         buttons.safe.addEventListener("click", function () {
-            handleSiteAddition(url, "safe");
+            handleSiteAddition(domain, "safe");
         });
 
         // if they click on the mismarked button, add the website to the unsafe list
         buttons.misMarked.addEventListener("click", function () {
-            handleSiteAddition(url, "unsafe");
+            handleSiteAddition(domain, "unsafe");
         });
 
         buttons.settings.addEventListener("click", () => {
@@ -111,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
      * Responsible for adding sites to list
      * Retrieve current list from storage --> add new website --> save list back to storage
      * Also display message for safe site
-     * @param {string} url
+     * @param {string} domain
      * @param {string} type
      */
     function handleSiteAddition(url, type) {
@@ -122,20 +124,20 @@ document.addEventListener("DOMContentLoaded", () => {
             let unsafeList = result["unsafe"] ? result["unsafe"] : {};
 
             // check if URL exists in either list, and if so, remove it
-            if (safeList[url]) {
-                delete safeList[url];
+            if (safeList[domain]) {
+                delete safeList[domain];
             }
-            if (unsafeList[url]) {
-                delete unsafeList[url];
+            if (unsafeList[domain]) {
+                delete unsafeList[domain];
             }
 
             // add website and caInfo to the appropriate list
             if (type === "safe") {
-                safeList[url] = [caInfo, evCert];
-                console.log(safeList[url]);
+                safeList[domain] = [caInfo, evCert];
+                console.log(safeList[domain]);
             } else if (type === "unsafe") {
-                unsafeList[url] = [caInfo, evCert];
-                console.log(unsafeList[url]);
+                unsafeList[domain] = [caInfo, evCert];
+                console.log(unsafeList[domain]);
             }
 
             //save lists back to storage
@@ -143,6 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 "safe": safeList,
                 "unsafe": unsafeList
             });
+            
         });
         siteStatusDivs.notMarked.style.display = "none";
         if (type === "safe") {
@@ -154,38 +157,37 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
     /**
      * Responsible for deleting sites from list
      * Retrieve current list from storage --> delete given url --> save list back to storage
-     * @param {string} url
+     * @param {string} domain
      * @param {string} type
      */
-    function handleSiteRemoval(url, type) {
+    function handleSiteRemoval(domain, type) {
         browser.storage.local.get(type, (result) => {
             //get current list of storage
             let sitesList = result[type];
-            delete sitesList[url]; //delete a url and its CA info from list
+            delete sitesList[domain]; //delete a url and its CA info from list
             browser.storage.local.set({ [type]: sitesList }); //save list to storage
         });
     }
 
     /**
      * Responsible for comparing current caInfo with stored caInfo
-     * @param {string} url
+     * @param {string} domain
      * @param {string} currentCaInfo
      */
-    function checkCA(url, currentCaInfo) {
+    function checkCA(domain, currentCaInfo) {
         browser.storage.local.get(["safe", "unsafe"], (result) => {
             //Get current list of storage
             //Check if the current website exists in either of the lists
-            let isSensitiveSite = result.safe && result.safe[url];
-            let isUnsafeSite = result.unsafe && result.unsafe[url];
+            let isSensitiveSite = result.safe && result.safe[domain];
+            let isUnsafeSite = result.unsafe && result.unsafe[domain];
 
             let previousCaInfo = isSensitiveSite
-                ? result.safe[url][0]
+                ? result.safe[domain][0]
                 : isUnsafeSite
-                    ? result.unsafe[url][0]
+                    ? result.unsafe[domain][0]
                     : null; // If the website is found, get the stored CA info for that website
 
             let previousEvStatus = isSensitiveSite
@@ -232,14 +234,14 @@ document.addEventListener("DOMContentLoaded", () => {
                         "different certificate";
                     buttons.conTrust.addEventListener("click", function () {
                         // If user wants to continue to trust, update CA info but keep url on safe list
-                        handleSiteAddition(url, "safe");
+                        handleSiteAddition(domain, "safe");
                         siteStatusDivs.markedDiff.style.display = "none";
                         updatePoints(true);
                     });
                     buttons.stopTrust.addEventListener("click", function () {
                         // If user does not want to trust, remove url from safe list and add it to unsafe list
-                        handleSiteRemoval(url, "safe");
-                        handleSiteAddition(url, "unsafe");
+                        handleSiteRemoval(domain, "safe");
+                        handleSiteAddition(domain, "unsafe");
                         siteStatusDivs.markedDiff.style.display = "none";
                         updatePoints(false);
                     });
