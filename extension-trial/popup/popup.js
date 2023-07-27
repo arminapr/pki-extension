@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
      * @param {string} domain
      * @param {string} type
      */
-    function handleSiteAddition(url, type) {
+    function handleSiteAddition(domain, type) {
         browser.storage.local.get(type, (result) => {
 
             // check if lists exist, otherwise create new objects
