@@ -113,7 +113,6 @@ document.addEventListener("DOMContentLoaded", () => {
      * @param {string} type
      */
     function handleSiteAddition(url, type) {
-        unblockWebsite("message");
         browser.storage.local.get(type, (result) => {
 
             // check if lists exist, otherwise create new objects
@@ -250,24 +249,25 @@ document.addEventListener("DOMContentLoaded", () => {
             if (sitesList === undefined || Object.keys(sitesList).length === 0) {
                 document.getElementById("buttons").innerHTML = "<h3>No websites on this list. Please add some sites then check again!</h3>";
             } else {
-                document.getElementById("buttons").innerHTML += "<h3>Click on a website to remove it from the list.</h3>";
                 // Reset button list
                 document.getElementById("buttons").innerHTML = "";
+                document.getElementById("buttons").innerHTML += "<h3>Click on a website to remove it from the " + type + " list.</h3>";
                 // Get all the urls on the list
                 urls = Object.keys(sitesList);
-                const urlButtons = {};
                 // Add each url to the html
                 urls.forEach((url) => {
                     // Create button
-                    document.getElementById("buttons").innerHTML += '<button id= "' + url + '">' + url + '</button>';
-                    urlButtons[url] = document.getElementById(url);
+                    var button = document.createElement("button");
+                    button.innerText = url;
                     // Add event listener for button
-                    urlButtons[url].addEventListener("click", () => {
+                    button.addEventListener("click", () => {
                         // Remove url from list and reload list
                         delete sitesList[url];
                         browser.storage.local.set({ [type]: sitesList });
                         showList(type);
                     });
+                    // Add button to html
+                    document.getElementById("buttons").appendChild(button);
                 });
             }
             resetText();
