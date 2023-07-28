@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
      * @param {string} domain
      * @param {string} type
      */
-    function handleSiteAddition(url, type) {
+    function handleSiteAddition(domain, type) {
         browser.storage.local.get(type, (result) => {
 
             // check if lists exist, otherwise create new objects
@@ -191,9 +191,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     : null; // If the website is found, get the stored CA info for that website
 
             let previousEvStatus = isSensitiveSite
-                ? result.safe[url][1]
+                ? result.safe[domain][1]
                 : isUnsafeSite
-                    ? result.unsafe[url][1]
+                    ? result.unsafe[domain][1]
                     : null; // If the website is found, get the stored CA info for that website
     
 
@@ -361,8 +361,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 // When the form is submitted, add the given input to the trusted list
                 formTrust.addEventListener("submit", () => {
                     caInfo = "NEWLY ADDED";
-                    var url = document.getElementById("siteNameTrust").value;
-                    handleSiteAddition(url, "safe");
+                    const urlObj = new URL(document.getElementById("siteNameTrust").value);
+                    const domain = urlObj.hostname;
+                    handleSiteAddition(domain, "safe");
+                    showList("safe");
                 });
             } else {
                 siteStatusDivs.addDistrust.style.display = "block";
@@ -370,8 +372,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 const formDistrust = document.getElementById("formDistrust");
                 // When the form is submitted, add the given input to the distrusted list
                 formDistrust.addEventListener("submit", () => {
-                    var url = document.getElementById("siteNameDistrust").value;
-                    handleSiteAddition(url, "unsafe");
+                    const urlObj = new URL(document.getElementById("siteNameDistrust").value);
+                    const domain = urlObj.hostname;
+                    handleSiteAddition(domain, "unsafe");
                 });
             }
         });
