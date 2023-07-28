@@ -33,7 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
         unsafeList: document.getElementById("unsafeList"),
         buttons: document.getElementById("buttons"),
         addDistrust: document.getElementById("addDistrust"),
-        addTrust: document.getElementById("addTrust")
+        addTrust: document.getElementById("addTrust"),
+        manuallyTrusted: document.getElementById("manuallyTrusted")
     };
     
     var faviconImage = document.getElementById("faviconImage"); //Favicon (Logo)
@@ -45,6 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // get the information on the extension
     browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        console.log("at the top");
         const url = tabs[0].url;
         console.log("url: " + url);
         const urlObj = new URL(url);
@@ -188,6 +190,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     ? result.unsafe[domain][0]
                     : null; // If the website is found, get the stored CA info for that website
 
+            let previousEvStatus = isSensitiveSite
+                ? result.safe[domain][1]
+                : isUnsafeSite
+                    ? result.unsafe[domain][1]
+                    : null; // If the website is found, get the stored CA info for that website
+    
+
             if (isSensitiveSite) {
                 siteStatusDivs.notMarked.style.display = "none";
                 if (previousCaInfo === currentCaInfo) {
@@ -202,6 +211,21 @@ document.addEventListener("DOMContentLoaded", () => {
                         timeout = undefined;
                     }, 3000);
                     }
+                // If user adds site manually, no CA info is stored so user must confirm their trust in the site upon first visit
+                } else if (previousCaInfo === "NEWLY ADDED") {
+                    siteStatusDivs.manuallyTrusted.style.display = "block";
+                    const buttons = {
+                        confirmTrusted: document.getElementById("confirmTrusted"),
+                        cancelTrusted: document.getElementById("cancelTrusted")
+                    }
+                    buttons.confirmTrusted.addEventListener("click", function() {
+                        handleSiteAddition(url, "safe");
+                        window.close();
+                    });
+                    buttons.cancelTrusted.addEventListener("click", function() {
+                        handleSiteRemoval(url, "safe");
+                        window.close();
+                    });
                 } else {
                     // If the stored CA info does not match the current CA info, display the "different CA" message
                     siteStatusDivs.markedSame.style.display = "none";
@@ -273,15 +297,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             }
             resetText();
-            // Display list
             if (type === "safe") {
+                // Give user to option to manually add site to trusted list
                 siteStatusDivs.safeList.style.display = "block";
                 addWebsite(document.getElementById("addTrusted"));
             } else {
-                siteStatusDivs.unsafeList.style.display = "block";
                 // Give user to option to manually add site to distrusted list
+                siteStatusDivs.unsafeList.style.display = "block";
                 addWebsite(document.getElementById("addDistrusted"));
             }
+            // Display list
             siteStatusDivs.buttons.style.display = "block";
         });
     }
@@ -309,6 +334,7 @@ document.addEventListener("DOMContentLoaded", () => {
         siteStatusDivs.buttons.style.display = "none";
         siteStatusDivs.addTrust.style.display = "none";
         siteStatusDivs.addDistrust.style.display = "none";
+        siteStatusDivs.manuallyTrusted.style.display = "none";
     }
 
     // unblock the website for the user
@@ -334,8 +360,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 const formTrust = document.getElementById("formTrust");
                 // When the form is submitted, add the given input to the trusted list
                 formTrust.addEventListener("submit", () => {
-                    var url = document.getElementById("siteNameTrust").value;
-                    handleSiteAddition(url, "safe");
+                    caInfo = "NEWLY ADDED";
+                    const urlObj = new URL(document.getElementById("siteNameTrust").value);
+                    const domain = urlObj.hostname;
+                    handleSiteAddition(domain, "safe");
+                    showList("safe");
                 });
             } else {
                 siteStatusDivs.addDistrust.style.display = "block";
@@ -343,11 +372,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 const formDistrust = document.getElementById("formDistrust");
                 // When the form is submitted, add the given input to the distrusted list
                 formDistrust.addEventListener("submit", () => {
-                    var url = document.getElementById("siteNameDistrust").value;
-                    handleSiteAddition(url, "unsafe");
+                    const urlObj = new URL(document.getElementById("siteNameDistrust").value);
+                    const domain = urlObj.hostname;
+                    handleSiteAddition(domain, "unsafe");
                 });
             }
-
         });
     }
 
