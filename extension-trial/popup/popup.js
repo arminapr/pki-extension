@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
         visit: document.getElementById("visit"),
         safe: document.getElementById("safe"),
         misMarked: document.getElementById("misMarked"),
+        continueUntrust: document.getElementById("continueUntrust"),
+        continueTrust: document.getElementById("continueTrust"),
         settings: document.getElementById("settingButton"),
         conTrust: document.getElementById("conTrust"),
         stopTrust: document.getElementById("stopTrust")
@@ -22,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
         notice: document.getElementById("notice"),
         unsecure: document.getElementById("unsecure"),
         notMarked: document.getElementById("notMarked"),
+        addUntrust: document.getElementById("addUntrust"),
         markedSame: document.getElementById("markedSameCert"),
         markedDiff: document.getElementById("markedDiffCert"),
         markedUnsafe: document.getElementById("markedUnsafe"),
@@ -91,10 +94,19 @@ document.addEventListener("DOMContentLoaded", () => {
             handleSiteAddition(domain, "safe");
         });
 
-        // if they click on the mismarked button, add the website to the unsafe list
+        // if they click on the mismarked button, prompt them the question of which list they want to add it to
         buttons.misMarked.addEventListener("click", function () {
-            handleSiteAddition(domain, "unsafe");
+            siteStatusDivs.notMarked.style.display = "none";
+            siteStatusDivs.addUntrust.style.display = "block";
         });
+
+        // add the websites to the respective lists
+        buttons.continueUntrust.addEventListener("click", function() {
+            handleSiteAddition(domain, "unsafe");
+        })
+        buttons.continueTrust.addEventListener("click", function () {
+            handleSiteAddition(domain, "safe");
+        })
 
         buttons.settings.addEventListener("click", () => {
             resetText();
@@ -330,6 +342,7 @@ document.addEventListener("DOMContentLoaded", () => {
         siteStatusDivs.notice.style.display = "none";
         siteStatusDivs.unsecure.style.display = "none";
         siteStatusDivs.notMarked.style.display = "none";
+        siteStatusDivs.addUntrust.style.display = "none";
         siteStatusDivs.markedSame.style.display = "none";
         siteStatusDivs.markedDiff.style.display = "none";
         siteStatusDivs.markedUnsafe.style.display = "none";
