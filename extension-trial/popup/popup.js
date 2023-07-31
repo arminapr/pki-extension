@@ -34,7 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
         buttons: document.getElementById("buttons"),
         addDistrust: document.getElementById("addDistrust"),
         addTrust: document.getElementById("addTrust"),
-        manuallyTrusted: document.getElementById("manuallyTrusted")
+        manuallyTrusted: document.getElementById("manuallyTrusted"),
+        changedEV: document.getElementById("changedEV")
     };
     
     var faviconImage = document.getElementById("faviconImage"); //Favicon (Logo)
@@ -64,8 +65,12 @@ document.addEventListener("DOMContentLoaded", () => {
             if (request.rootCA) {
                 // Check if root CA exists in the request
                 caInfo = request.rootCA;
-                document.getElementById("rootCAInfo").textContent = caInfo;
-                checkCA(domain, caInfo);
+                document.getElementById("rootCAInfo").textContent = caInfo + " ";
+                // Add a checkmark if site has an EV certificate
+                if (evCert === true) {
+                    document.getElementById("rootCAInfo").innerHTML += '<img src="../icons/checkmark.png"  style="width:20px;height:20px;" alt="Checkmark icon" />';
+                }
+                checkCA(domain, caInfo, evCert);
             }
             if (request.evStatus != undefined) {
                 evCert = request.evStatus;
@@ -177,7 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
      * @param {string} domain
      * @param {string} currentCaInfo
      */
-    function checkCA(domain, currentCaInfo) {
+    function checkCA(domain, currentCaInfo, currentEvCert) {
         browser.storage.local.get(["safe", "unsafe"], (result) => {
             //Get current list of storage
             //Check if the current website exists in either of the lists
@@ -190,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     ? result.unsafe[domain][0]
                     : null; // If the website is found, get the stored CA info for that website
 
-            let previousEvStatus = isSensitiveSite
+            let previousEvCert = isSensitiveSite
                 ? result.safe[domain][1]
                 : isUnsafeSite
                     ? result.unsafe[domain][1]
@@ -232,6 +237,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     siteStatusDivs.markedDiff.style.display = "block";
                     document.getElementById("notice").textContent =
                         "different certificate";
+                    // if cert is downgraded from EV, show extra warning
+                    if (previousEvCert === true &&  currentEvCert === false) {
+                        siteStatusDivs.changedEV.style.display = "block";
+                    }
                     buttons.conTrust.addEventListener("click", function () {
                         // If user wants to continue to trust, update CA info but keep url on safe list
                         handleSiteAddition(domain, "safe");
@@ -276,8 +285,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById("buttons").innerHTML = "<h3>No websites on this list. Please add some sites then check again!</h3>";
             } else {
                 // Reset button list
-                document.getElementById("buttons").innerHTML = "";
-                document.getElementById("buttons").innerHTML += "<h3>Click on a website to remove it from the " + type + " list.</h3>";
+                document.getElementById("buttons").innerHTML = "<h3>Click on a website to remove it from the " + type + " list.</h3>";
                 // Get all the urls on the list
                 urls = Object.keys(sitesList);
                 // Add each url to the html
@@ -335,6 +343,7 @@ document.addEventListener("DOMContentLoaded", () => {
         siteStatusDivs.addTrust.style.display = "none";
         siteStatusDivs.addDistrust.style.display = "none";
         siteStatusDivs.manuallyTrusted.style.display = "none";
+        siteStatusDivs.changedEV.style.display = "none";
     }
 
     // unblock the website for the user
