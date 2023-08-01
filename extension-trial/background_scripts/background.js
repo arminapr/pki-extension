@@ -30,12 +30,11 @@ browser.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
                         browser.tabs.executeScript(tabs[0].id, { file: 'contentScript.js' }); 
                         waitingTabs[tabId] = true; 
                     }
-                    else if (isUnsafeSite) {
-                        browser.tabs.executeScript(tabs[0].id, { file: 'contentScript.js' });
-                    }
-
                     // Add the site to the list of visited sites
                     visitedSites[domain] = true;
+                }
+                if (isUnsafeSite) {
+                    browser.tabs.executeScript(tabs[0].id, { file: 'contentScript.js' });
                 }
             });
         });
