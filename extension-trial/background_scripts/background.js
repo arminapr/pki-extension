@@ -6,6 +6,8 @@ var rootCA;
 var evStatus;
 var waitingTabs = {};
 
+let visitedSites = {}; // Initialize an empty object to store visited sites
+
 browser.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     if (changeInfo.status === "complete") {
         // Reset rootCA when the page is refreshed
@@ -16,22 +18,28 @@ browser.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
             const url = tabs[0].url; //getURL
             const urlObj = new URL(url);
             const domain = urlObj.hostname;
+
             console.log("tab ID in onUpdated: ", tabId);
             browser.storage.local.get(["safe", "unsafe"], (result) => {
                 let isSensitiveSite = result.safe && result.safe[domain];
                 let isUnsafeSite = result.unsafe && result.unsafe[domain];
-                //unblock website
-                if (isSensitiveSite) {
-                    browser.tabs.executeScript(tabs[0].id, { file: 'contentScript.js' }); 
-                    waitingTabs[tabId] = true; 
-                }
-                else if (isUnsafeSite) {
-                    browser.tabs.executeScript(tabs[0].id, { file: 'contentScript.js' });
+
+                // Block the site only if it hasn't been visited in the current session
+                if (!visitedSites[domain]) {
+                    if (isSensitiveSite) {
+                        browser.tabs.executeScript(tabs[0].id, { file: 'contentScript.js' }); 
+                        waitingTabs[tabId] = true; 
+                    }
+                    else if (isUnsafeSite) {
+                        browser.tabs.executeScript(tabs[0].id, { file: 'contentScript.js' });
+                    }
+
+                    // Add the site to the list of visited sites
+                    visitedSites[domain] = true;
                 }
             });
         });
 });
-
 
 // extracts the certificate chain and sends it to the popup.js
 async function sendRootCAName(details) {
@@ -108,7 +116,6 @@ browser.tabs.onActivated.addListener(activeInfo => {
 });
 
 browser.runtime.onMessage.addListener(request => {
-    console.log("Received message in background for tab ID: ", request.tabId);
     if (request.message==="force-unblock"){
         browser.tabs.executeScript(request.tabId, {
             code: 'var blockerDiv = document.getElementById("myBlockerDiv"); if (blockerDiv) { blockerDiv.parentNode.removeChild(blockerDiv); }'
