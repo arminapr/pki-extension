@@ -57,6 +57,6 @@ In the about:debugging page, next to the extension name, click the "Inspect" but
 
 ## Helpful Resources
 
-- [submitting extension to be added to FireFix store] (https://extensionworkshop.com/documentation/publish/submitting-an-add-on/)
-- [diagram of extension (not up-to-date)] (https://excalidraw.com/#room=76f1120b127f55a2ae25,gcjqMcJaHTqGeiAoBSeptA)
-- [link for the source of the checkmark image] (https://www.freeimages.com/clipart/circle-checkmark-clip-art-5333016)
+- [submitting extension to be added to FireFix store](https://extensionworkshop.com/documentation/publish/submitting-an-add-on/)
+- [diagram of extension (not up-to-date)](https://excalidraw.com/#room=76f1120b127f55a2ae25,gcjqMcJaHTqGeiAoBSeptA)
+- [link for the source of the checkmark image](https://www.freeimages.com/clipart/circle-checkmark-clip-art-5333016)
