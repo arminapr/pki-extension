@@ -282,7 +282,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 // document.getElementById("test4").textContent = "TEST4";
                 // If the website does not exist in either of the lists, display the "not marked" message
                 siteStatusDivs.notMarked.style.display = "block";
-                document.getElementById("notice").textContent = "no certificate saved";
+                document.getElementById("notice").textContent = "Unsaved site";
             }
         });
     }
