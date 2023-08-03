@@ -6,6 +6,26 @@
 
 Helps to keep users information secure by monitoring the certificate information websites that the users enter sensitive infomation into and warning users about websites that they have previously deemed unsafe.
 
+## Extension Flow
+
+<img width="749" alt="Screenshot 2023-08-03 at 1 33 53 AM" src="https://github.com/arminapr/pki-extension/assets/118499953/1f788a96-af0e-4324-bb22-ee31aaf1a31a">
+
+## Technologies Used
+HTML, CSS, JavaScript
+
+### Files
+#### 1. popup.html- 
+Content of the extension popup
+#### 2. popup.css- 
+Styling of the extension popup
+#### 3. popup.js- 
+Most functions related to the extension (like adding/removing sites from sensitive/unsafe lists, etc).
+#### 4. background.js- 
+Mostly used to communicate back and forth with popup.js to provide crucial information like CA (certificate authority) info, blocking websites, etc. Some functions that cannot be performed by popup.js (or are too complicated to implement) are performed here. 
+#### 5. contentScript.js- 
+It has CSS styling that is injected to a webpage (by background.js). This CSS styling “blocks” the website by creating an overlay over the website (i.e. users will be clicking the overlay instead of the website, getting no response). 
+
+
 ## Main Features
 
 ### Sensitive Sites
