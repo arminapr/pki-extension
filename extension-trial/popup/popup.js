@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
         manuallyTrusted: document.getElementById("manuallyTrusted"),
         changedEV: document.getElementById("changedEV")
     };
-    
+
     var faviconImage = document.getElementById("faviconImage"); //Favicon (Logo)
     var websiteUrlElement = document.getElementById("websiteUrl"); //URL
 
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         // add the websites to the respective lists
-        buttons.continueUntrust.addEventListener("click", function() {
+        buttons.continueUntrust.addEventListener("click", function () {
             handleSiteAddition(domain, "unsafe");
         })
         buttons.continueTrust.addEventListener("click", function () {
@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 showList("unsafe");
             });
         });
-        randomTesting();
+        randomTesting(domain);
     });
 
     /**
@@ -162,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 "safe": safeList,
                 "unsafe": unsafeList
             });
-            
+
         });
         siteStatusDivs.notMarked.style.display = "none";
         if (type === "safe") {
@@ -212,45 +212,48 @@ document.addEventListener("DOMContentLoaded", () => {
                 : isUnsafeSite
                     ? result.unsafe[domain][1]
                     : null; // If the website is found, get the stored CA info for that website
-    
+
 
             if (isSensitiveSite) {
                 siteStatusDivs.notMarked.style.display = "none";
-                if (previousCaInfo === currentCaInfo) {
+                let urlContent = siteStatusDivs.website.textContent;
+                console.log("content: " + urlContent);
+                if (previousCaInfo === currentCaInfo && domain === urlContent) {
                     // If the stored CA info matches the current CA info, display the "same CA" message
                     siteStatusDivs.markedDiff.style.display = "none";
                     siteStatusDivs.markedSame.style.display = "block";
                     document.getElementById("notice").textContent = "same certificate";
                     if (timeout === undefined) {
-                    timeout = setTimeout(() => {
-                        // Close window after 3 seconds
-                        window.close();
-                        timeout = undefined;
-                    }, 3000);
+                        timeout = setTimeout(() => {
+                            // Close window after 3 seconds
+                            window.close();
+                            timeout = undefined;
+                        }, 3000);
                     }
-                // If user adds site manually, no CA info is stored so user must confirm their trust in the site upon first visit
+                    // If user adds site manually, no CA info is stored so user must confirm their trust in the site upon first visit
                 } else if (previousCaInfo === "NEWLY ADDED") {
                     siteStatusDivs.manuallyTrusted.style.display = "block";
                     const buttons = {
                         confirmTrusted: document.getElementById("confirmTrusted"),
                         cancelTrusted: document.getElementById("cancelTrusted")
                     }
-                    buttons.confirmTrusted.addEventListener("click", function() {
+                    buttons.confirmTrusted.addEventListener("click", function () {
                         handleSiteAddition(url, "safe");
                         window.close();
                     });
-                    buttons.cancelTrusted.addEventListener("click", function() {
+                    buttons.cancelTrusted.addEventListener("click", function () {
                         handleSiteRemoval(url, "safe");
                         window.close();
                     });
                 } else {
+                    // TODO: fix the buttons for the game updating points
                     // If the stored CA info does not match the current CA info, display the "different CA" message
                     siteStatusDivs.markedSame.style.display = "none";
                     siteStatusDivs.markedDiff.style.display = "block";
                     document.getElementById("notice").textContent =
                         "different certificate";
                     // if cert is downgraded from EV, show extra warning
-                    if (previousEvCert === true &&  currentEvCert === false) {
+                    if (previousEvCert === true && currentEvCert === false) {
                         siteStatusDivs.changedEV.style.display = "block";
                     }
                     buttons.conTrust.addEventListener("click", function () {
@@ -364,7 +367,7 @@ document.addEventListener("DOMContentLoaded", () => {
         browser.tabs.query({ active: true, currentWindow: true }).then(tabs => {
             let activeTab = tabs[0];
             console.log("Sending message from popup for tab ID: ", activeTab.id);
-            if (message==="force-unblock"){
+            if (message === "force-unblock") {
                 browser.runtime.sendMessage({ tabId: activeTab.id, message: "force-unblock" });
             }
             browser.runtime.sendMessage({ tabId: activeTab.id });
@@ -403,34 +406,36 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Test the user randomly on certain visits
-    function randomTesting() {
-        console.log("doing random test");
-        browser.storage.local.get("points", (result) => {
-            let points = result.points ? result.points : 0;
-            // code below commented because it needs to be written in the html content first
-            // document.getElementById("points").textContent = points;
-
-            var randomNumber = Math.random() * 1000;
-            if (randomNumber % 10 === 0) {
-                console.log("random test activated");
-                var urlID = document.getElementById("websiteUrl");
-                var urlContent = urlID.textContent;
-                var randomIndex = Math.random() * urlContent.length - 1;
-                const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-                var randomLetterNum = Math.floor(Math.random() * 27);
-                var randomLetter = alphabet[randomLetterNum];
-                // to see which letter it's being changed to
-                console.log("random index: " + randomIndex);
-                console.log("random letter: " + randomLetter);
-                // change the url on the extension
-                urlID.textContent = urlContent.substring(0, randomIndex) + randomLetter + urlContent.substring(randomIndex + 1);
-                // tell the user some information has changed and ask if they still trust the website
-                siteStatusDivs.notMarked.style.display = "none";
-                siteStatusDivs.markedSame.style.display = "none";
-                siteStatusDivs.markedDiff.style.display = "block";
-                console.log("points: " + points);
+    function randomTesting(domain) {
+        browser.storage.local.get("safe", (lists) => {
+            let safelist = lists["safe"];
+            console.log(safelist);
+            if (domain in safelist) {
+                console.log("it is");
+                browser.storage.local.get("points", (result) => {
+                    let points = result.points ? result.points : 0;
+                    // code below commented because it needs to be written in the html content first
+                    document.getElementById("pointValue").textContent = points;
+                    var randomNumber = Math.random() * 1000;
+                    if (randomNumber % 10 === 0) {
+                        console.log("random test activated");
+                        var urlID = document.getElementById("websiteUrl");
+                        var urlContent = urlID.textContent;
+                        var randomIndex = Math.random() * urlContent.length - 1;
+                        const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+                        var randomLetterNum = Math.floor(Math.random() * 27);
+                        var randomLetter = alphabet[randomLetterNum];
+                        // to see which letter it's being changed to
+                        console.log("random index: " + randomIndex);
+                        console.log("random letter: " + randomLetter);
+                        // change the url on the extension
+                        urlID.textContent = urlContent.substring(0, randomIndex) + randomLetter + urlContent.substring(randomIndex + 1);
+                        // tell the user some information has changed and ask if they still trust the website
+                        console.log("points: " + points);
+                    }
+                });
             }
-        });
+        })
     }
 
     // updating the avatar based on the points that the user has
@@ -460,7 +465,6 @@ document.addEventListener("DOMContentLoaded", () => {
             let points = result.points ? result.points : 0;
             var urlID = document.getElementById("websiteUrl");
             var urlContent = urlID.textContent;
-            // not sure if I have to do this or just leave it as (type) because I think that also checks if it has a value at all
             if (type == true) {
                 console.log("initial: " + points);
                 if (urlID.textContent !== urlContent) {
