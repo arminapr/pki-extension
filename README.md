@@ -44,8 +44,7 @@ The settings includes the following features (more to be added):
     - Manually add site by url
 
 ### Points System
-
-(TODO)
+The user will be randomly tested while they are using the extension. To do this testing, we change one of the characters in the domain name of the website and ask the user if they still trust the website. If they answer correctly, 10 points will be added. If they answer incorrectly, 5 points will be reduced. The message of the game is still in the making.
 
 ### Extended Validation Certificates
 When a website has an extended validation (EV) certificate, there is a checkmark that is displayed next to the root domain in the extension. If a website changes from an EV certificate to an organization or domain certificate (which both require less information and are easier to fake), there is a warning message given to the user.

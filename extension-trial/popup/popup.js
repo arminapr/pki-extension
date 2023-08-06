@@ -2,6 +2,7 @@
 let caInfo;
 let evCert;
 let timeout;
+let webDomain;
 
 document.addEventListener("DOMContentLoaded", () => {
     const buttons = {
@@ -54,9 +55,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const url = tabs[0].url;
         console.log("url: " + url);
         const urlObj = new URL(url);
-        const domain = urlObj.hostname;
+        webDomain = urlObj.hostname;
         const favicon = tabs[0].favIconUrl;
-        websiteUrlElement.textContent = domain;
+        websiteUrlElement.textContent = webDomain;
         faviconImage.src = favicon;
         browser.runtime.sendMessage({ websiteUrl: url });
 
@@ -73,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (evCert === true) {
                     document.getElementById("rootCAInfo").innerHTML += '<img src="../icons/checkmark.png"  style="width:20px;height:20px;" alt="Checkmark icon" />';
                 }
-                checkCA(domain, caInfo, evCert);
+                checkCA(webDomain, caInfo, evCert);
             }
             if (request.evStatus != undefined) {
                 evCert = request.evStatus;
@@ -123,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 showList("unsafe");
             });
         });
-        randomTesting(domain);
+        randomTesting(webDomain);
     });
 
     /**
@@ -222,7 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     // If the stored CA info matches the current CA info, display the "same CA" message
                     siteStatusDivs.markedDiff.style.display = "none";
                     siteStatusDivs.markedSame.style.display = "block";
-                    document.getElementById("notice").textContent = "same certificate";
+                    document.getElementById("notice").textContent = "same information";
                     if (timeout === undefined) {
                         timeout = setTimeout(() => {
                             // Close window after 3 seconds
@@ -246,12 +247,11 @@ document.addEventListener("DOMContentLoaded", () => {
                         window.close();
                     });
                 } else {
-                    // TODO: fix the buttons for the game updating points
                     // If the stored CA info does not match the current CA info, display the "different CA" message
                     siteStatusDivs.markedSame.style.display = "none";
                     siteStatusDivs.markedDiff.style.display = "block";
                     document.getElementById("notice").textContent =
-                        "different certificate";
+                        "different information";
                     // if cert is downgraded from EV, show extra warning
                     if (previousEvCert === true && currentEvCert === false) {
                         siteStatusDivs.changedEV.style.display = "block";
@@ -260,14 +260,14 @@ document.addEventListener("DOMContentLoaded", () => {
                         // If user wants to continue to trust, update CA info but keep url on safe list
                         handleSiteAddition(domain, "safe");
                         siteStatusDivs.markedDiff.style.display = "none";
-                        updatePoints(true);
+                        updatePoints(true, domain);
                     });
                     buttons.stopTrust.addEventListener("click", function () {
                         // If user does not want to trust, remove url from safe list and add it to unsafe list
                         handleSiteRemoval(domain, "safe");
                         handleSiteAddition(domain, "unsafe");
                         siteStatusDivs.markedDiff.style.display = "none";
-                        updatePoints(false);
+                        updatePoints(false, domain);
                     });
                 }
             } else if (isUnsafeSite) {
@@ -417,7 +417,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     // code below commented because it needs to be written in the html content first
                     document.getElementById("pointValue").textContent = points;
                     var randomNumber = Math.random() * 1000;
-                    if (randomNumber % 10 === 0) {
+                    // if (randomNumber % 10 === 0) {
                         console.log("random test activated");
                         var urlID = document.getElementById("websiteUrl");
                         var urlContent = urlID.textContent;
@@ -432,7 +432,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         urlID.textContent = urlContent.substring(0, randomIndex) + randomLetter + urlContent.substring(randomIndex + 1);
                         // tell the user some information has changed and ask if they still trust the website
                         console.log("points: " + points);
-                    }
+                    // }
                 });
             }
         })
@@ -465,30 +465,26 @@ document.addEventListener("DOMContentLoaded", () => {
             let points = result.points ? result.points : 0;
             var urlID = document.getElementById("websiteUrl");
             var urlContent = urlID.textContent;
-            if (type == true) {
+            if (type === true) {
                 console.log("initial: " + points);
-                if (urlID.textContent !== urlContent) {
+                if (urlContent !== webDomain) {
                     // reduce points
                     points -= 5;
-                    browser.storage.local.set({ points: points });
-                    console.log("points: " + points);
                 } else {
                     // add points
                     points += 10;
-                    browser.storage.local.set({ points: points });
-                    console.log("points: " + points);
                 }
-            } else if (type == false) {
-                if (urlID.textContent !== urlContent) {
+            } else if (type === false) {
+                if (urlContent !== webDomain) {
                     // add points
                     points += 10;
-                    browser.storage.local.set({ points: points });
                 } else {
                     // reduce points
                     points -= 5;
-                    browser.storage.local.set({ points: points });
                 }
             }
+            console.log("points: " + points);
+            browser.storage.local.set({ points: points });
             // update the user avatar
             updateAvatar(points);
         });
