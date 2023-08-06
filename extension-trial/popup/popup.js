@@ -417,7 +417,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     // code below commented because it needs to be written in the html content first
                     document.getElementById("pointValue").textContent = points;
                     var randomNumber = Math.random() * 1000;
-                    // if (randomNumber % 10 === 0) {
+                    if (randomNumber % 10 === 0) {
                         console.log("random test activated");
                         var urlID = document.getElementById("websiteUrl");
                         var urlContent = urlID.textContent;
@@ -432,7 +432,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         urlID.textContent = urlContent.substring(0, randomIndex) + randomLetter + urlContent.substring(randomIndex + 1);
                         // tell the user some information has changed and ask if they still trust the website
                         console.log("points: " + points);
-                    // }
+                    }
                 });
             }
         })
