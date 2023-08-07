@@ -54,11 +54,11 @@ When a website has an extended validation (EV) certificate, there is a checkmark
 - Revamp visuals
 - Revamp text
 - Connect to database to collect results
-- Complete necessary steps to get extension added to FireFox extension store
+- Complete necessary steps to get extension added to Firefox extension store
 
 ## Known Issues
 
-- Exception thrown when user adds a site manually to either list, has to do with dead objects.
+- TypeError exception thrown in popup.js on line 388, message "can't access dead object"
 
 ## Download Instructions
 1. Download project from GitHub repository
@@ -76,6 +76,8 @@ In the about:debugging page, next to the extension name, click the "Inspect" but
 
 ## Helpful Resources
 
-- [submitting extension to be added to FireFix store](https://extensionworkshop.com/documentation/publish/submitting-an-add-on/)
+- [submitting extension to be added to Firefox store](https://extensionworkshop.com/documentation/publish/submitting-an-add-on/)
 - [diagram of extension (not up-to-date)](https://excalidraw.com/#room=76f1120b127f55a2ae25,gcjqMcJaHTqGeiAoBSeptA)
 - [link for the source of the checkmark image](https://www.freeimages.com/clipart/circle-checkmark-clip-art-5333016)
+-[basic information about creating a Firefox extension](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension)
+-[examples of simple Firefox extensions](https://github.com/mdn/webextensions-examples)
