@@ -79,5 +79,5 @@ In the about:debugging page, next to the extension name, click the "Inspect" but
 - [submitting extension to be added to Firefox store](https://extensionworkshop.com/documentation/publish/submitting-an-add-on/)
 - [diagram of extension (not up-to-date)](https://excalidraw.com/#room=76f1120b127f55a2ae25,gcjqMcJaHTqGeiAoBSeptA)
 - [link for the source of the checkmark image](https://www.freeimages.com/clipart/circle-checkmark-clip-art-5333016)
--[basic information about creating a Firefox extension](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension)
--[examples of simple Firefox extensions](https://github.com/mdn/webextensions-examples)
+- [basic information about creating a Firefox extension](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension)
+- [examples of simple Firefox extensions](https://github.com/mdn/webextensions-examples)
