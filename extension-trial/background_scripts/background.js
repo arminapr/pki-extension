@@ -65,6 +65,8 @@ async function sendRootCAName(details) {
             !securityInfo.isUntrusted &&
             securityInfo.certificates.length > 0
         ) {
+            // only continuing to get the certificate authority if it is currently undefined
+            // this is an addition to ensure that the CA of site resources are not mistakenly presented
             if (typeof rootCA === "undefined") {
                 // Received message from popup.js, extension page is opened
                 var domain = securityInfo.certificates[0].subject;
