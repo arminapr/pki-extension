@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         // if they click on the safe button, add the website to the safe list
         buttons.safe.addEventListener("click", function () {
-            handleSiteAddition(domain, "safe");
+            handleSiteAddition(webDomain, "safe");
         });
 
         // if they click on the mismarked button, prompt them the question of which list they want to add it to
@@ -103,10 +103,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // add the websites to the respective lists
         buttons.continueUntrust.addEventListener("click", function () {
-            handleSiteAddition(domain, "unsafe");
+            handleSiteAddition(webDomain, "unsafe");
         })
         buttons.continueTrust.addEventListener("click", function () {
-            handleSiteAddition(domain, "safe");
+            handleSiteAddition(webDomain, "safe");
         })
 
         buttons.settings.addEventListener("click", () => {
@@ -258,14 +258,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                     buttons.conTrust.addEventListener("click", function () {
                         // If user wants to continue to trust, update CA info but keep url on safe list
-                        handleSiteAddition(domain, "safe");
+                        handleSiteAddition(webDomain, "safe");
                         siteStatusDivs.markedDiff.style.display = "none";
                         updatePoints(true, domain);
                     });
                     buttons.stopTrust.addEventListener("click", function () {
                         // If user does not want to trust, remove url from safe list and add it to unsafe list
-                        handleSiteRemoval(domain, "safe");
-                        handleSiteAddition(domain, "unsafe");
+                        handleSiteRemoval(webDomain, "safe");
+                        handleSiteAddition(webDomain, "unsafe");
                         siteStatusDivs.markedDiff.style.display = "none";
                         updatePoints(false, domain);
                     });
@@ -388,7 +388,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     caInfo = "NEWLY ADDED";
                     const urlObj = new URL(document.getElementById("siteNameTrust").value);
                     const domain = urlObj.hostname;
-                    handleSiteAddition(domain, "safe");
+                    handleSiteAddition(webDomain, "safe");
                     showList("safe");
                 });
             } else {
@@ -399,7 +399,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 formDistrust.addEventListener("submit", () => {
                     const urlObj = new URL(document.getElementById("siteNameDistrust").value);
                     const domain = urlObj.hostname;
-                    handleSiteAddition(domain, "unsafe");
+                    handleSiteAddition(webDomain, "unsafe");
                 });
             }
         });
@@ -410,30 +410,32 @@ document.addEventListener("DOMContentLoaded", () => {
         browser.storage.local.get("safe", (lists) => {
             let safelist = lists["safe"];
             console.log(safelist);
-            if (domain in safelist) {
-                console.log("it is");
-                browser.storage.local.get("points", (result) => {
-                    let points = result.points ? result.points : 0;
-                    // code below commented because it needs to be written in the html content first
-                    document.getElementById("pointValue").textContent = points;
-                    var randomNumber = Math.random() * 1000;
-                    if (randomNumber % 10 === 0) {
-                        console.log("random test activated");
-                        var urlID = document.getElementById("websiteUrl");
-                        var urlContent = urlID.textContent;
-                        var randomIndex = Math.random() * urlContent.length - 1;
-                        const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-                        var randomLetterNum = Math.floor(Math.random() * 27);
-                        var randomLetter = alphabet[randomLetterNum];
-                        // to see which letter it's being changed to
-                        console.log("random index: " + randomIndex);
-                        console.log("random letter: " + randomLetter);
-                        // change the url on the extension
-                        urlID.textContent = urlContent.substring(0, randomIndex) + randomLetter + urlContent.substring(randomIndex + 1);
-                        // tell the user some information has changed and ask if they still trust the website
-                        console.log("points: " + points);
-                    }
-                });
+            if (safelist) {
+                if (domain in safelist) {
+                    console.log("it is");
+                    browser.storage.local.get("points", (result) => {
+                        let points = result.points ? result.points : 0;
+                        // code below commented because it needs to be written in the html content first
+                        document.getElementById("pointValue").textContent = points;
+                        var randomNumber = Math.random() * 1000;
+                        if (randomNumber % 10 === 0) {
+                            console.log("random test activated");
+                            var urlID = document.getElementById("websiteUrl");
+                            var urlContent = urlID.textContent;
+                            var randomIndex = Math.random() * urlContent.length - 1;
+                            const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+                            var randomLetterNum = Math.floor(Math.random() * 27);
+                            var randomLetter = alphabet[randomLetterNum];
+                            // to see which letter it's being changed to
+                            console.log("random index: " + randomIndex);
+                            console.log("random letter: " + randomLetter);
+                            // change the url on the extension
+                            urlID.textContent = urlContent.substring(0, randomIndex) + randomLetter + urlContent.substring(randomIndex + 1);
+                            // tell the user some information has changed and ask if they still trust the website
+                            console.log("points: " + points);
+                        }
+                    });
+                }
             }
         })
     }
