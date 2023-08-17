@@ -166,6 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         });
         siteStatusDivs.notMarked.style.display = "none";
+        siteStatusDivs.addUntrust.style.display = "none";
         if (type === "safe") {
             siteStatusDivs.untrustText.style.display = "none";
             siteStatusDivs.trustText.style.display = "block";
