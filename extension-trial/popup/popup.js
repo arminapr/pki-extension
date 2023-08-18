@@ -11,15 +11,15 @@ document.addEventListener("DOMContentLoaded", () => {
         misMarked: document.getElementById("misMarked"),
         continueUntrust: document.getElementById("continueUntrust"),
         continueTrust: document.getElementById("continueTrust"),
-        settings: document.getElementById("settingButton"),
+        settings: document.getElementById("settings-button"),
         conTrust: document.getElementById("conTrust"),
         stopTrust: document.getElementById("stopTrust")
     };
 
     const siteStatusDivs = {
-        favicon: document.getElementById("faviconImage"),
+        favicon: document.getElementById("favicon"),
         website: document.getElementById("websiteUrl"),
-        rootCAElem: document.getElementById("rootCA"),
+        rootCAElem: document.getElementById("root-ca"),
         rootCA: document.getElementById("rootCAInfo"),
         pkInfo: document.getElementById("pkInfo"),
         notice: document.getElementById("notice"),
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
         changedEV: document.getElementById("changedEV")
     };
 
-    var faviconImage = document.getElementById("faviconImage"); //Favicon (Logo)
+    var faviconImage = document.getElementById("favicon"); //Favicon (Logo)
     var websiteUrlElement = document.getElementById("websiteUrl"); //URL
 
     // unblock the page and let the user use the website
@@ -283,7 +283,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     window.close();
                 });
             } else {
-                // document.getElementById("test4").textContent = "TEST4";
                 // If the website does not exist in either of the lists, display the "not marked" message
                 siteStatusDivs.notMarked.style.display = "block";
                 document.getElementById("notice").textContent = "Unsaved site";
@@ -417,7 +416,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     browser.storage.local.get("points", (result) => {
                         let points = result.points ? result.points : 0;
                         // code below commented because it needs to be written in the html content first
-                        document.getElementById("pointValue").textContent = points;
+                        document.getElementById("point-value").textContent = points;
                         var randomNumber = Math.random() * 1000;
                         if (randomNumber % 10 === 0) {
                             console.log("random test activated");

@@ -2,38 +2,38 @@
 <html>
 
 <head>
-    <title>Extension Trial</title>
     <meta charset="utf-8">
+    <title>Extension Trial</title>
     <link rel="stylesheet" type="text/css" href="popup.css">
 </head>
 
 <body>
-    <button type="submit" id="settingButton">
+
+    <button type="submit" id="settings-button">
         <img src="../icons/settings.png" alt="Picture of a gear" />
     </button>
 
-    <!--<button id="unblock">Proceed to browsing</button>-->
-
     <!--Favicon (Logo)-->
-    <img id="faviconImage">
+    <img id="favicon" alt="Website Favicon">
 
     <!--Website URL-->
     <span id="websiteUrl"></span>
 
-    <div id="points">
+    <section id="points">
         <h4>points:</h4>
-        <h4 id="pointValue">0</h4>
-    </span>
+        <h4 id="point-value">0</h4>
+    </section>
 
     <!--Avatar-->
-    <img id="avatarPic" src="../icons/frog.png">
+    <img id="avatarPic" src="../icons/frog.png" alt="Avatar">
 
     <!--Root CA Info-->
-    <h1 id="rootCA" style="font-size: 20">Root CA: </h1>
-    <h1 id="test"></h1>
-    <p id="rootCAInfo"></p>
+    <section id="ca-info">
+        <h1 id="root-ca" style="font-size: 20">Root CA: </h1>
+        <p id="rootCAInfo"></p>
+    </section>
 
-    <p id="pkInfo"></p>
+    <p id="pkInfo"></p> <!--TO BE REMOVED-->
 
     <p id="notice"></p>
 
