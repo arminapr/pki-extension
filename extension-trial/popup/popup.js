@@ -7,7 +7,7 @@ let webDomain;
 document.addEventListener("DOMContentLoaded", () => {
     const buttons = {
         visit: document.getElementById("visit"),
-        safe: document.getElementById("safe"),
+        safe: document.getElementById("add-sensitive-site"),
         misMarked: document.getElementById("misMarked"),
         continueUntrust: document.getElementById("continueUntrust"),
         continueTrust: document.getElementById("continueTrust"),
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         nonSens: document.getElementById("markedNonSensitive"),
         untrustText: document.getElementById("untrustText"),
         trustText: document.getElementById("trustText"),
-        settings: document.getElementById("settings"),
+        settings: document.getElementById("settings-section"),
         safeList: document.getElementById("safeList"),
         unsafeList: document.getElementById("unsafeList"),
         buttons: document.getElementById("buttons"),
@@ -114,8 +114,8 @@ document.addEventListener("DOMContentLoaded", () => {
             clearTimeout(timeout);
             siteStatusDivs.settings.style.display = "block";
             const buttons = {
-                seeSafeList: document.getElementById("seeSafeList"),
-                seeUnsafeList: document.getElementById("seeUnsafeList")
+                seeSafeList: document.getElementById("view-safe-sites"),
+                seeUnsafeList: document.getElementById("view-unsafe-sites")
             }
             buttons.seeSafeList.addEventListener("click", () => {
                 showList("safe");

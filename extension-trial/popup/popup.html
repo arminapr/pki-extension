@@ -37,14 +37,26 @@
 
     <p id="notice"></p>
 
+<section id="notifications">
+
     <div id="unsecure" style="display: none; color: red">
         This website has an unsecure connection. We have blocked access, do you want to access it?
         <button id="visit">Yes</button>
     </div>
 
+    <!-- when the website is marked as unsafe -->
+    <div id="markedUnsafe" style="display: none; color: red">
+        This website has been marked as unsafe. We have blocked access, do you want to access it?
+        <button id="accept">Yes</button>
+    </div>
+
+</section>
+
+<section id="website-actions">
+
     <!-- when the website has not been marked yet -->
     <div id="notMarked" style="display: block">
-        <button id="safe">Add new sensitive site</button>
+        <button id="add-sensitive-site">Add new sensitive site</button>
         <button id="misMarked">I thought this was one of my sensitive websites</button>
     </div>
 
@@ -59,6 +71,7 @@
             style="text-decoration: underline; color: green">trusted </span>websites</div>
     <div id="untrustText" style="display:none">This website has been added to your <span
             style="text-decoration: underline; color: red">untrusted </span> websites</div>
+
     <!-- when the certification information has not changed -->
     <div id="markedSameCert" style="display: none">
         <h1>You are all set!</h1>
@@ -72,56 +85,53 @@
         <button id="stopTrust">Distrust this website</button>
     </div>
 
-    <!-- when the website is marked as unsafe -->
-    <div id="markedUnsafe" style="display: none; color: red">
-        This website has been marked as unsafe. We have blocked access, do you want to access it?
-        <button id="accept">Yes</button>
-    </div>
+</section>
+
 
     <div id="markedNonSensitive" style="display: none">
         <h1>This website is marked as non-sensitive. Changed your mind?</h1>
         <button id="changeToSensitive">Click here to mark as sensitive</button>
     </div>
 
-    <div id="settings" style="display: none">
+    <section id="settings-section" style="display: none">
         <h1>Settings</h1>
-        <button id="seeSafeList">See and change safe websites</button>
-        <button id="seeUnsafeList">See and change unsafe websites</button>
-    </div>
+        <button id="view-safe-sites">See and change safe websites</button>
+        <button id="view-unsafe-sites">See and change unsafe websites</button>
 
-    <div id="safeList" style="display: none">
-        <h1>Sensitive Sites</h1>
-        <button id="addTrusted">Click to add a trusted site</button>
-    </div>
+        <div id="safeList" style="display: none">
+            <h1>Sensitive Sites</h1>
+            <button id="addTrusted">Click to add a trusted site</button>
+        </div>
 
-    <div id="unsafeList" style="display: none">
-        <h1>Unsafe Sites</h1>
-        <button id="addDistrusted">Click to add a distrusted site</button>
-    </div>
+        <section id="unsafeList" style="display: none">
+            <h1>Unsafe Sites</h1>
+            <button id="addDistrusted">Click to add a distrusted site</button>
+        </section>
 
-    <div id="addTrust" style="display: none">
-        <h2>Add a site to the trusted list:</h2>
-        <form id="formTrust">
-            <label for="siteName">Please copy and paste the full URL of the site you would like to trust.</label><br>
-            <input type="text" id="siteNameTrust" name="siteName"><br>
-            <input type="submit" value="Submit">
-        </form>
-    </div>
+        <div id="addTrust" style="display: none">
+            <h2>Add a site to the trusted list:</h2>
+            <form id="formTrust">
+                <label for="siteName">Please copy and paste the full URL of the site you would like to trust.</label><br>
+                <input type="text" id="siteNameTrust" name="siteName"><br>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
 
-    <div id="addDistrust" style="display: none">
-        <h2>Add a site to the distrusted list:</h2>
-        <form id="formDistrust">
-            <label for="siteName">Please copy and paste the full URL of the site you would like to distrust.</label><br>
-            <input type="text" id="siteNameDistrust" name="siteName"><br>
-            <input type="submit" value="Submit">
-        </form>
-    </div>
+        <div id="addDistrust" style="display: none">
+            <h2>Add a site to the distrusted list:</h2>
+            <form id="formDistrust">
+                <label for="siteName">Please copy and paste the full URL of the site you would like to distrust.</label><br>
+                <input type="text" id="siteNameDistrust" name="siteName"><br>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
 
-    <div id = "manuallyTrusted" style="display: none">
-        <h4>This site was added by url, so please review the CA information and confirm that you trust this site!</h4>
-        <button id="confirmTrusted">Confirm</button>
-        <button id="cancelTrusted">Cancel</button>
-    </div>
+        <div id = "manuallyTrusted" style="display: none">
+            <h4>This site was added by url, so please review the CA information and confirm that you trust this site!</h4>
+            <button id="confirmTrusted">Confirm</button>
+            <button id="cancelTrusted">Cancel</button>
+        </div>
+    </section>
 
     <div id="changedEV" style="display: none; color: red">
         Warning: This site no longer has an Extended Validation certificate.
