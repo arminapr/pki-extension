@@ -29,7 +29,7 @@ img {
     object-fit: contain;
 }
 
-button[type="submit"] {
+button[id="settings-button"] {
     position: fixed;
     top: 4px;
     right: 0px;
@@ -44,6 +44,17 @@ button[type="submit"]:hover {
     background-color: gray;
 }
 
+button[id="go-back"] {
+    position: fixed;
+    top: 4px;
+    left: 0px;
+    z-index: 600;
+    width: 32px;
+    height: 32px;
+    background-color: white;
+    cursor: pointer;
+}
+
 img[src="../icons/settings.png"] {
     width: 25px;
     height: 25px;
@@ -54,6 +65,18 @@ img[src="../icons/frog.png"] {
     height: 35px;
     background-color: white;
     position: fixed;
-    top: 4px;
+    top: 40px;
     left: 0px;
+}
+
+img[src="../icons/backarrow.png"] {
+    width: 30px;
+    height: 30px;
+    position: fixed;
+    top: 9px;
+    left: 1px;
+}
+
+#points h3 {
+    display: inline;
 }

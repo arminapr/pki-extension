@@ -5,6 +5,7 @@ let timeout;
 let webDomain;
 
 document.addEventListener("DOMContentLoaded", () => {
+    // buttons available in the browser extension
     const buttons = {
         visit: document.getElementById("visit"),
         safe: document.getElementById("add-sensitive-site"),
@@ -16,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stopTrust: document.getElementById("stopTrust")
     };
 
+    // the different status that the browser can display
     const siteStatusDivs = {
         favicon: document.getElementById("favicon"),
         website: document.getElementById("websiteUrl"),
@@ -39,7 +41,8 @@ document.addEventListener("DOMContentLoaded", () => {
         addDistrust: document.getElementById("addDistrust"),
         addTrust: document.getElementById("addTrust"),
         manuallyTrusted: document.getElementById("manuallyTrusted"),
-        changedEV: document.getElementById("changedEV")
+        changedEV: document.getElementById("changedEV"),
+        points: document.getElementById("points")
     };
 
     var faviconImage = document.getElementById("favicon"); //Favicon (Logo)
@@ -49,6 +52,11 @@ document.addEventListener("DOMContentLoaded", () => {
     //document.getElementById('unblock').addEventListener('click', unblockWebsite);
     unblockWebsite("message");
 
+    document.getElementById("go-back").addEventListener("click", () => {
+        console.log("we go back");
+        // TODO: figure out how we can go back to the previous state
+        
+    })
     // get the information on the extension
     browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         console.log("at the top");
@@ -76,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 checkCA(webDomain, caInfo, evCert);
             }
+            // update the evCert information of the domain
             if (request.evStatus != undefined) {
                 evCert = request.evStatus;
             }
@@ -86,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         });
-
+        // if the user wants to visit the site, exit out of the extension
         buttons.visit.addEventListener("click", function () {
             window.close();
         });
@@ -360,6 +369,7 @@ document.addEventListener("DOMContentLoaded", () => {
         siteStatusDivs.addDistrust.style.display = "none";
         siteStatusDivs.manuallyTrusted.style.display = "none";
         siteStatusDivs.changedEV.style.display = "none";
+        siteStatusDivs.points.style.display = "none";
     }
 
     // unblock the website for the user
