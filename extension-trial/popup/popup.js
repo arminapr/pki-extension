@@ -53,15 +53,15 @@ document.addEventListener("DOMContentLoaded", () => {
     unblockWebsite("message");
 
     document.getElementById("go-back").addEventListener("click", () => {
-        console.log("we go back");
+        ////console.log("we go back");
         // TODO: figure out how we can go back to the previous state
         
     })
     // get the information on the extension
     browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        console.log("at the top");
+        //console.log("at the top");
         const url = tabs[0].url;
-        console.log("url: " + url);
+        //console.log("url: " + url);
         const urlObj = new URL(url);
         webDomain = urlObj.hostname;
         const favicon = tabs[0].favIconUrl;
@@ -161,12 +161,13 @@ document.addEventListener("DOMContentLoaded", () => {
             // add website and caInfo to the appropriate list
             if (type === "safe") {
                 safeList[domain] = [caInfo, evCert];
-                console.log(safeList[domain]);
+                //console.log(safeList[domain]);
             } else if (type === "unsafe") {
                 unsafeList[domain] = [caInfo, evCert];
-                console.log(unsafeList[domain]);
+                //console.log(unsafeList[domain]);
             }
-
+            // alert("Site added ")
+            showAlert("Site added!");
             //save lists back to storage
             browser.storage.local.set({
                 "safe": safeList,
@@ -228,7 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (isSensitiveSite) {
                 siteStatusDivs.notMarked.style.display = "none";
                 let urlContent = siteStatusDivs.website.textContent;
-                console.log("content: " + urlContent);
+                //console.log("content: " + urlContent);
                 if (previousCaInfo === currentCaInfo && domain === urlContent) {
                     // If the stored CA info matches the current CA info, display the "same CA" message
                     siteStatusDivs.markedDiff.style.display = "none";
@@ -376,7 +377,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function unblockWebsite(message) {
         browser.tabs.query({ active: true, currentWindow: true }).then(tabs => {
             let activeTab = tabs[0];
-            console.log("Sending message from popup for tab ID: ", activeTab.id);
+            //console.log("Sending message from popup for tab ID: ", activeTab.id);
             if (message === "force-unblock") {
                 browser.runtime.sendMessage({ tabId: activeTab.id, message: "force-unblock" });
             }
@@ -419,17 +420,17 @@ document.addEventListener("DOMContentLoaded", () => {
     function randomTesting(domain) {
         browser.storage.local.get("safe", (lists) => {
             let safelist = lists["safe"];
-            console.log(safelist);
+            //console.log(safelist);
             if (safelist) {
                 if (domain in safelist) {
-                    console.log("it is");
+                    //console.log("it is");
                     browser.storage.local.get("points", (result) => {
                         let points = result.points ? result.points : 0;
                         // code below commented because it needs to be written in the html content first
                         document.getElementById("point-value").textContent = points;
                         var randomNumber = Math.random() * 1000;
                         if (randomNumber % 10 === 0) {
-                            console.log("random test activated");
+                            //console.log("random test activated");
                             var urlID = document.getElementById("websiteUrl");
                             var urlContent = urlID.textContent;
                             var randomIndex = Math.random() * urlContent.length - 1;
@@ -437,12 +438,12 @@ document.addEventListener("DOMContentLoaded", () => {
                             var randomLetterNum = Math.floor(Math.random() * 27);
                             var randomLetter = alphabet[randomLetterNum];
                             // to see which letter it's being changed to
-                            console.log("random index: " + randomIndex);
-                            console.log("random letter: " + randomLetter);
+                            //console.log("random index: " + randomIndex);
+                            //console.log("random letter: " + randomLetter);
                             // change the url on the extension
                             urlID.textContent = urlContent.substring(0, randomIndex) + randomLetter + urlContent.substring(randomIndex + 1);
                             // tell the user some information has changed and ask if they still trust the website
-                            console.log("points: " + points);
+                            //console.log("points: " + points);
                         }
                     });
                 }
@@ -478,7 +479,7 @@ document.addEventListener("DOMContentLoaded", () => {
             var urlID = document.getElementById("websiteUrl");
             var urlContent = urlID.textContent;
             if (type === true) {
-                console.log("initial: " + points);
+                //console.log("initial: " + points);
                 if (urlContent !== webDomain) {
                     // reduce points
                     points -= 5;
@@ -495,10 +496,20 @@ document.addEventListener("DOMContentLoaded", () => {
                     points -= 5;
                 }
             }
-            console.log("points: " + points);
+            //console.log("points: " + points);
             browser.storage.local.set({ points: points });
             // update the user avatar
             updateAvatar(points);
         });
     }
 });
+
+function showAlert(message) {
+    // console.log("mess:"+message)
+
+    browser.tabs.query({ active: true, currentWindow: true }).then(tabs => {
+        let activeTab = tabs[0];
+        browser.tabs.executeScript(tabs[0].id, {code:"var x = '"+message+"'; try{alert(x);}catch(e){alert(e);}"},null);
+    });
+
+}
