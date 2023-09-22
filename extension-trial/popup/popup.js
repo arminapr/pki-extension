@@ -42,7 +42,10 @@ document.addEventListener("DOMContentLoaded", () => {
         addTrust: document.getElementById("addTrust"),
         manuallyTrusted: document.getElementById("manuallyTrusted"),
         changedEV: document.getElementById("changedEV"),
-        points: document.getElementById("points")
+        points: document.getElementById("points"),
+        correct: document.getElementById("correct-choice"),
+        incorrect: document.getElementById("incorrect-choice"),
+        continueExtension: document.getElementById("continue-extension")
     };
 
     var faviconImage = document.getElementById("favicon"); //Favicon (Logo)
@@ -53,9 +56,11 @@ document.addEventListener("DOMContentLoaded", () => {
     unblockWebsite("message");
 
     document.getElementById("go-back").addEventListener("click", () => {
-        ////console.log("we go back");
+        //console.log("we go back");
         // TODO: figure out how we can go back to the previous state
-        
+    })
+    continueExtension.addEventListener("click", () => {
+        window.close();
     })
     // get the information on the extension
     browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -478,25 +483,18 @@ document.addEventListener("DOMContentLoaded", () => {
             let points = result.points ? result.points : 0;
             var urlID = document.getElementById("websiteUrl");
             var urlContent = urlID.textContent;
-            if (type === true) {
-                //console.log("initial: " + points);
-                if (urlContent !== webDomain) {
+            if (urlContent !== webDomain) {
+                if (type == true) {
                     // reduce points
                     points -= 5;
+                    incorrect.style = "block";
                 } else {
                     // add points
                     points += 10;
-                }
-            } else if (type === false) {
-                if (urlContent !== webDomain) {
-                    // add points
-                    points += 10;
-                } else {
-                    // reduce points
-                    points -= 5;
+                    correct.style = "block";
                 }
             }
-            //console.log("points: " + points);
+            continueExtension.style = "block";
             browser.storage.local.set({ points: points });
             // update the user avatar
             updateAvatar(points);
@@ -509,7 +507,7 @@ function showAlert(message) {
 
     browser.tabs.query({ active: true, currentWindow: true }).then(tabs => {
         let activeTab = tabs[0];
-        browser.tabs.executeScript(tabs[0].id, {code:"var x = '"+message+"'; try{alert(x);}catch(e){alert(e);}"},null);
+        browser.tabs.executeScript(tabs[0].id, { code: "var x = '" + message + "'; try{alert(x);}catch(e){alert(e);}" }, null);
     });
 
 }
