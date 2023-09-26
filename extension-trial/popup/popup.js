@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
         //console.log("we go back");
         // TODO: figure out how we can go back to the previous state
     })
-    continueExtension.addEventListener("click", () => {
+    siteStatusDivs.continueExtension.addEventListener("click", () => {
         window.close();
     })
     // get the information on the extension
