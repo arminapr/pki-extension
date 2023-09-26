@@ -10,11 +10,11 @@
 <body>
 
     <button type="submit" id="settings-button">
-        <img src="../icons/settings.png" alt="Picture of a gear" />
+        <img src="../icons/settings.png" alt="Picture of a gear"/>
     </button>
 
     <button type="submit" id="go-back">
-        <img src="../icons/backarrow.png" alt="Back arroa" />
+        <img src="../icons/backarrow.png" alt="Back arroa"/>
     </button>
 
     <!--Favicon (Logo)-->
@@ -25,7 +25,7 @@
 
     <section id="points">
         <h3>points:</h4>
-            <h3 id="point-value">0</h4>
+        <h3 id="point-value">0</h4>
     </section>
 
     <!--Avatar-->
@@ -41,56 +41,57 @@
 
     <p id="notice"></p>
 
-    <section id="notifications">
+<section id="notifications">
 
-        <div id="unsecure" style="display: none; color: red">
-            This website has an unsecure connection. We have blocked access, do you want to access it?
-            <button id="visit">Yes</button>
-        </div>
+    <div id="unsecure" style="display: none; color: red">
+        This website has an unsecure connection. We have blocked access, do you want to access it?
+        <button id="visit">Yes</button>
+    </div>
 
-        <!-- when the website is marked as unsafe -->
-        <div id="markedUnsafe" style="display: none; color: red">
-            This website has been marked as unsafe. We have blocked access, do you want to access it?
-            <button id="accept">Yes</button>
-        </div>
+    <!-- when the website is marked as unsafe -->
+    <div id="markedUnsafe" style="display: none; color: red">
+        This website has been marked as unsafe. We have blocked access, do you want to access it?
+        <button id="accept">Yes</button>
+    </div>
 
-    </section>
+</section>
 
-    <section id="website-actions">
+<section id="website-actions">
 
-        <!-- when the website has not been marked yet -->
-        <div id="notMarked" style="display: block">
-            <button id="add-sensitive-site">Add new sensitive site</button>
-            <button id="misMarked">I thought this was one of my sensitive websites</button>
-        </div>
+    <!-- when the website has not been marked yet -->
+    <div id="notMarked" style="display: block">
+        <button id="add-sensitive-site">Add new sensitive site</button>
+        <button id="misMarked">I thought this was one of my sensitive websites</button>
+    </div>
 
-        <div id="addUntrust" style="display: none">
-            <h4>If you continue, this site will be added to your distrusted list.
-                You can change your preferences in settings. Continue?</h4>
-            <button id="continueUntrust">Add to untrusted websites.</button>
-            <button id="continueTrust">Add to trusted websites.</button>
-        </div>
+    <div id="addUntrust" style="display: none">
+        <h4>If you continue, this site will be added to your distrusted list. 
+            You can change your preferences in settings. Continue?</h4>
+        <button id="continueUntrust">Add to untrusted websites.</button>
+        <button id="continueTrust">Add to trusted websites.</button>
+    </div>
 
-        <div id="trustText" style="display:none">This website has been added to your <span
-                style="text-decoration: underline; color: green">trusted </span>websites</div>
-        <div id="untrustText" style="display:none">This website has been added to your <span
-                style="text-decoration: underline; color: red">untrusted </span> websites</div>
+    <div id="trustText" style="display:none">This website has been added to your <span
+            style="text-decoration: underline; color: green">trusted </span>websites</div>
+    <div id="untrustText" style="display:none">This website has been added to your <span
+            style="text-decoration: underline; color: red">untrusted </span> websites</div>
 
-        <!-- when the certification information has not changed -->
-        <div id="markedSameCert" style="display: none">
-            <h1>You are all set!</h1>
-        </div>
+    <!-- when the certification information has not changed -->
+    <div id="markedSameCert" style="display: none">
+        <h1>You are all set!</h1>
+    </div>
 
-        <!-- ask the user why they do not think that this a secure website-->
-        <div id="markedDiffCert" style="display: none">
-            <h4>Some information about the website has changed.
-                Observe the RootCA and the domain name to ensure that your information remains secure.</h4>
-            <button id="conTrust">Continue to trust this website</button>
-            <button id="stopTrust">Distrust this website</button>
-        </div>
+    <!-- ask the user why they do not think that this a secure website-->
+    <div id="markedDiffCert" style="display: none">
+        <h4>Some information about the website has changed.
+            Observe the RootCA and the domain name to ensure that your information remains secure.</h4>
+        <button id="conTrust">Continue to trust this website</button>
+        <button id="stopTrust">Distrust this website</button>
+    </div>
 
-    </section>
+</section>
 
+<<<<<<< HEAD
     <section id="points-feedback" style="display: none">
         <h2 id="correct-choice">
             This was a test. You are correct. The domain name was changed in this example. Good job catching that! We have added 10 points.
@@ -102,6 +103,8 @@
             Continue and exit
         </button>
     </section>
+=======
+>>>>>>> parent of ee294f6 (updating the description after getting points for identifying the wrong domain name)
 
     <div id="markedNonSensitive" style="display: none">
         <h1>This website is marked as non-sensitive. Changed your mind?</h1>
@@ -126,8 +129,7 @@
         <div id="addTrust" style="display: none">
             <h2>Add a site to the trusted list:</h2>
             <form id="formTrust">
-                <label for="siteName">Please copy and paste the full URL of the site you would like to
-                    trust.</label><br>
+                <label for="siteName">Please copy and paste the full URL of the site you would like to trust.</label><br>
                 <input type="text" id="siteNameTrust" name="siteName"><br>
                 <input type="submit" value="Submit">
             </form>
@@ -136,16 +138,14 @@
         <div id="addDistrust" style="display: none">
             <h2>Add a site to the distrusted list:</h2>
             <form id="formDistrust">
-                <label for="siteName">Please copy and paste the full URL of the site you would like to
-                    distrust.</label><br>
+                <label for="siteName">Please copy and paste the full URL of the site you would like to distrust.</label><br>
                 <input type="text" id="siteNameDistrust" name="siteName"><br>
                 <input type="submit" value="Submit">
             </form>
         </div>
 
-        <div id="manuallyTrusted" style="display: none">
-            <h4>This site was added by url, so please review the CA information and confirm that you trust this site!
-            </h4>
+        <div id = "manuallyTrusted" style="display: none">
+            <h4>This site was added by url, so please review the CA information and confirm that you trust this site!</h4>
             <button id="confirmTrusted">Confirm</button>
             <button id="cancelTrusted">Cancel</button>
         </div>
