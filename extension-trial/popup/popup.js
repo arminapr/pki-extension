@@ -433,8 +433,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         let points = result.points ? result.points : 0;
                         // code below commented because it needs to be written in the html content first
                         document.getElementById("point-value").textContent = points;
-                        var randomNumber = Math.random() * 1000;
-                        if (randomNumber % 10 === 0) {
+                        var randomNumber = Math.random() * 100;
+                        if (randomNumber > 90) {
                             //console.log("random test activated");
                             var urlID = document.getElementById("websiteUrl");
                             var urlContent = urlID.textContent;
