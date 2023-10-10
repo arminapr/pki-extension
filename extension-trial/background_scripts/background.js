@@ -7,6 +7,7 @@ var evStatus;
 var waitingTabs = {};
 
 let visitedSites = {}; // Initialize an empty object to store visited sites
+let tabPasswordStatus = {}; // Store tab password field status
 
 browser.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     if (changeInfo.status === "complete") {
@@ -26,14 +27,14 @@ browser.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 
                 // Block the site only if it hasn't been visited in the current session
                 if (!visitedSites[domain]) {
-                    if (isSensitiveSite) {
+                    if (isSensitiveSite && tabPasswordStatus[tabId]) {
                         browser.tabs.executeScript(tabs[0].id, { file: 'contentScript.js' }); 
                         waitingTabs[tabId] = true; 
                     }
                     // Add the site to the list of visited sites
                     visitedSites[domain] = true;
                 }
-                if (isUnsafeSite) {
+                if (isUnsafeSite && tabPasswordStatus[tabId]) {
                     browser.tabs.executeScript(tabs[0].id, { file: 'contentScript.js' });
                 }
             });
@@ -116,7 +117,14 @@ browser.tabs.onActivated.addListener(activeInfo => {
     evStatus = undefined;
 });
 
-browser.runtime.onMessage.addListener(request => {
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.hasPassword){
+        tabPasswordStatus[sender.tab.id] = true;
+        console.log('Has Password: Background.js');
+    }
+    if (message.action === 'getPasswordStatus'){
+        sendResponse({ hasPassword: !!tabPasswordStatus[sender.tab.id] });
+    }
     if (request.message==="force-unblock"){
         browser.tabs.executeScript(request.tabId, {
             code: 'var blockerDiv = document.getElementById("myBlockerDiv"); if (blockerDiv) { blockerDiv.parentNode.removeChild(blockerDiv); }'

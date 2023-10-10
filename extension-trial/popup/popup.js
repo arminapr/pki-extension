@@ -59,9 +59,15 @@ document.addEventListener("DOMContentLoaded", () => {
         //console.log("we go back");
         // TODO: figure out how we can go back to the previous state
     })
+
     siteStatusDivs.continueExtension.addEventListener("click", () => {
         window.close();
     })
+    browser.runtime.sendMessage({ action: "getPasswordStatus" }, response => {
+        if (response && response.hasPassword){
+            console.log("Has Password Field");
+        }
+    });
     // get the information on the extension
     browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         //console.log("at the top");
