@@ -1,3 +1,5 @@
+let messageSent = false;
+
 function valueIsLikePassword(value) {
     if (!value) {
         return false;
@@ -33,14 +35,22 @@ function isLikePassword(field) {
 }
 
 function detectPasswordField() {
+    if (messageSent) return;
     const passwordFields = [...document.querySelectorAll('input[type="password"], input[type="text"]')];
 
     const hasPassword = passwordFields.some(field => {
         return field.type === "password" || isLikePassword(field);
     });
-
     if (hasPassword) {
-        browser.runtime.sendMessage({ hasPassword: true });
+        browser.runtime.sendMessage({ hasPassword: true }, function(response) {
+            if (browser.runtime.lastError) {
+                console.log(`Error: ${browser.runtime.lastError}`);
+            } else {
+                messageSent = true;
+                console.log("Message sent successfully.");
+                // Handle the response or do other things.
+            }
+        });
     }
 }
 

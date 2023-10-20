@@ -93,11 +93,13 @@ async function sendRootCAName(details) {
                 })
             }
         }
+        /**
         browser.runtime.onMessage.addListener((request) => {
             // Send root data to popup.js
             browser.runtime.sendMessage({ rootCA });
             browser.runtime.sendMessage({ evStatus });
         });
+        */
     } catch (error) {
         console.error(error);
     }
@@ -117,12 +119,14 @@ browser.tabs.onActivated.addListener(activeInfo => {
     evStatus = undefined;
 });
 
-browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.hasPassword){
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    browser.runtime.sendMessage({ rootCA });
+    browser.runtime.sendMessage({ evStatus });
+    if (request.hasPassword){
         tabPasswordStatus[sender.tab.id] = true;
         console.log('Has Password: Background.js');
     }
-    if (message.action === 'getPasswordStatus'){
+    if (request.action === 'getPasswordStatus'){
         sendResponse({ hasPassword: !!tabPasswordStatus[sender.tab.id] });
     }
     if (request.message==="force-unblock"){
