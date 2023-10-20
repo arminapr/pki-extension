@@ -56,8 +56,33 @@ document.addEventListener("DOMContentLoaded", () => {
     unblockWebsite("message");
 
     document.getElementById("go-back").addEventListener("click", () => {
-        //console.log("we go back");
-        // TODO: figure out how we can go back to the previous state
+        // console.log(window.location.href);
+        // window.location.href="settings.html";
+        if(siteStatusDivs.settings.style.display=="none"){
+                // console.log("in non");
+        }
+        else{
+            // console.log("ni restar");
+            browser.tabs.query({ active: true, currentWindow: true }, function start (tabs) {
+                // console.log("at the top");
+                resetText();
+                const url = tabs[0].url;
+                //console.log("url: " + url);
+                const urlObj = new URL(url);
+                webDomain = urlObj.hostname;
+                const favicon = tabs[0].favIconUrl;
+                websiteUrlElement.textContent = webDomain;
+                faviconImage.src = favicon;
+                browser.runtime.sendMessage({ websiteUrl: url });
+                restartText();
+            });
+        }
+        
+
+
+
+
+
     })
     siteStatusDivs.continueExtension.addEventListener("click", () => {
         window.close();
@@ -376,6 +401,22 @@ document.addEventListener("DOMContentLoaded", () => {
         siteStatusDivs.manuallyTrusted.style.display = "none";
         siteStatusDivs.changedEV.style.display = "none";
         siteStatusDivs.points.style.display = "none";
+    }
+    
+    // restart all the status
+    function restartText() {
+        resetText();
+        siteStatusDivs.favicon.style.display = "block";
+        siteStatusDivs.website.style.display = "block";
+        siteStatusDivs.rootCA.style.display = "block";
+        siteStatusDivs.rootCAElem.style.display = "block";
+        siteStatusDivs.pkInfo.style.display = "block";
+        siteStatusDivs.notice.style.display = "block";
+        siteStatusDivs.notMarked.style.display = "block";
+        siteStatusDivs.buttons.style.display = "block";
+        siteStatusDivs.addTrust.style.display = "block";
+        siteStatusDivs.addDistrust.style.display = "block";
+        siteStatusDivs.points.style.display = "block";
     }
 
     // unblock the website for the user
