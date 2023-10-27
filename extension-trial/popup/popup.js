@@ -14,7 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
         continueTrust: document.getElementById("continueTrust"),
         settings: document.getElementById("settings-button"),
         conTrust: document.getElementById("conTrust"),
-        stopTrust: document.getElementById("stopTrust")
+        stopTrust: document.getElementById("stopTrust"),
+        settingsButton: document.getElementById("settings-button"),
+        settingsSection: document.getElementById("settings-section")
     };
 
     // the different status that the browser can display
@@ -58,12 +60,12 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("go-back").addEventListener("click", () => {
         // console.log(window.location.href);
         // window.location.href="settings.html";
-        if(siteStatusDivs.settings.style.display=="none"){
-                // console.log("in non");
+        if (siteStatusDivs.settings.style.display == "none") {
+            // console.log("in non");
         }
-        else{
+        else {
             // console.log("ni restar");
-            browser.tabs.query({ active: true, currentWindow: true }, function start (tabs) {
+            browser.tabs.query({ active: true, currentWindow: true }, function start(tabs) {
                 // console.log("at the top");
                 resetText();
                 const url = tabs[0].url;
@@ -77,13 +79,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 restartText();
             });
         }
-        
-
-
-
-
 
     })
+
     siteStatusDivs.continueExtension.addEventListener("click", () => {
         window.close();
     })
@@ -162,6 +160,9 @@ document.addEventListener("DOMContentLoaded", () => {
             buttons.seeUnsafeList.addEventListener("click", () => {
                 showList("unsafe");
             });
+        });
+        settingsButton.addEventListener("click", function () {
+            settingsSection.style.display = "block";
         });
         randomTesting(webDomain);
     });
@@ -402,7 +403,7 @@ document.addEventListener("DOMContentLoaded", () => {
         siteStatusDivs.changedEV.style.display = "none";
         siteStatusDivs.points.style.display = "none";
     }
-    
+
     // restart all the status
     function restartText() {
         resetText();
