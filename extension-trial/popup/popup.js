@@ -102,29 +102,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Receive message from background.js for CA Info and update html
         browser.runtime.onMessage.addListener((request) => {
-            browser.runtime.onMessage.addListener((request2) => {
-                if (request.rootCA) {
-                    // Check if root CA exists in the request
-                    caInfo = request.rootCA;
-                    document.getElementById("rootCAInfo").textContent = caInfo + " ";
-                    // Add a checkmark if site has an EV certificate
-                    if (evCert === true) {
-                        document.getElementById("rootCAInfo").innerHTML += '<img src="../icons/checkmark.png"  style="width:20px;height:20px;" alt="Checkmark icon" />';
-                    }
-                    checkCA(webDomain, caInfo, evCert);
+            browser.runtime.onMessage.addListener((request2) => { });
+            if (request.rootCA) {
+                // Check if root CA exists in the request
+                caInfo = request.rootCA;
+                document.getElementById("rootCAInfo").textContent = caInfo + " ";
+                // Add a checkmark if site has an EV certificate
+                if (evCert === true) {
+                    document.getElementById("rootCAInfo").innerHTML += '<img src="../icons/checkmark.png"  style="width:20px;height:20px;" alt="Checkmark icon" />';
                 }
+                checkCA(webDomain, caInfo, evCert);
+            }
 
-                // update the evCert information of the domain
-                if (request.evStatus != undefined) {
-                    evCert = request.evStatus;
+            // update the evCert information of the domain
+            if (request.evStatus != undefined) {
+                evCert = request.evStatus;
+            }
+            if (request.secure) {
+                if (request.secure === "no") {
+                    siteStatusDivs.notMarked.style.display = "none";
+                    siteStatusDivs.unsecure.style.display = "block";
                 }
-                if (request.secure) {
-                    if (request.secure === "no") {
-                        siteStatusDivs.notMarked.style.display = "none";
-                        siteStatusDivs.unsecure.style.display = "block";
-                    }
-                }
-            })
+            }
         });
         // if the user wants to visit the site, exit out of the extension
         buttons.visit.addEventListener("click", function () {
@@ -548,8 +547,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function showAlert(message) {
-    // console.log("mess:"+message)
-
     browser.tabs.query({ active: true, currentWindow: true }).then(tabs => {
         let activeTab = tabs[0];
         browser.tabs.executeScript(tabs[0].id, { code: "var x = '" + message + "'; try{alert(x);}catch(e){alert(e);}" }, null);
