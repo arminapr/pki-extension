@@ -102,26 +102,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Receive message from background.js for CA Info and update html
         browser.runtime.onMessage.addListener((request) => {
-            if (request.rootCA) {
-                // Check if root CA exists in the request
-                caInfo = request.rootCA;
-                document.getElementById("rootCAInfo").textContent = caInfo + " ";
-                // Add a checkmark if site has an EV certificate
-                if (evCert === true) {
-                    document.getElementById("rootCAInfo").innerHTML += '<img src="../icons/checkmark.png"  style="width:20px;height:20px;" alt="Checkmark icon" />';
+            browser.runtime.onMessage.addListener((request2) => {
+                if (request.rootCA) {
+                    // Check if root CA exists in the request
+                    caInfo = request.rootCA;
+                    document.getElementById("rootCAInfo").textContent = caInfo + " ";
+                    // Add a checkmark if site has an EV certificate
+                    if (evCert === true) {
+                        document.getElementById("rootCAInfo").innerHTML += '<img src="../icons/checkmark.png"  style="width:20px;height:20px;" alt="Checkmark icon" />';
+                    }
+                    checkCA(webDomain, caInfo, evCert);
                 }
-                checkCA(webDomain, caInfo, evCert);
-            }
-            // update the evCert information of the domain
-            if (request.evStatus != undefined) {
-                evCert = request.evStatus;
-            }
-            if (request.secure) {
-                if (request.secure === "no") {
-                    siteStatusDivs.notMarked.style.display = "none";
-                    siteStatusDivs.unsecure.style.display = "block";
+
+                // update the evCert information of the domain
+                if (request.evStatus != undefined) {
+                    evCert = request.evStatus;
                 }
-            }
+                if (request.secure) {
+                    if (request.secure === "no") {
+                        siteStatusDivs.notMarked.style.display = "none";
+                        siteStatusDivs.unsecure.style.display = "block";
+                    }
+                }
+            })
         });
         // if the user wants to visit the site, exit out of the extension
         buttons.visit.addEventListener("click", function () {
@@ -161,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 showList("unsafe");
             });
         });
-        settingsButton.addEventListener("click", function () {
+        buttons.settingsButton.addEventListener("click", function () {
             settingsSection.style.display = "block";
         });
         randomTesting(webDomain);
