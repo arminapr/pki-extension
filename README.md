@@ -74,6 +74,16 @@ To use the extension, click on the puzzle piece in the Firefix toolbar (upper ri
 ### To Debug
 In the about:debugging page, next to the extension name, click the "Inspect" button. Keeping the Inspect tab open as you use the extension allows you to view all errors and logs, as well as set up breakpoints to watch the code run line by line. 
 
+##Firefox Developers Edition-
+1. Download and install Firefox Developer Edition on your device.
+2. Go to about:config and change xpinstall.signatures.required to false.
+![Screenshot 2023-11-17 at 9 47 51 AM](https://github.com/arminapr/pki-extension/assets/118499953/523ce3a4-0dee-4460-8f21-fb4105419ee5)
+3. Compress the extension files into a .zip file (make sure manifest.json is at the root).
+4. Go to about:addons, and choose the Install Add-on from file option, choose the .zip file created in the previous step.
+![Screenshot 2023-11-17 at 9 50 54 AM](https://github.com/arminapr/pki-extension/assets/118499953/ca65f515-ea4f-4ce8-80b0-6583876f17bc)
+5. The extension is now installed permanently on the developer edition browser and can be accessed through the toolbar.
+
+
 ## Helpful Resources
 
 - [submitting extension to be added to Firefox store](https://extensionworkshop.com/documentation/publish/submitting-an-add-on/)
