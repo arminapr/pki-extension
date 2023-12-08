@@ -27,8 +27,8 @@ browser.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
                 // Block the site only if it hasn't been visited in the current session
                 if (!visitedSites[domain]) {
                     if (isSensitiveSite) {
-                        browser.tabs.executeScript(tabs[0].id, { file: 'contentScript.js' }); 
-                        waitingTabs[tabId] = true; 
+                        browser.tabs.executeScript(tabs[0].id, { file: 'contentScript.js' });
+                        waitingTabs[tabId] = true;
                     }
                     // Add the site to the list of visited sites
                     visitedSites[domain] = true;
@@ -69,10 +69,17 @@ async function sendRootCAName(details) {
             // this is an addition to ensure that the CA of site resources are not mistakenly presented
             if (typeof rootCA === "undefined") {
                 // Received message from popup.js, extension page is opened
-                var domain = securityInfo.certificates[0].subject;
-                var root = securityInfo.certificates[0].issuer; //"subject" property from CertificateInfo Object
+
+                var ca;
+                var certificateString;
                 browser.runtime.onMessage.addListener((message) => {
                     if (message.websiteUrl) {
+                        var domain = securityInfo.certificates[0].subject;
+                        for (let i = 0; i < securityInfo.certificates.length; i++) {
+                            ca = securityInfo.certificates[i].issuer; //"subject" property from CertificateInfo Object
+                            certificateString += (ca + ", ");
+                        }
+                        console.log("root: " + certificateString);
                         console.log("url: " + message.websiteUrl);
                         console.log("domain: " + domain);
                         const url = message.websiteUrl;
@@ -83,11 +90,12 @@ async function sendRootCAName(details) {
                         let ind1 = domainSub.indexOf('.');
                         let ind2 = urlSub.indexOf('.');
                         if (domainSub.substring(0, ind1) === urlSub.substring(0, ind2)) {
-                            rootCA = root.substring(3, root.indexOf(",")); //substring to only include the root CA name (comma seperated list)
-
+                            var first = securityInfo.certificates[securityInfo.certificates.length - 1].issuer;
+                            rootCA = first.substring(3, first.indexOf(",")); //substring to only include the root CA name (comma seperated list)
                             const publicKeyDigest = securityInfo.certificates[0].subjectPublicKeyInfoDigest;
                             console.log(publicKeyDigest);
                         }
+
                     }
                 })
             }
@@ -117,7 +125,7 @@ browser.tabs.onActivated.addListener(activeInfo => {
 });
 
 browser.runtime.onMessage.addListener(request => {
-    if (request.message==="force-unblock"){
+    if (request.message === "force-unblock") {
         browser.tabs.executeScript(request.tabId, {
             code: 'var blockerDiv = document.getElementById("myBlockerDiv"); if (blockerDiv) { blockerDiv.parentNode.removeChild(blockerDiv); }'
         });
