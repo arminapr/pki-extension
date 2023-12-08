@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Receive message from background.js for CA Info and update html
         browser.runtime.onMessage.addListener((request) => {
-            // browser.runtime.onMessage.addListener((request2) => { });
+            //browser.runtime.onMessage.addListener((request2) => { });
             if (request.rootCA) {
                 // Check if root CA exists in the request
                 caInfo = request.rootCA;
