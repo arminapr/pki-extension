@@ -103,10 +103,10 @@ document.addEventListener("DOMContentLoaded", () => {
         // Receive message from background.js for CA Info and update html
         browser.runtime.onMessage.addListener((request) => {
             //browser.runtime.onMessage.addListener((request2) => { });
-            if (request.rootCA) {
+            if (request.rootCA && request.certChain) {
                 // Check if root CA exists in the request
-                caInfo = request.rootCA;
-                document.getElementById("rootCAInfo").textContent = caInfo + " ";
+                caInfo = request.certChain;
+                document.getElementById("rootCAInfo").textContent = request.rootCA + " ";
                 // Add a checkmark if site has an EV certificate
                 if (evCert === true) {
                     document.getElementById("rootCAInfo").innerHTML += '<img src="../icons/checkmark.png"  style="width:20px;height:20px;" alt="Checkmark icon" />';

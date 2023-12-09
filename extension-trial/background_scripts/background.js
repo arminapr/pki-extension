@@ -101,8 +101,12 @@ async function sendRootCAName(details) {
             }
         }
         browser.runtime.onMessage.addListener((request) => {
+            const dataToSend ={
+                rootCA: rootCA,
+                certChain: certificateString
+            }
             // Send root data to popup.js
-            browser.runtime.sendMessage({ rootCA });
+            browser.runtime.sendMessage(dataToSend);
             browser.runtime.sendMessage({ evStatus });
         });
     } catch (error) {
