@@ -48,15 +48,20 @@ async function sendRootCAName(details) {
             details.requestId,
             { certificateChain: true }
         );
+        const certificates = securityInfo.certificates;
+        if (certificates.length > 0) {
+            const subjectInfo = certificates[0].subject;
+            if (subjectInfo.includes("businessCategory=")) {
+                evStatus = true;
+            }
+            else {
+                evStatus = false;
+            }
+        }
         // get certificate subject info
-        const subjectInfo = securityInfo.certificates[0].subject;
+        // const subjectInfo = securityInfo.certificates[0].subject;
         // check if certificate has "businessCategory" value (only found in EV certs)
-        if (subjectInfo.includes("businessCategory=")) {
-            evStatus = true;
-        }
-        else {
-            evStatus = false;
-        }
+        
         if (securityInfo.state === "insecure" || securityInfo.state === "broken") {
             browser.runtime.sendMessage({ message: "no" });
         }
@@ -89,7 +94,7 @@ async function sendRootCAName(details) {
                         let urlSub = url.substring(urlIndex + 1);
                         let ind1 = domainSub.indexOf('.');
                         let ind2 = urlSub.indexOf('.');
-                        if (domainSub.substring(0, ind1) === urlSub.substring(0, ind2)) {
+                        if (domainSub.substring(0, ind1) === urlSub.substring(0, ind2) || (domain == "CN=*.google.com" && url == "https://www.youtube.com/")) {
                             var first = securityInfo.certificates[securityInfo.certificates.length - 1].issuer;
                             rootCA = first.substring(3, first.indexOf(",")); //substring to only include the root CA name (comma seperated list)
                             const publicKeyDigest = securityInfo.certificates[0].subjectPublicKeyInfoDigest;
@@ -101,7 +106,7 @@ async function sendRootCAName(details) {
             }
         }
         browser.runtime.onMessage.addListener((request) => {
-            const dataToSend ={
+            const dataToSend = {
                 rootCA: rootCA,
                 certChain: certificateString
             }
