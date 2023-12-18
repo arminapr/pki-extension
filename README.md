@@ -8,6 +8,8 @@ Helps to keep users information secure by monitoring the certificate information
 
 ## Extension Flow
 
+<img width="1121" alt="Screenshot 2023-12-18 at 1 21 31 PM" src="https://github.com/arminapr/pki-extension/assets/115113212/4b7ae06e-addb-4157-b323-956fc233ceef">
+
 ![flow-2](https://github.com/arminapr/pki-extension/assets/118499953/e565323e-8a89-4b71-9e08-95dc22774c47)
 
 ## Technologies Used
