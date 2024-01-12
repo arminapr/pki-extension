@@ -16,7 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
         conTrust: document.getElementById("conTrust"),
         stopTrust: document.getElementById("stopTrust"),
         settingsButton: document.getElementById("settings-button"),
-        settingsSection: document.getElementById("settings-section")
+        settingsSection: document.getElementById("settings-section"),
+        toggleSwitch: document.getElementById("toggleButton"),
     };
 
     // the different status that the browser can display
@@ -164,9 +165,15 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
         buttons.settingsButton.addEventListener("click", function () {
-            settingsSection.style.display = "block";
+            buttons.settingsSection.style.display = "block";
         });
-        randomTesting(webDomain);
+        
+        if (buttons.toggleSwitch.checked) {
+            randomTesting(webDomain);
+            console.log("here");
+        } else {
+            console.log("nope");
+        }
     });
 
     /**
