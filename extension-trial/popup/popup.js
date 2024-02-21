@@ -167,12 +167,10 @@ document.addEventListener("DOMContentLoaded", () => {
         buttons.settingsButton.addEventListener("click", function () {
             buttons.settingsSection.style.display = "block";
         });
-        
+
         if (buttons.toggleSwitch.checked) {
             randomTesting(webDomain);
-            console.log("here");
         } else {
-            console.log("nope");
         }
     });
 
@@ -476,15 +474,13 @@ document.addEventListener("DOMContentLoaded", () => {
     function randomTesting(domain) {
         browser.storage.local.get("safe", (lists) => {
             let safelist = lists["safe"];
-            //console.log(safelist);
             if (safelist) {
                 if (domain in safelist) {
-                    //console.log("it is");
                     browser.storage.local.get("points", (result) => {
                         let points = result.points ? result.points : 0;
-                        // code below commented because it needs to be written in the html content first
                         document.getElementById("point-value").textContent = points;
                         var randomNumber = Math.random() * 100;
+                        // randomizing the url content
                         if (randomNumber > 90) {
                             //console.log("random test activated");
                             var urlID = document.getElementById("websiteUrl");
@@ -500,6 +496,20 @@ document.addEventListener("DOMContentLoaded", () => {
                             urlID.textContent = urlContent.substring(0, randomIndex) + randomLetter + urlContent.substring(randomIndex + 1);
                             // tell the user some information has changed and ask if they still trust the website
                             //console.log("points: " + points);
+                        } else if (randomNumber < 10) {
+                            // randomizing the CA
+                            var certificateArray = ["CA1",
+                                "CA2",
+                                "CA3",
+                                "CA4",
+                                "CA5",
+                                "CA6",
+                                "CA7",
+                                "CA8",
+                                "CA9",
+                                "CA10"];
+                            var wrongCAInfo = certificateArray.get(randomNumber);
+                            document.getElementById("rootCAInfo").textContent = wrongCAInfo + " ";
                         }
                     });
                 }
@@ -534,7 +544,10 @@ document.addEventListener("DOMContentLoaded", () => {
             let points = result.points ? result.points : 0;
             var urlID = document.getElementById("websiteUrl");
             var urlContent = urlID.textContent;
-            if (urlContent !== webDomain) {
+            var certContent = document.getElementById("rootCAInfo").textContent;
+            console.log(certContent);
+            console.log(caInfo);
+            if (urlContent !== webDomain || caInf !== certContent) {
                 if (type == true) {
                     // reduce points
                     points -= 5;
